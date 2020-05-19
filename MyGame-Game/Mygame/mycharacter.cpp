@@ -15,7 +15,7 @@ void MyCharacter::animation_frame()
     {
         for(int j=0;j<8;j++)
         {
-            this->vector_animationframe.emplace_back(sf::IntRect(i*128,j*150+110,128,150));
+            this->vector_animationframe.emplace_back(sf::IntRect(i*128,j*260,128,260));
         }
     }
 }
@@ -36,4 +36,25 @@ void MyCharacter::render(sf::RenderTarget &window)
 void MyCharacter::setposition(float x,float y)
 {
     this->setPosition(x*0.25f,y*0.25f);
+}
+
+void MyCharacter::runstep()
+{
+    if(it<6)
+    {
+        this->setTextureRect(this->vector_animationframe[it]);
+        it++;
+    }
+    else
+    {
+        it=0;
+    }
+}
+
+void MyCharacter::moving(const sf::Time& elapsed)
+{
+    std::cout<<elapsed.asSeconds()<<std::endl;
+    if(this->run==true){
+    this->move(this->vx*elapsed.asSeconds(),this->vy*elapsed.asSeconds());
+    }
 }

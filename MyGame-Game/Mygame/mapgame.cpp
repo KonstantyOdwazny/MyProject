@@ -100,5 +100,14 @@ void MapGame::drawing(sf::RenderTarget &target)
 void MapGame::getposition(size_t it)
 {
     std::cout<<bounds_vector[it].left<<" "<<bounds_vector[it].top<<std::endl;
+    /*
+    for(size_t i=0;i<this->sprites.size();i++)
+    {
+        for(size_t j=0;j<this->sprites[i].size();j++)
+        {
+            std::cout<<sprites[i][j]->getGlobalBounds().left<<std::endl;
+        }
+    }
+    */
 }
 

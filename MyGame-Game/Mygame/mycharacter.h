@@ -30,6 +30,8 @@ public:
         ay=0;
         x=0;
         y=0;
+        run=false;
+        it=0;
     }
     //~MyCharacter();
     //public properties
@@ -39,6 +41,8 @@ public:
     float ay;
     float x;
     float y;
+    bool run;
+    int it;
     std::vector<sf::IntRect> vector_animationframe;
     //functions public
     void animation_frame();
@@ -47,6 +51,8 @@ public:
     //void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void render(sf::RenderTarget& window);
     void setposition(float x,float y);
+    void runstep();
+    void moving(const sf::Time& elapsed);
 };
 
 #endif // MYCHARACTER_H
