@@ -26,6 +26,12 @@ void Game::pollevent()
         {
             this->window->close();
         }
+        if(this->ev.key.code==sf::Keyboard::Left){
+            this->hero->setScale(-0.5f,0.5f);
+        }
+        if(this->ev.key.code==sf::Keyboard::Right){
+            this->hero->setScale(0.5f,0.5f);
+        }
     }
 }
 void Game::update()
@@ -65,15 +71,21 @@ void Game::update()
             this->hero->ay=9.81f;
             this->hero->vy+=this->hero->ay;
         }
-       this->hero->jump=true;
+
+        this->hero->jump=true;
         this->hero->jumpstep();
     }
     else{
-        if((this->hero->y - this->hero->getPosition().y)>0.0f)
+        if(this->hero->colission(this->level->sprites))
+        {
+            this->hero->ay=0;
+            this->hero->vy=0;
+        }
+        else if((this->hero->y - this->hero->getPosition().y)>0.0f)
         {
              this->hero->ay=9.81f;
              this->hero->vy+=this->hero->ay;
-            this->hero->jumpstep();
+             this->hero->jumpstep();
         }
         else
         {

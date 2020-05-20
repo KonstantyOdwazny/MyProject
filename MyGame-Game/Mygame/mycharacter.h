@@ -34,6 +34,7 @@ public:
         it=24;
         jump_it=1;
         jump=false;
+        is_colission=true;
     }
     //~MyCharacter();
     //public properties
@@ -45,6 +46,7 @@ public:
     float y;
     bool run;
     bool jump;
+    bool is_colission;
     int it;
     int jump_it;
     std::vector<sf::IntRect> vector_animationframe;
@@ -59,6 +61,8 @@ public:
     void jumpstep();
     void stop();
     void moving(const sf::Time& elapsed);
+    //colission with static object
+    bool colission(const std::vector<std::vector<std::unique_ptr<sf::Sprite>>>& sp);
 };
 
 #endif // MYCHARACTER_H

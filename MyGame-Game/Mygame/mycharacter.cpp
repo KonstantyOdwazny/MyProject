@@ -78,3 +78,22 @@ void MyCharacter::moving(const sf::Time& elapsed)
     this->move(this->vx*elapsed.asSeconds()+ax*elapsed.asSeconds(),this->vy*elapsed.asSeconds()+ay*elapsed.asSeconds());
     }
 }
+
+bool MyCharacter::colission(const std::vector<std::vector<std::unique_ptr<sf::Sprite>>>& sp)
+{
+    for(size_t i=0;i<sp.size();i++)
+    {
+        for(size_t j=0;j<sp[i].size();j++)
+        {
+            if((this->getGlobalBounds().intersects(sp[i][j]->getGlobalBounds()))&&(this->vy<=0)){
+                this->is_colission=true;
+                return true;
+            }
+            else if(!(this->getGlobalBounds().intersects(sp[i][j]->getGlobalBounds())))
+            {
+                this->is_colission=false;
+            }
+        }
+    }
+    return false;
+}
