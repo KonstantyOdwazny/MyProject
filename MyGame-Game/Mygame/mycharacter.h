@@ -31,7 +31,9 @@ public:
         x=0;
         y=0;
         run=false;
-        it=0;
+        it=24;
+        jump_it=1;
+        jump=false;
     }
     //~MyCharacter();
     //public properties
@@ -42,7 +44,9 @@ public:
     float x;
     float y;
     bool run;
+    bool jump;
     int it;
+    int jump_it;
     std::vector<sf::IntRect> vector_animationframe;
     //functions public
     void animation_frame();
@@ -50,8 +54,10 @@ public:
     void InitTexture(std::string filename);
     //void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void render(sf::RenderTarget& window);
-    void setposition(float x,float y);
+    void setposition(float x_,float y_);
     void runstep();
+    void jumpstep();
+    void stop();
     void moving(const sf::Time& elapsed);
 };
 
