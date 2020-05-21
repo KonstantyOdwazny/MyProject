@@ -3,6 +3,13 @@
 #include <fstream>
 #include <iostream>
 
+/*
+ * cpp fail of our map
+ * create textures and sprites
+ * drawing elements
+*/
+
+
 //constructor and destructor
 MapGame::MapGame()
 {
@@ -47,7 +54,7 @@ void MapGame::loadfromfile(std::string filename)
 
     file.close();
 }
-
+//create our sprites and get them to the containers
 void MapGame::createSprite()
 {
 
@@ -86,6 +93,7 @@ void MapGame::createSprite()
     }
 }
 
+//draw all elements of the map
 void MapGame::drawing(sf::RenderTarget &target)
 {
     for(size_t i=0;i<this->sprites.size();i++)

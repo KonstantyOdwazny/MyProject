@@ -27,7 +27,8 @@ public:
     //time
     sf::Clock clock;
     sf::Time elapsed;
-
+    //view
+    sf::View view;
 };
 
 #endif // GAME_H

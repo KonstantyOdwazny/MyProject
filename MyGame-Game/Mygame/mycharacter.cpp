@@ -28,6 +28,7 @@ void MyCharacter::InitSprite(sf::IntRect r)
     this->setTexture(this->texture);
     this->setTextureRect(r);
     this->setScale(0.50f,0.50f);
+    this->setOrigin(64.0f,64.0f);
     //this->setPosition(100.0f*0.4f,300.0f*0.4f);
 }
 
