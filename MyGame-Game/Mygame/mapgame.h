@@ -4,6 +4,7 @@
 #include "SFML/Window.hpp"
 #include <vector>
 #include <memory>
+//#include "collision.h"
 
 enum fieldtype{
     None, STONE,Stone1,stone2,stone3,stone4,stone5,stone6,stone7,stone8,stone9,stone10,stone11,stone12,stone13,stone14,stone15,DIRT,COUNT
@@ -57,6 +58,12 @@ public:
     std::vector<std::vector<std::unique_ptr<sf::Sprite>>> sprites;
     //help vector of our grounds bounds
     std::vector<bounds> bounds_vector;
+
+    bool CheckCollision(sf::Sprite& other,float p);
+
+
+
+
 };
 
 #endif // MAPGAME_H

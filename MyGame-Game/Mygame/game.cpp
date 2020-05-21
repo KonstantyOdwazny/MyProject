@@ -21,6 +21,8 @@ Game::~Game()
     delete this->hero;
 }
 //functions
+
+//functions of event in game
 void Game::pollevent()
 {
     while(this->window->pollEvent(this->ev))
@@ -37,12 +39,18 @@ void Game::pollevent()
         }
     }
 }
+//funkcja update gdzie zmieniamy pozycje obiektow i dodajemy zdarzenia przyciskow wejscia np klawiatury
 void Game::update()
 {
     //level->getposition(10);
     //running
-    this->window->setFramerateLimit(60);
-    this->elapsed=this->clock.restart();
+    this->window->setFramerateLimit(60); //limit fps-ow
+    this->elapsed=this->clock.restart(); //restart a clock
+    /*
+     * Zdarzenia klawiatury
+     *
+     *
+     */
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         if(this->hero->vx<100.0f){
@@ -102,13 +110,16 @@ void Game::update()
         }
 
     }
+    //animacja kiedy postac stoi
     if(this->hero->vx==0.0f&&this->hero->vy==0.0f){
         this->hero->stop();
     }
-    this->hero->moving(elapsed);
+    this->hero->moving(elapsed); //poruszanie naszym bohaterem
 
+    this->level->CheckCollision(*this->hero,1.0f);
 
 }
+//function where we draw everything and set the view options
 void Game::render()
 {
     this->view.setCenter(this->hero->getPosition());
@@ -120,7 +131,7 @@ void Game::render()
     this->hero->render(*window);
     this->window->display();
 }
-
+//bool functions return true if our windows is open
 bool Game::running()
 {
     return this->window->isOpen();

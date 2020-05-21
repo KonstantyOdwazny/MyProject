@@ -10,7 +10,9 @@
 class Game
 {
 private:
+    //window
     sf::RenderWindow* window;
+    //events
     sf::Event ev;
 public:
     //constructor and destructor

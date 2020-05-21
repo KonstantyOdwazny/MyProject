@@ -27,6 +27,8 @@ MapGame::~MapGame()
 
 }
 //public functions
+
+//load texture from the file
 void MapGame::loadfromfile(std::string filename)
 {
     std::ifstream file(filename);
@@ -79,6 +81,7 @@ void MapGame::createSprite()
             s->setTexture(*textures[poziom[i][j].type]);
             s->setScale(0.25f,0.25f);
             s->setPosition(j*tile_width*0.25f,i*tile_height*0.25f);
+            s->setOrigin(s->getGlobalBounds().width/2.0f,s->getGlobalBounds().height/2.0f); //*
             sp.emplace_back(std::move(s));
             auto b=std::make_unique<bounds>();
             b->top=i*tile_height*0.25f;
@@ -118,4 +121,97 @@ void MapGame::getposition(size_t it)
     }
     */
 }
+//check the collision with other sprite and return true or false
 
+bool MapGame::CheckCollision(sf::Sprite &other,float p)
+{
+    sf::Vector2f otherposition=other.getPosition();
+    sf::Vector2f otherhalfsize;
+    otherhalfsize.x=other.getGlobalBounds().width/2.0f;
+    otherhalfsize.y=other.getGlobalBounds().height/2.0f;
+    sf::Vector2f thisposition;
+    sf::Vector2f thishalfsize;
+
+    float deltax;
+    float deltay;
+    float intersectX;
+    float intersectY;
+    for(size_t i=0;i<this->sprites.size();i++)
+    {
+        for(size_t j=0;j<this->sprites[i].size();j++)
+        {
+            thisposition=this->sprites[i][j]->getPosition();
+            thishalfsize.x=this->sprites[i][j]->getGlobalBounds().width/2.0f;
+            thishalfsize.x=this->sprites[i][j]->getGlobalBounds().height/2.0f;
+
+             deltax=otherposition.x-thisposition.x;
+             deltay=otherposition.y-thisposition.y;
+
+             intersectX=std::abs(deltax)-(otherhalfsize.x+thishalfsize.x);
+             intersectY=std::abs(deltay)-(otherhalfsize.y+thishalfsize.y);
+
+             if(intersectX<0.0f&&intersectY<0.0f)
+             {
+                 p=std::min(std::max(p,0.0f),1.0f);
+
+                 if(intersectX > intersectY)
+                 {
+                     if(deltax > 0.0f)
+                     {
+                         this->sprites[i][j]->move(intersectX*(1.0f-p),0.0f);
+                         other.move(-intersectX*p,0.0f);
+                     }
+                     else
+                    {
+                     this->sprites[i][j]->move(-intersectX*(1.0f-p),0.0f);
+                     other.move(intersectX*p,0.0f);
+                    }
+                 }
+                 else
+                 {
+                     if(deltay > 0.0f)
+                     {
+                         this->sprites[i][j]->move(0.0f,intersectY*(1.0f-p));
+                         other.move(0.0f,-intersectY*p);
+                     }
+                     else
+                    {
+                     this->sprites[i][j]->move(0.0f,-intersectY*(1.0f-p));
+                     other.move(0.0f,intersectY*p);
+                    }
+                 }
+                 return true;
+             }
+
+        }
+    }
+    return false;
+}
+
+/*
+std::vector<Collision> MapGame::GetColissions()
+{
+    for(size_t i=0;i<this->sprites.size();i++)
+    {
+        for(size_t j=0;j<this->sprites[i].size();j++)
+        {
+            auto c=std::make_unique<Collision>();
+
+        }
+    }
+}
+*/
+//funkcja do sprawdzania kolizji
+/*
+std::vector<std::vector<Collision>> MapGame::GetColider()
+{
+    std::vector<Collision> v;
+    for(size_t i=0;i<this->sprites.size();i++)
+    {
+        for(size_t j=0;j<this->sprites[i].size();j++)
+        {
+
+        }
+    }
+}
+*/

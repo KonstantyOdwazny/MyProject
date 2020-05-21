@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+//#include "collision.h"
 
 /*
  * Here we have a class of our hero
@@ -39,35 +40,41 @@ public:
         time=0.0f;
     }
     //~MyCharacter();
-    //public properties
-    float vx;
-    float vy;
-    float ax;
-    float ay;
-    float x;
-    float y;
-    bool run;
-    bool jump;
+
+//public properties
+
+    float vx;   //horizontal velocity
+    float vy;   //vertical velocity
+    float ax;   //horizontal acceleration
+    float ay;   //vertical acceleration
+    float x;    //position horizontal a hero
+    float y;    //position vertical a hero
+    bool run;   //run or not
+    bool jump;  //jump or not
     bool is_colission;
     int it;
     int jump_it;
-    float timelimit;
+    float timelimit;    //limit of animation time
     float time;
+    //container of a animation frame a hero
     std::vector<sf::IntRect> vector_animationframe;
 
-    //functions public
+//functions public
+
     void animation_frame();
-    void InitSprite(sf::IntRect r);
-    void InitTexture(std::string filename);
+    void InitSprite(sf::IntRect r);     //create hero
+    void InitTexture(std::string filename);     //download texture from file
     //void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-    void render(sf::RenderTarget& window);
-    void setposition(float x_,float y_);
-    void runstep(const sf::Time& elapsed);
-    void jumpstep();
-    void stop();
+    void render(sf::RenderTarget& window);  //draw a hero
+    void setposition(float x_,float y_);    //set the position on the map
+    void runstep(const sf::Time& elapsed);  //animation of running
+    void jumpstep();    //animation of jumping
+    void stop();    //animation when hero stay
     void moving(const sf::Time& elapsed);
     //colission with static object
     bool colission(const std::vector<std::vector<std::unique_ptr<sf::Sprite>>>& sp);
+
+
 };
 
 #endif // MYCHARACTER_H

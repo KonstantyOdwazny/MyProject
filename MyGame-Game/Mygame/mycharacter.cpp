@@ -60,6 +60,7 @@ void MyCharacter::runstep(const sf::Time& elapsed)
         it=24;
     }
     }
+
 }
 
 void MyCharacter::jumpstep()
@@ -106,3 +107,7 @@ bool MyCharacter::colission(const std::vector<std::vector<std::unique_ptr<sf::Sp
     }
     return false;
 }
+
+
+
+
