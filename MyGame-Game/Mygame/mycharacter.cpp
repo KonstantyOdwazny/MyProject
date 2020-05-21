@@ -11,11 +11,14 @@ void MyCharacter::InitTexture(std::string filename)
 
 void MyCharacter::animation_frame()
 {
+    sf::Vector2u v=this->texture.getSize();
+    v.x/=9;
+    v.y/=5;
     for(int i=0;i<5;i++)
     {
         for(int j=0;j<9;j++)
         {
-            this->vector_animationframe.emplace_back(sf::IntRect(j*95,i*130,95,130));
+            this->vector_animationframe.emplace_back(sf::IntRect(j*v.x,i*v.y,v.x,v.y));
         }
     }
 }
@@ -40,8 +43,12 @@ void MyCharacter::setposition(float x_,float y_)
     this->y=y_;
 }
 
-void MyCharacter::runstep()
+void MyCharacter::runstep(const sf::Time& elapsed)
 {
+    time+=elapsed.asSeconds();
+    if(time>=timelimit)
+    {
+        time-=timelimit;
     if(it<27)
     {
         this->setTextureRect(this->vector_animationframe[it]);
@@ -50,6 +57,7 @@ void MyCharacter::runstep()
     else
     {
         it=24;
+    }
     }
 }
 

@@ -38,21 +38,25 @@ void Game::update()
 {
     //level->getposition(10);
     //running
-    this->window->setFramerateLimit(30);
+    this->window->setFramerateLimit(60);
     this->elapsed=this->clock.restart();
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
+        if(this->hero->vx<100.0f){
         this->hero->vx+=10.0f;
+        }
         this->hero->run=true;
-        this->hero->runstep();
+        this->hero->runstep(this->elapsed);
         //this->hero->moving(elapsed);
 
     }
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
+        if(this->hero->vx>-100.0f){
         this->hero->vx-=10.0f;
+        }
         this->hero->run=true;
-        this->hero->runstep();
+        this->hero->runstep(this->elapsed);
         //this->hero->moving(elapsed);
 
     }

@@ -35,6 +35,8 @@ public:
         jump_it=1;
         jump=false;
         is_colission=true;
+        timelimit=0.2f;
+        time=0.0f;
     }
     //~MyCharacter();
     //public properties
@@ -49,7 +51,10 @@ public:
     bool is_colission;
     int it;
     int jump_it;
+    float timelimit;
+    float time;
     std::vector<sf::IntRect> vector_animationframe;
+
     //functions public
     void animation_frame();
     void InitSprite(sf::IntRect r);
@@ -57,7 +62,7 @@ public:
     //void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void render(sf::RenderTarget& window);
     void setposition(float x_,float y_);
-    void runstep();
+    void runstep(const sf::Time& elapsed);
     void jumpstep();
     void stop();
     void moving(const sf::Time& elapsed);
