@@ -4,7 +4,6 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        collision.cpp \
         game.cpp \
         main.cpp \
         mapgame.cpp \
@@ -18,7 +17,6 @@ CONFIG(debug, debug|release){
 }
 
 HEADERS += \
-    collision.h \
     game.h \
     mapgame.h \
     mycharacter.h

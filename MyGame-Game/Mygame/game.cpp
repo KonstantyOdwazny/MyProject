@@ -32,12 +32,9 @@ void Game::pollevent()
         {
             this->window->close();
         }
-
-        if(this->ev.key.code==sf::Keyboard::Left){
-            this->hero->setScale(-0.5f,0.5f);
-        }
-        if(this->ev.key.code==sf::Keyboard::Right){
-            this->hero->setScale(0.5f,0.5f);
+        if(this->ev.key.code==sf::Keyboard::Space){
+            this->hero->jump=true;
+           // this->hero->jumpstep(); //jump hero animation frame
         }
 
     }
@@ -45,25 +42,20 @@ void Game::pollevent()
 //funckja do sprawdzania kolizji gracza z otoczeniem
 void Game::CheckCollision(sf::Vector2f &direction, float p)
 {
+    float deltax; //zmienna odleglosc miedzy pozycja x bohatera i pozycja x innych obiektow
+    float deltay; //zmienna odleglosc miedzy pozycja y bohatera i pozycja y innych obiektow
+    float intersectX; //przeciecie w osi X obiektu z bohaterem
+    float intersectY; //przeciecie w osi Y obiektu z bohaterem
 
-
-    //std::vector<sf::Vector2f> thispositions;
-    //std::vector<sf::Vector2f> thishalfsizes;
-    //sf::Vector2f thishalfsize(this->level->sprites[0][0]->getGlobalBounds().width/2.0f,this->level->sprites[0][0]->getGlobalBounds().height/2.0f);
-    float deltax;
-    float deltay;
-    float intersectX;
-    float intersectY;
-
-    //musze sprawdzic dla kazdego z osobna
+    //sprawdzamy kolizje naszego bohatera z kazdym obiektem na naszej mapie
     for(size_t i=0;i<this->level->sprites.size();i++)
     {
         for(size_t j=0;j<this->level->sprites[i].size();j++)
         {
 
 
-            sf::Vector2f thisposition=this->level->sprites[i][j]->getPosition();
-            sf::Vector2f otherposition=this->hero->getPosition();
+            sf::Vector2f thisposition=this->level->sprites[i][j]->getPosition(); //pozycja bohatera
+            sf::Vector2f otherposition=this->hero->getPosition(); //pozycja aktualnego obiektu
             sf::Vector2f thishalfsize(this->level->sprites[i][j]->getGlobalBounds().width/2.0f,this->level->sprites[i][j]->getGlobalBounds().height/2.0f);
             //thishalfsize.x=this->level->sprites[i][j]->getGlobalBounds().width/2.0f;
             //thishalfsize.y=this->level->sprites[i][j]->getGlobalBounds().height/2.0f;
@@ -76,7 +68,7 @@ void Game::CheckCollision(sf::Vector2f &direction, float p)
              intersectX=std::abs(deltax)-(otherhalfsize.x+thishalfsize.x);
              intersectY=std::abs(deltay)-(otherhalfsize.y+thishalfsize.y);
 
-             if(intersectX<0.0f && intersectY<0.0f)
+             if(intersectX<0.0f && intersectY<0.0f) //jesli obie osie przeciecia obiektu sa mniejsze od 0 to znaczy ze obiekty na siebie nachodza i nastepuje zderzenie
              {
                  p=std::min(std::max(p,0.0f),1.0f);
 
@@ -84,7 +76,7 @@ void Game::CheckCollision(sf::Vector2f &direction, float p)
                  {
                      if(deltax > 0.0f)
                      {
-                         this->level->sprites[i][j]->move(intersectX*(1.0f-p),0.0f);
+                         this->level->sprites[i][j]->move(intersectX*(1.0f-p),0.0f); //odbicia podczas zderzen kazdy w innym kierunku
                          hero->move(-intersectX*p,0.0f);
 
                          direction.x=1.0f;
@@ -167,10 +159,6 @@ void Game::update()
         //this->hero->moving(elapsed);
 
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-    {
-        this->hero->vy+=30.0f;
-    }
     /*
     else{
         this->hero->run=false;
@@ -178,21 +166,26 @@ void Game::update()
         //this->hero->stop();
     }
     */
-
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->hero->canjump)
     {
         this->hero->canjump=false;
         //gravity
         this->hero->vy=-sqrtf(2.0f*981.0f*this->hero->jumpHeight); //float square root
+        this->hero->jumpstep(); //jump hero animation frame
+
+
     }
 
     this->hero->vy+=981.0f*elapsed.asSeconds();
 
-    this->CheckCollision(direction,1.0f);
+    this->CheckCollision(direction,1.0f); //sprawdzamy kolizje przed poruszeniem sie postaci aby sprawdzic czy moze ona sie poruszac
+
     this->hero->moving(elapsed); //poruszanie naszym bohaterem
+
      //animacja kiedy postac stoi
     if(this->hero->vx==0.0f&&this->hero->vy==0.0f){
-        this->hero->stop();
+        this->hero->stop(elapsed);
+        this->hero->jump=false;
     }
 
 }

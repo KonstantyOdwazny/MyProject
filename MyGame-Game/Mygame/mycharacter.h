@@ -39,6 +39,7 @@ public:
         timelimit=0.2f;
         time=0.0f;
         jumpHeight=100.0f;
+        stay_it=22;
         //canjump =true;
     }
     //~MyCharacter();
@@ -52,14 +53,16 @@ public:
     float x;    //position horizontal a hero
     float y;    //position vertical a hero
     bool run;   //run or not
-    bool jump;  //jump or not
+    bool jump;
     bool is_colission;
 
-    bool canjump;
-    float jumpHeight;
+    bool canjump; //can jump or not
+    float jumpHeight; //higth of the jump
 
-    int it;
-    int jump_it;
+    int it; //iterator vector animation  frame
+    int jump_it; //iterator jump animation frame
+    int stay_it;
+
     float timelimit;    //limit of animation time
     float time;
     //container of a animation frame a hero
@@ -75,10 +78,10 @@ public:
     void setposition(float x_,float y_);    //set the position on the map
     void runstep(const sf::Time& elapsed);  //animation of running
     void jumpstep();    //animation of jumping
-    void stop();    //animation when hero stay
-    void moving(const sf::Time& elapsed);
+    void stop(const sf::Time& elapsed);    //animation when hero stay
+    void moving(const sf::Time& elapsed); //moving a hero with a time beetwen frame
     //colission with static object
-    void Oncollision(sf::Vector2f direction);
+    void Oncollision(sf::Vector2f direction); //detect does hero in collision
 
 
 };

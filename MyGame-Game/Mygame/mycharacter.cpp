@@ -66,20 +66,33 @@ void MyCharacter::runstep(const sf::Time& elapsed)
 //animmation of jumping hero
 void MyCharacter::jumpstep()
 {
-    if(jump_it<4)
+    //time+=elapsed.asSeconds();
+    //if(time>= timelimit)
+   // {
+        //time-=timelimit;
+    if(jump==true){
+
+           this->setTextureRect(this->vector_animationframe[1]);
+    }
+
+}
+//animation when hero stay
+void MyCharacter::stop(const sf::Time& elapsed)
+{
+    time+=elapsed.asSeconds();
+    if(time>=2.0f*timelimit)
     {
-        this->setTextureRect(this->vector_animationframe[jump_it]);
-        jump_it++;
+        time-=2.0f*timelimit;
+    if(stay_it<24){
+        this->setTextureRect(this->vector_animationframe[stay_it]);
+        stay_it++;
     }
     else
     {
-        jump_it=1;
+        stay_it=22;
     }
-}
-//animation when hero stay
-void MyCharacter::stop()
-{
-    this->setTextureRect(this->vector_animationframe[0]);
+    }
+
 }
 //move
 void MyCharacter::moving(const sf::Time& elapsed)
