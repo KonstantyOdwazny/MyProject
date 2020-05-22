@@ -8,7 +8,7 @@ void MyCharacter::InitTexture(std::string filename)
     }
     this->texture.setRepeated(true);
 }
-
+//create a vector of animation frame
 void MyCharacter::animation_frame()
 {
     sf::Vector2u v=this->texture.getSize();
@@ -22,28 +22,29 @@ void MyCharacter::animation_frame()
         }
     }
 }
-
+//create a Sprite hero
 void MyCharacter::InitSprite(sf::IntRect r)
 {
     this->setTexture(this->texture);
     this->setTextureRect(r);
     this->setScale(0.50f,0.50f);
-    this->setOrigin(64.0f,64.0f);
+    //this->setOrigin(64.0f,64.0f);
+    this->setOrigin(this->getGlobalBounds().width/2.0f,this->getGlobalBounds().height/2.0f);
     //this->setPosition(100.0f*0.4f,300.0f*0.4f);
 }
-
+//draw hero
 void MyCharacter::render(sf::RenderTarget &window)
 {
     window.draw(*this);
 }
-
+//set the hero position
 void MyCharacter::setposition(float x_,float y_)
 {
     this->setPosition(x_,y_);
     this->x=x_;
     this->y=y_;
 }
-
+//animation of running hero
 void MyCharacter::runstep(const sf::Time& elapsed)
 {
     time+=elapsed.asSeconds();
@@ -62,7 +63,7 @@ void MyCharacter::runstep(const sf::Time& elapsed)
     }
 
 }
-
+//animmation of jumping hero
 void MyCharacter::jumpstep()
 {
     if(jump_it<4)
@@ -75,12 +76,12 @@ void MyCharacter::jumpstep()
         jump_it=1;
     }
 }
-
+//animation when hero stay
 void MyCharacter::stop()
 {
     this->setTextureRect(this->vector_animationframe[0]);
 }
-
+//move
 void MyCharacter::moving(const sf::Time& elapsed)
 {
     //std::cout<<1/elapsed.asSeconds()<<std::endl;
@@ -89,25 +90,8 @@ void MyCharacter::moving(const sf::Time& elapsed)
    // }
 }
 
-bool MyCharacter::colission(const std::vector<std::vector<std::unique_ptr<sf::Sprite>>>& sp)
-{
-    for(size_t i=0;i<sp.size();i++)
-    {
-        for(size_t j=0;j<sp[i].size();j++)
-        {
-            if((this->getGlobalBounds().intersects(sp[i][j]->getGlobalBounds()))&&(this->vy<=0)){
-                this->is_colission=true;
-                return true;
-            }
-            else if(!(this->getGlobalBounds().intersects(sp[i][j]->getGlobalBounds())))
-            {
-                this->is_colission=false;
-            }
-        }
-    }
-    return false;
-}
 
+//funkcja do sprawdzania z ktorej strony obiektu nastepuje kolizja gracza z obiektem
 void MyCharacter::Oncollision(sf::Vector2f direction)
 {
     if(direction.x <0.0f)

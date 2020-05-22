@@ -32,6 +32,8 @@ public:
     sf::Time elapsed;
     //view
     sf::View view;
+
+    void CheckCollision(sf::Vector2f& direction ,float p);
 };
 
 #endif // GAME_H

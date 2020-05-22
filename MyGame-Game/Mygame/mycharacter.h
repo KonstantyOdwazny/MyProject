@@ -39,7 +39,7 @@ public:
         timelimit=0.2f;
         time=0.0f;
         jumpHeight=100.0f;
-        canjump =true;
+        //canjump =true;
     }
     //~MyCharacter();
 
@@ -78,8 +78,6 @@ public:
     void stop();    //animation when hero stay
     void moving(const sf::Time& elapsed);
     //colission with static object
-    bool colission(const std::vector<std::vector<std::unique_ptr<sf::Sprite>>>& sp);
-
     void Oncollision(sf::Vector2f direction);
 
 
