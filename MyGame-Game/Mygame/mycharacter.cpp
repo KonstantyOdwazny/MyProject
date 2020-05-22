@@ -84,9 +84,9 @@ void MyCharacter::stop()
 void MyCharacter::moving(const sf::Time& elapsed)
 {
     //std::cout<<1/elapsed.asSeconds()<<std::endl;
-    if(this->run==true||this->jump==true){
+    //if(this->run==true||this->jump==true){
     this->move(this->vx*elapsed.asSeconds()+ax*elapsed.asSeconds(),this->vy*elapsed.asSeconds()+ay*elapsed.asSeconds());
-    }
+   // }
 }
 
 bool MyCharacter::colission(const std::vector<std::vector<std::unique_ptr<sf::Sprite>>>& sp)
@@ -106,6 +106,32 @@ bool MyCharacter::colission(const std::vector<std::vector<std::unique_ptr<sf::Sp
         }
     }
     return false;
+}
+
+void MyCharacter::Oncollision(sf::Vector2f direction)
+{
+    if(direction.x <0.0f)
+    {
+        //Collision on the left
+        vx=0.0f;
+    }
+    else if(direction.x >0.0f)
+    {
+        //Collision on the rigth
+        vx=0.0f;
+    }
+
+    if(direction.y < 0.0f)
+    {
+        //Collision on the bottom
+        vy=0.0f;
+        canjump=true;
+    }
+    else if(direction.y >0.0f)
+    {
+        //Collision on the top
+        vy=0.0f;
+    }
 }
 
 

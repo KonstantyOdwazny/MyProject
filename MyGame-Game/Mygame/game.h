@@ -26,6 +26,7 @@ public:
     //public properties
     MapGame* level;
     MyCharacter* hero;
+    sf::Vector2f direction;
     //time
     sf::Clock clock;
     sf::Time elapsed;

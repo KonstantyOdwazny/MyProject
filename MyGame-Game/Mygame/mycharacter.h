@@ -38,6 +38,8 @@ public:
         is_colission=true;
         timelimit=0.2f;
         time=0.0f;
+        jumpHeight=100.0f;
+        canjump =true;
     }
     //~MyCharacter();
 
@@ -52,6 +54,10 @@ public:
     bool run;   //run or not
     bool jump;  //jump or not
     bool is_colission;
+
+    bool canjump;
+    float jumpHeight;
+
     int it;
     int jump_it;
     float timelimit;    //limit of animation time
@@ -73,6 +79,8 @@ public:
     void moving(const sf::Time& elapsed);
     //colission with static object
     bool colission(const std::vector<std::vector<std::unique_ptr<sf::Sprite>>>& sp);
+
+    void Oncollision(sf::Vector2f direction);
 
 
 };

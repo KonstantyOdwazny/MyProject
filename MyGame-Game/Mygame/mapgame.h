@@ -59,7 +59,7 @@ public:
     //help vector of our grounds bounds
     std::vector<bounds> bounds_vector;
 
-    bool CheckCollision(sf::Sprite& other,float p);
+    bool CheckCollision(sf::Sprite& other,sf::Vector2f& direction ,float p);
 
 
 

@@ -1,4 +1,5 @@
 #include "game.h"
+#include <cmath>
 //constructor
 Game::Game()
 {
@@ -11,7 +12,7 @@ Game::Game()
     this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_maleAdventurer_sheet.png");
     this->hero->animation_frame();
     this->hero->InitSprite(this->hero->vector_animationframe[0]);
-    this->hero->setposition(0.0f,420.0f);
+    this->hero->setposition(400.0f,400.0f);
 }
 //destructor
 Game::~Game()
@@ -31,12 +32,14 @@ void Game::pollevent()
         {
             this->window->close();
         }
+        /*
         if(this->ev.key.code==sf::Keyboard::Left){
             this->hero->setScale(-0.5f,0.5f);
         }
         if(this->ev.key.code==sf::Keyboard::Right){
             this->hero->setScale(0.5f,0.5f);
         }
+        */
     }
 }
 //funkcja update gdzie zmieniamy pozycje obiektow i dodajemy zdarzenia przyciskow wejscia np klawiatury
@@ -51,31 +54,35 @@ void Game::update()
      *
      *
      */
+    this->hero->vx=0.0f;
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        if(this->hero->vx<100.0f){
+       // if(this->hero->vx<100.0f){
         this->hero->vx+=10.0f;
-        }
+       // }
         this->hero->run=true;
         this->hero->runstep(this->elapsed);
         //this->hero->moving(elapsed);
 
     }
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        if(this->hero->vx>-100.0f){
+        //if(this->hero->vx>-100.0f){
         this->hero->vx-=10.0f;
-        }
+       // }
         this->hero->run=true;
         this->hero->runstep(this->elapsed);
         //this->hero->moving(elapsed);
 
     }
+    /*
     else{
         this->hero->run=false;
         this->hero->vx=0.0f;
         //this->hero->stop();
     }
+    */
+    /*
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
         if((this->hero->y - this->hero->getPosition().y)<70.0f){
@@ -110,13 +117,28 @@ void Game::update()
         }
 
     }
+    */
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->hero->canjump)
+    {
+        this->hero->canjump=false;
+        //gravity
+        this->hero->vy=-sqrtf(2.0f*981.0f*this->hero->jumpHeight); //float square root
+    }
+
+    this->hero->vy+=981.0f*elapsed.asSeconds();
+
     //animacja kiedy postac stoi
+    /*
     if(this->hero->vx==0.0f&&this->hero->vy==0.0f){
         this->hero->stop();
     }
+    */
     this->hero->moving(elapsed); //poruszanie naszym bohaterem
 
-    this->level->CheckCollision(*this->hero,1.0f);
+    if(this->level->CheckCollision(*this->hero,direction,1.0f))
+    {
+        this->hero->Oncollision(direction);
+    }
 
 }
 //function where we draw everything and set the view options
