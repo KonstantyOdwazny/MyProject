@@ -47,13 +47,30 @@ void MyCharacter::setposition(float x_,float y_)
 //animation of running hero
 void MyCharacter::runstep(const sf::Time& elapsed)
 {
+
+    sf::IntRect drect;
     time+=elapsed.asSeconds();
     if(time>=timelimit)
     {
         time-=timelimit;
     if(it<27)
     {
-        this->setTextureRect(this->vector_animationframe[it]);
+        drect.top=this->vector_animationframe[it].top;
+        drect.height=this->vector_animationframe[it].height;
+        if(facerigth)
+        {
+            //this->vector_animationframe[it].width=std::abs(this->vector_animationframe[it].width);
+            drect.width=std::abs(this->vector_animationframe[it].width);
+            drect.left=this->vector_animationframe[it].left;
+        }
+        else
+        {
+            //this->vector_animationframe[it].width=-std::abs(this->vector_animationframe[it].width);
+            drect.width=-std::abs(this->vector_animationframe[it].width);
+            drect.left=this->vector_animationframe[it+1].left;
+        }
+        //this->setTextureRect(this->vector_animationframe[it]);
+        this->setTextureRect(drect);
         it++;
     }
     else

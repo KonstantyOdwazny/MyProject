@@ -147,7 +147,7 @@ void Game::update()
         }
         this->hero->run=true;
         this->hero->runstep(this->elapsed);
-        //this->hero->moving(elapsed);
+        this->hero->facerigth=true;
 
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -157,16 +157,10 @@ void Game::update()
         }
         this->hero->run=true;
         this->hero->runstep(this->elapsed);
-        //this->hero->moving(elapsed);
+       this->hero->facerigth=false;
 
     }
-    /*
-    else{
-        this->hero->run=false;
-        this->hero->vx=0.0f;
-        //this->hero->stop();
-    }
-    */
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->hero->canjump)
     {
         this->hero->canjump=false;

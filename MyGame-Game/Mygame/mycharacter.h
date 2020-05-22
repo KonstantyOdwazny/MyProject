@@ -40,6 +40,7 @@ public:
         time=0.0f;
         jumpHeight=200.0f;
         stay_it=22;
+        facerigth=true;
         //canjump =true;
     }
     //~MyCharacter();
@@ -52,9 +53,11 @@ public:
     float ay;   //vertical acceleration
     float x;    //position horizontal a hero
     float y;    //position vertical a hero
+
     bool run;   //run or not
     bool jump;
     bool is_colission;
+    bool facerigth;
 
     bool canjump; //can jump or not
     float jumpHeight; //higth of the jump
