@@ -38,7 +38,7 @@ public:
         is_colission=true;
         timelimit=0.2f;
         time=0.0f;
-        jumpHeight=100.0f;
+        jumpHeight=200.0f;
         stay_it=22;
         //canjump =true;
     }

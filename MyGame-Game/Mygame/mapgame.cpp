@@ -71,6 +71,8 @@ void MapGame::createSprite()
     }
     }
     std::vector<std::unique_ptr<sf::Sprite>> sp;
+
+
     for(int i=0;i<height;i++)
     {
         for(int j=0;j<width;j++)
@@ -79,15 +81,24 @@ void MapGame::createSprite()
 
             auto s=std::make_unique<sf::Sprite>();
             s->setTexture(*textures[poziom[i][j].type]);
-            s->setScale(0.25f,0.25f);
-            s->setPosition(j*tile_width*0.25f,i*tile_height*0.25f);
-            s->setOrigin(s->getGlobalBounds().width/2.0f,s->getGlobalBounds().height/2.0f); //*
+
+            s->setScale(0.5f,0.5f);
+
+            s->setPosition(j*tile_width*0.5f,i*tile_height*0.5f);
+
+                pom.x=j*tile_width*0.5f-155.0f;
+                pom.y=i*tile_height*0.5f-255.0f;
+                //std::cout<<pom.x<<"    "<<pom.y<<std::endl;
+
+            s->setOrigin(s->getGlobalBounds().width/2.0f,s->getGlobalBounds().height/2.0f);
+            //std::cout<<s->getGlobalBounds().width/2.0f<<"  "<<s->getGlobalBounds().height/2.0f<<std::endl;
+
             sp.emplace_back(std::move(s));
             auto b=std::make_unique<bounds>();
-            b->top=i*tile_height*0.25f;
-            b->left=j*tile_width*0.25f;
-            b->width=128.0f*0.25f;
-            b->height=128.0f*0.25f;
+            b->top=i*tile_height*0.5f;
+            b->left=j*tile_width*0.5f;
+            b->width=128.0f*0.5f;
+            b->height=128.0f*0.5f;
             this->bounds_vector.emplace_back(std::move(*b));
             }
         }

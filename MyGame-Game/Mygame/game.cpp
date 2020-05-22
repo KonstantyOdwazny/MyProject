@@ -12,7 +12,8 @@ Game::Game()
     this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_maleAdventurer_sheet.png");
     this->hero->animation_frame();
     this->hero->InitSprite(this->hero->vector_animationframe[0]);
-    this->hero->setposition(400.0f,420.0f);
+    this->hero->setposition(800.0f,840.0f);
+    //this->hero->setPosition(this->level->pom);
 }
 //destructor
 Game::~Game()
