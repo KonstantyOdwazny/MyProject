@@ -61,7 +61,8 @@ public:
 
     sf::Vector2f pom;
 
-
+    sf::Sprite* backgrounds;
+    sf::Texture* tex;
 
 
 };

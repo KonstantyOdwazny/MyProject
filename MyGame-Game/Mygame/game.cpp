@@ -12,7 +12,7 @@ Game::Game()
     this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_maleAdventurer_sheet.png");
     this->hero->animation_frame();
     this->hero->InitSprite(this->hero->vector_animationframe[0]);
-    this->hero->setposition(800.0f,840.0f);
+    this->hero->setposition(300.0f,300.0f);
     //this->hero->setPosition(this->level->pom);
 }
 //destructor
@@ -142,8 +142,8 @@ void Game::update()
     this->hero->vx=0.0f;
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        if(this->hero->vx<300.0f){
-        this->hero->vx+=30.0f;
+        if(this->hero->vx<600.0f){
+        this->hero->vx+=100.0f;
         }
         this->hero->run=true;
         this->hero->runstep(this->elapsed);
@@ -152,8 +152,8 @@ void Game::update()
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        if(this->hero->vx>-300.0f){
-        this->hero->vx-=30.0f;
+        if(this->hero->vx>-600.0f){
+        this->hero->vx-=100.0f;
         }
         this->hero->run=true;
         this->hero->runstep(this->elapsed);

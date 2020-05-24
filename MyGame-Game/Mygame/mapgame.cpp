@@ -53,7 +53,6 @@ void MapGame::loadfromfile(std::string filename)
             }
         }
     }
-
     file.close();
 }
 //create our sprites and get them to the containers
@@ -105,11 +104,23 @@ void MapGame::createSprite()
         this->sprites.emplace_back(std::move(sp));
         sp.clear();
     }
+
+    //backgrounds
+
+    tex=new sf::Texture;
+    tex->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/backgroundColorForest.png");
+    tex->setRepeated(true);
+    this->backgrounds=new sf::Sprite;
+    this->backgrounds->setTexture(*tex);
+    //this->backgrounds->setTextureRect(sf::IntRect(0,0,1000,1000));
+    this->backgrounds->setScale(5.0f,5.0f);
+    this->backgrounds->setPosition(0.0f,0.0f);
 }
 
 //draw all elements of the map
 void MapGame::drawing(sf::RenderTarget &target)
 {
+    target.draw(*this->backgrounds);
     for(size_t i=0;i<this->sprites.size();i++)
     {
         for(size_t j=0;j<this->sprites[i].size();j++)
@@ -117,6 +128,7 @@ void MapGame::drawing(sf::RenderTarget &target)
             target.draw(*sprites[i][j]);
         }
     }
+
 }
 
 void MapGame::getposition(size_t it)
