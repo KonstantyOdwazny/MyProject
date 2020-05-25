@@ -85,6 +85,8 @@ public:
     void moving(const sf::Time& elapsed); //moving a hero with a time beetwen frame
     //colission with static object
     void Oncollision(sf::Vector2f direction); //detect does hero in collision
+    //colission with dynamic object
+    void OnitemCollision(sf::Vector2f& direction);
 
 
 };

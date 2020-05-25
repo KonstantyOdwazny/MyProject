@@ -154,6 +154,21 @@ void MyCharacter::Oncollision(sf::Vector2f direction)
     }
 }
 
+void MyCharacter::OnitemCollision(sf::Vector2f &direction)
+{
+    if(direction.y < 0.0f)
+    {
+        //Collision on the bottom
+        vy=0.0f;
+        canjump=true;
+    }
+    else if(direction.y >0.0f)
+    {
+        //Collision on the top
+        vy=0.0f;
+    }
+}
+
 
 
 

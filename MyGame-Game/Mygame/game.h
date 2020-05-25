@@ -35,7 +35,16 @@ public:
     //view
     sf::View view;
 
+    //public functions
+
+    //collision hero witch map
     void CheckCollision(sf::Vector2f& direction ,float p);
+    //collision hero and items
+    void hero_and_itemsCollision(sf::Vector2f& direction, float p);
+    //collision items with elements of map
+    void map_collision_items(sf::Vector2f& direction, float p);
+
+
 };
 
 #endif // GAME_H
