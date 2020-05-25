@@ -5,6 +5,7 @@ CONFIG -= qt
 
 SOURCES += \
         game.cpp \
+        items.cpp \
         main.cpp \
         mapgame.cpp \
         mycharacter.cpp
@@ -18,5 +19,6 @@ CONFIG(debug, debug|release){
 
 HEADERS += \
     game.h \
+    items.h \
     mapgame.h \
     mycharacter.h

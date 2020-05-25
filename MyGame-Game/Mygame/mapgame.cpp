@@ -113,7 +113,7 @@ void MapGame::createSprite()
     this->backgrounds=new sf::Sprite;
     this->backgrounds->setTexture(*tex);
     //this->backgrounds->setTextureRect(sf::IntRect(0,0,1000,1000));
-    this->backgrounds->setScale(5.0f,5.0f);
+    this->backgrounds->setScale(3.0f,3.0f);
     this->backgrounds->setPosition(0.0f,0.0f);
 }
 
@@ -134,15 +134,7 @@ void MapGame::drawing(sf::RenderTarget &target)
 void MapGame::getposition(size_t it)
 {
     std::cout<<bounds_vector[it].left<<" "<<bounds_vector[it].top<<std::endl;
-    /*
-    for(size_t i=0;i<this->sprites.size();i++)
-    {
-        for(size_t j=0;j<this->sprites[i].size();j++)
-        {
-            std::cout<<sprites[i][j]->getGlobalBounds().left<<std::endl;
-        }
-    }
-    */
+
 }
 
 

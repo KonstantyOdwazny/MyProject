@@ -2,6 +2,7 @@
 #define GAME_H
 #include "mapgame.h"
 #include "mycharacter.h"
+//#include "items.h"
 
 /*
  Main game class
@@ -24,6 +25,7 @@ public:
     bool running();
     void pollevent();
     //public properties
+    Items* things;
     MapGame* level;
     MyCharacter* hero;
     sf::Vector2f direction;

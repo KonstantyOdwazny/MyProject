@@ -59,17 +59,14 @@ void MyCharacter::runstep(const sf::Time& elapsed)
         drect.height=this->vector_animationframe[it].height;
         if(facerigth)
         {
-            //this->vector_animationframe[it].width=std::abs(this->vector_animationframe[it].width);
             drect.width=std::abs(this->vector_animationframe[it].width);
             drect.left=this->vector_animationframe[it].left;
         }
         else
         {
-            //this->vector_animationframe[it].width=-std::abs(this->vector_animationframe[it].width);
             drect.width=-std::abs(this->vector_animationframe[it].width);
             drect.left=this->vector_animationframe[it+1].left;
         }
-        //this->setTextureRect(this->vector_animationframe[it]);
         this->setTextureRect(drect);
         it++;
     }
@@ -83,13 +80,22 @@ void MyCharacter::runstep(const sf::Time& elapsed)
 //animmation of jumping hero
 void MyCharacter::jumpstep()
 {
-    //time+=elapsed.asSeconds();
-    //if(time>= timelimit)
-   // {
-        //time-=timelimit;
+    sf::IntRect drect;
     if(jump==true){
+        drect.top=this->vector_animationframe[1].top;
+        drect.height=this->vector_animationframe[1].height;
+        if(facerigth)
+        {
+            drect.width=std::abs(this->vector_animationframe[1].width);
+            drect.left=this->vector_animationframe[1].left;
+        }
+        else
+        {
+            drect.width=-std::abs(this->vector_animationframe[1].width);
+            drect.left=this->vector_animationframe[1+1].left;
+        }
 
-           this->setTextureRect(this->vector_animationframe[1]);
+        this->setTextureRect(drect);
     }
 
 }

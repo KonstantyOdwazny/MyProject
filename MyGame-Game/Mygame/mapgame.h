@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 //#include "collision.h"
+#include "items.h"
 
 enum fieldtype{
     None, STONE,Stone1,stone2,stone3,stone4,stone5,stone6,stone7,stone8,stone9,stone10,stone11,stone12,stone13,stone14,stone15,DIRT,COUNT
@@ -14,11 +15,13 @@ enum fieldtype{
  *
  *
  */
+/*
 struct Tile{
     //fieldtype type;
     int type;
     bool iswall;
 };
+*/
 struct bounds{
     float left;
     float top;
@@ -47,8 +50,8 @@ public:
     const static int tile_height =128;
     const static int tile_width =128;
 
-    const static int height =18;
-    const static int width =32;
+    const static int height =22;
+    const static int width =47;
     //object our help struct Tile when we have a number which texture we have draw with our png
     Tile poziom[height][width];
 

@@ -14,6 +14,7 @@ Game::Game()
     this->hero->InitSprite(this->hero->vector_animationframe[0]);
     this->hero->setposition(300.0f,300.0f);
     //this->hero->setPosition(this->level->pom);
+    this->things=new Items("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/item.level");
 }
 //destructor
 Game::~Game()
@@ -21,6 +22,7 @@ Game::~Game()
     delete this->window;
     delete  this->level;
     delete this->hero;
+    delete this->things;
 }
 //functions
 
@@ -193,6 +195,7 @@ void Game::render()
     window->setView(this->view);
     //draw game object
     level->drawing(*window);
+    things->drawing(*window);
     this->hero->render(*window);
     this->window->display();
 }
