@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        enemies.cpp \
         game.cpp \
         items.cpp \
         main.cpp \
@@ -18,6 +19,7 @@ CONFIG(debug, debug|release){
 }
 
 HEADERS += \
+    enemies.h \
     game.h \
     items.h \
     mapgame.h \

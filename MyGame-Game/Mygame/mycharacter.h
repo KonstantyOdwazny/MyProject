@@ -57,7 +57,7 @@ public:
     bool run;   //run or not
     bool jump;
     bool is_colission;
-    bool facerigth;
+    bool facerigth; //hero have face on the right or left
 
     bool canjump; //can jump or not
     float jumpHeight; //higth of the jump
@@ -73,7 +73,7 @@ public:
 
 //functions public
 
-    void animation_frame();
+    void animation_frame(); //set vector of animation frame
     void InitSprite(sf::IntRect r);     //create hero
     void InitTexture(std::string filename);     //download texture from file
     //void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
@@ -87,8 +87,6 @@ public:
     void Oncollision(sf::Vector2f direction); //detect does hero in collision
     //colission with dynamic object
     void OnitemCollision(sf::Vector2f& direction);
-
-
 };
 
 #endif // MYCHARACTER_H

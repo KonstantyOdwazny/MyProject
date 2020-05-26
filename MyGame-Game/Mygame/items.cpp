@@ -5,6 +5,7 @@
 
 
 //private functions
+//load texture from file
 void Items::loadfromfile(const std::string &filename)
 {
     std::ifstream file(filename);
@@ -35,7 +36,7 @@ void Items::loadfromfile(const std::string &filename)
     }
     file.close();
 }
-
+//create a items sprite
 void Items::createSprite()
 {
 
@@ -51,6 +52,7 @@ void Items::createSprite()
     }
      std::vector<std::unique_ptr<sf::Sprite>> sp;
      std::vector<item_type> itemname;
+
 
      for(int i=0;i<height;i++)
      {
@@ -87,12 +89,14 @@ void Items::createSprite()
          }
          this->items.emplace_back(std::move(sp));
          this->typeofitem.emplace_back(itemname);
+
+
          itemname.clear();
          sp.clear();
      }
 
 }
-
+//constructors
 Items::Items()
 {
 
@@ -114,7 +118,7 @@ void Items::drawing(sf::RenderTarget &target)
         }
     }
 }
-
+//what hapen when items collider
 void Items::Collision_events(sf::Vector2f &direction,const size_t& i,const size_t& j)
 {
     if(direction.x <0.0f)
@@ -135,12 +139,13 @@ void Items::Collision_events(sf::Vector2f &direction,const size_t& i,const size_
         //Collision on the bottom
         //vy=0.0f;
         this->typeofitem[i][j].velocity.y=0.0f;
+
     }
     else if(direction.y >0.0f)
     {
         //Collision on the top
         //vy=0.0f;
-        this->typeofitem[i][j].velocity.y=0.0f;
+        this->typeofitem[i][j].velocity.y=98.0f;
     }
 }
 
