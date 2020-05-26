@@ -60,6 +60,8 @@ public:
     void drawing(sf::RenderTarget& target);
     void Collision_events(sf::Vector2f& direction,const size_t& i,const size_t& j);
     void moving(sf::Time& elapsed);
+    //items with items collision
+    void Collider_items();
 };
 
 #endif // ITEMS_H

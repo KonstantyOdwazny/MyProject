@@ -162,7 +162,7 @@ void Game::hero_and_itemsCollision(sf::Vector2f &direction, float p)
                      if(deltax > 0.0f)
                      {
                          this->things->items[i][j]->move(intersectX,0.0f); //odbicia podczas zderzen kazdy w innym kierunku
-                         hero->move(0.0f,0.0f);
+                         hero->move(-0.0f,0.0f);
 
                          direction.x=1.0f;
                          direction.y=0.0f;
@@ -363,6 +363,7 @@ void Game::update()
     this->CheckCollision(direction,1.0f); //sprawdzamy kolizje przed poruszeniem sie postaci aby sprawdzic czy moze ona sie poruszac
     this->map_collision_items(direction,1.0f); //sprawdzamy kolizje przedmiotow z elementami mapy
     this->hero_and_itemsCollision(direction,1.0f); //sprawdzamy kolizje gracza z przedmiotami
+    this->things->Collider_items();
 
     this->hero->moving(elapsed); //poruszanie naszym bohaterem
     this->things->moving(elapsed);
