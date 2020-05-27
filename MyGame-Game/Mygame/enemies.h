@@ -4,7 +4,16 @@
 #include <vector>
 #include <memory>
 #include <iostream>
-#include "items.h"
+//#include "items.h"
+
+//help structure to load from file
+struct Tile{
+    //fieldtype type;
+    int type;
+    bool iswall;
+};
+
+
 
 class Enemies
 {
@@ -14,10 +23,17 @@ private:
     void animationframe();
     void loadfromfile(const std::string& filename);
     void InitTextures();
+   // void TurnAround();
 
     //private properties
     std::vector<std::unique_ptr<sf::Texture>> textures;
     std::vector<sf::IntRect> vector_animationframe;
+    //float timelimit;
+   // float time;
+   // bool faceright;
+  //  size_t it;
+   // float walktime;
+   // float walklimittime;
 public:
     Enemies();
     Enemies(std::string filename);
@@ -31,12 +47,15 @@ public:
     //object our help struct Tile when we have a number which texture we have draw with our png
     Tile poziom[height][width];
 
+    //vector of sprites enemies
     std::vector<std::unique_ptr<sf::Sprite>> sprites;
+    //vector velocity enemies
+    //std::vector<sf::Vector2f> veclocities;
 
     //public functions
     void drawing(sf::RenderTarget& target);
-    void walkingstep();
-    void moving();
+  //  void walkingstep(const sf::Time& elapsed,const size_t& i);
+  //  void moving(const sf::Time& elapsed);
 };
 
 #endif // ENEMIES_H

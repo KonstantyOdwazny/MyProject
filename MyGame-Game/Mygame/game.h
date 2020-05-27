@@ -2,6 +2,7 @@
 #define GAME_H
 #include "mapgame.h"
 #include "mycharacter.h"
+//#include "enemies.h"
 //#include "items.h"
 
 /*
@@ -25,6 +26,7 @@ public:
     bool running();
     void pollevent();
     //public properties
+    Enemies* enemies;
     Items* things;
     MapGame* level;
     MyCharacter* hero;

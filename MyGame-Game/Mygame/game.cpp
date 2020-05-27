@@ -8,13 +8,17 @@ Game::Game()
     view.setCenter(0.0f,0.0f);
     this->window=new sf::RenderWindow(sf::VideoMode(800,600),"My Game");
     this->level=new MapGame("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/map.level");
+    //create hero
     hero=new MyCharacter;
     this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_maleAdventurer_sheet.png");
     this->hero->animation_frame();
     this->hero->InitSprite(this->hero->vector_animationframe[0]);
     this->hero->setposition(300.0f,300.0f);
     //this->hero->setPosition(this->level->pom);
+    //create items
     this->things=new Items("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/item.level");
+    //create enemies
+    this->enemies=new Enemies("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/enemies.level");
 }
 //destructor
 Game::~Game()
@@ -23,6 +27,7 @@ Game::~Game()
     delete  this->level;
     delete this->hero;
     delete this->things;
+    delete  this->enemies;
 }
 //functions
 
@@ -385,6 +390,7 @@ void Game::render()
     //draw game object
     level->drawing(*window);
     things->drawing(*window);
+    enemies->drawing(*window);
     this->hero->render(*window);
     this->window->display();
 }

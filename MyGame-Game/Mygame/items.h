@@ -3,6 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include <vector>
 #include <memory>
+#include "enemies.h"
 /*
  * Class items
  * drawing dynamic elements on map
@@ -19,14 +20,14 @@ struct item_type
     bool dynamic;
     sf::Vector2f velocity;
 };
-
+/*
 //help structure to load from file
 struct Tile{
     //fieldtype type;
     int type;
     bool iswall;
 };
-
+*/
 class Items
 {
 private:
@@ -63,5 +64,48 @@ public:
     //items with items collision
     void Collider_items();
 };
+/*
+class Enemies
+{
+private:
+    //private functions
+    void InitSprite();
+    void animationframe();
+    void loadfromfile(const std::string& filename);
+    void InitTextures();
+   // void TurnAround();
 
+    //private properties
+    std::vector<std::unique_ptr<sf::Texture>> textures;
+    std::vector<sf::IntRect> vector_animationframe;
+    //float timelimit;
+   // float time;
+   // bool faceright;
+  //  size_t it;
+   // float walktime;
+   // float walklimittime;
+public:
+    Enemies();
+    Enemies(std::string filename);
+    //public properties
+    //size our textures
+    const static int tile_height =128;
+    const static int tile_width =96;
+    //size a map
+    const static int height =22;
+    const static int width =47;
+    //object our help struct Tile when we have a number which texture we have draw with our png
+    Tile poziom[height][width];
+
+    //vector of sprites enemies
+    std::vector<std::unique_ptr<sf::Sprite>> sprites;
+    //vector velocity enemies
+    //std::vector<sf::Vector2f> veclocities;
+
+    //public functions
+    void drawing(sf::RenderTarget& target);
+  //  void walkingstep(const sf::Time& elapsed,const size_t& i);
+  //  void moving(const sf::Time& elapsed);
+};
+*/
 #endif // ITEMS_H
