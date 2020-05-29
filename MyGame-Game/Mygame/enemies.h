@@ -28,12 +28,12 @@ private:
     //private properties
     std::vector<std::unique_ptr<sf::Texture>> textures;
     std::vector<sf::IntRect> vector_animationframe;
-    //float timelimit;
-   // float time;
-   // bool faceright;
-  //  size_t it;
-   // float walktime;
-   // float walklimittime;
+    float timelimit;
+    float time;
+    bool faceright;
+    size_t it;
+    float walktime;
+    float walklimittime;
 public:
     Enemies();
     Enemies(std::string filename);
@@ -50,12 +50,12 @@ public:
     //vector of sprites enemies
     std::vector<std::unique_ptr<sf::Sprite>> sprites;
     //vector velocity enemies
-    //std::vector<sf::Vector2f> veclocities;
+    std::vector<float> veclocities;
 
     //public functions
     void drawing(sf::RenderTarget& target);
-  //  void walkingstep(const sf::Time& elapsed,const size_t& i);
-  //  void moving(const sf::Time& elapsed);
+    void walkingstep(const sf::Time& elapsed,const size_t& i);
+    void moving(const sf::Time& elapsed);
 };
 
 #endif // ENEMIES_H

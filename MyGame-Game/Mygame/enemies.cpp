@@ -20,7 +20,7 @@ void Enemies::InitSprite()
                 s->setPosition(j*tile_width*0.5f,i*tile_height*0.5f);
                 s->setOrigin(s->getGlobalBounds().width/2.0f,s->getGlobalBounds().height/2.0f);
                 sprites.emplace_back(std::move(s));
-               // this->veclocities.emplace_back(sf::Vector2f(200.0f,0.0f));
+               this->veclocities.emplace_back(200.0f);
             }
         }
     }
