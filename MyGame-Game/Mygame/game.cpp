@@ -10,6 +10,7 @@ void Game::InitTextures()
     v.x/=8;
     v.y/=8;
     tex_hud->setRepeated(true);
+
     for(int i=0;i<5;i++)
     {
         for(int j=0;j<8;j++)
@@ -17,7 +18,7 @@ void Game::InitTextures()
             this->game_rect.emplace_back(sf::IntRect(i*v.x,j*v.y,v.y,v.x));
         }
     }
-    for(int i=0;i<4;i++)
+    for(int i=0;i<6;i++)
     {
         auto sp=std::make_unique<sf::Sprite>();
         if(i==3)
@@ -26,10 +27,16 @@ void Game::InitTextures()
             sp->setTextureRect(this->game_rect[4]);
             sp->setScale(0.3f,0.3f);
         }
-        else
+        else if(i<3)
         {
             sp->setTexture(*this->tex_hud);
             sp->setTextureRect(this->game_rect[2]);
+            sp->setScale(0.3f,0.3f);
+        }
+        else if(i>3)
+        {
+            sp->setTexture(*this->tex_hud);
+            sp->setTextureRect(this->game_rect[14]);
             sp->setScale(0.3f,0.3f);
         }
         this->game_sprites.emplace_back(std::move(sp));
@@ -48,11 +55,13 @@ void Game::Update_TexturesPosition()
         {
             this->game_sprites[i]->setPosition(game_sprites[i-1]->getGlobalBounds().left+game_sprites[i-1]->getGlobalBounds().width,this->view.getCenter().y-290.0f);
         }
+
     }
 }
 //constructor
 Game::Game()
 {
+
     this->InitTextures();
     licz_pom=0;
     //view.setViewport(sf::FloatRect(0.0f,0.0f,800.0f,600.0f));
@@ -67,7 +76,7 @@ Game::Game()
     this->hero->InitSprite(this->hero->vector_animationframe[0]);
     this->hero->setposition(300.0f,300.0f);
     this->hero->start_position.x=300.0f;
-    this->hero->start_position.y=300.0f;
+    this->hero->start_position.y=280.0f;
     //this->hero->setPosition(this->level->pom);
     //create items
     this->things=new Items("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/item.level");
@@ -365,6 +374,8 @@ void Game::map_collision_items(sf::Vector2f &direction, float p)
 
 void Game::EnemiesWithItems_collision(sf::Vector2f &direction, float p)
 {
+    if(enemies->sprites.empty()==false)
+    {
     float deltax; //zmienna odleglosc miedzy pozycja x wroga i pozycja x innych obiektow
     float deltay; //zmienna odleglosc miedzy pozycja y wroga i pozycja y innych obiektow
     float intersectX; //przeciecie w osi X obiektu z wrogiem
@@ -447,6 +458,94 @@ void Game::EnemiesWithItems_collision(sf::Vector2f &direction, float p)
         }
 
     }
+    }
+}
+
+void Game::Hero_Enemies_Collision(sf::Vector2f &direction, float p)
+{
+    if(enemies->sprites.empty()==false)
+    {
+    float deltax; //zmienna odleglosc miedzy pozycja x bohatera i pozycja x wroga
+    float deltay; //zmienna odleglosc miedzy pozycja y bohatera i pozycja y wroga
+    float intersectX; //przeciecie w osi X obiektu z bohaterem
+    float intersectY; //przeciecie w osi Y obiektu z bohaterem
+
+
+        for(size_t i=0;i<this->enemies->sprites.size();i++)
+        //for(auto it=enemies->sprites.begin();it!=enemies->sprites.end();it++)
+        {
+            //size_t i=std::distance(enemies->sprites.begin(),it);
+            sf::Vector2f thisposition=this->enemies->sprites[i]->getPosition(); //pozycja przedmiotu
+            sf::Vector2f otherposition=this->hero->getPosition(); //pozycja aktualna bohatera
+            sf::Vector2f thishalfsize(this->enemies->sprites[i]->getGlobalBounds().width/2.0f,this->enemies->sprites[i]->getGlobalBounds().height/2.0f);
+            sf::Vector2f otherhalfsize(this->hero->getGlobalBounds().width/2.0f,this->hero->getGlobalBounds().height/2.0f);
+            bool t;
+
+             deltax=otherposition.x-thisposition.x;
+             deltay=otherposition.y-thisposition.y;
+
+             intersectX=std::abs(deltax)-(otherhalfsize.x+thishalfsize.x);
+             intersectY=std::abs(deltay)-(otherhalfsize.y+thishalfsize.y);
+
+
+
+             if(intersectX<0.0f && intersectY<0.0f) //jesli obie osie przeciecia obiektu sa mniejsze od 0 to znaczy ze obiekty na siebie nachodza i nastepuje zderzenie
+             {
+                 p=std::min(std::max(p,0.0f),1.0f);
+
+                 if(intersectX > intersectY)
+                 {
+                     if(deltax > 0.0f)
+                     {
+                         this->enemies->sprites[i]->move(intersectX,0.0f); //odbicia podczas zderzen kazdy w innym kierunku
+                         hero->move(-0.0f,0.0f);
+
+                         direction.x=1.0f;
+                         direction.y=0.0f;
+                     }
+                     else
+                    {
+                     this->enemies->sprites[i]->move(-intersectX,0.0f);
+                     hero->move(0.0f,0.0f);
+
+                     direction.x=-1.0f;
+                     direction.y=0.0f;
+                    }
+                 }
+                 else
+                 {
+                     if(deltay > 0.0f)
+                     {
+                         this->enemies->sprites[i]->move(0.0f,intersectY*(1.0f-p));
+                         hero->move(0.0f,-intersectY*p);
+
+                         direction.x=0.0f;
+                         direction.y=1.0f;
+                     }
+                     else
+                    {
+                     this->enemies->sprites[i]->move(0.0f,-intersectY*(1.0f-p));
+                     hero->move(0.0f,intersectY*p);
+
+                     this->enemies->Dead(i);
+                     direction.x=0.0f;
+                     direction.y=-1.0f;
+                    }
+                 }
+                 t=true;
+
+             }
+             else{
+                 t=false;
+             }
+             if(t==true)
+             {
+                 this->hero->OnEnemiesCollision(direction);
+             }
+
+        }
+    }
+
 }
 //funkcja update gdzie zmieniamy pozycje obiektow i dodajemy zdarzenia przyciskow wejscia np klawiatury
 void Game::update()
@@ -509,11 +608,18 @@ void Game::update()
     this->map_collision_items(direction,1.0f); //sprawdzamy kolizje przedmiotow z elementami mapy
     this->hero_and_itemsCollision(direction,1.0f); //sprawdzamy kolizje gracza z przedmiotami
     this->things->Collider_items();
+    if(enemies->sprites.empty()==false)
+    {
+    this->Hero_Enemies_Collision(direction,0.0f);
     this->EnemiesWithItems_collision(direction,0.0f);
+    }
 
     this->hero->moving(elapsed); //poruszanie naszym bohaterem
     this->things->moving(elapsed);
+    if(enemies->sprites.empty()==false)
+    {
     this->enemies->moving(elapsed);
+    }
 
      //animacja kiedy postac stoi
     if(this->hero->vx==0.0f&&this->hero->vy==0.0f){
@@ -538,7 +644,10 @@ void Game::render()
     //draw game object
     level->drawing(*window);
     things->drawing(*window);
+    if(enemies->sprites.empty()==false)
+    {
     enemies->drawing(*window);
+    }
     this->hero->render(*window);
     for(size_t i=0;i<this->game_sprites.size();i++)
     {

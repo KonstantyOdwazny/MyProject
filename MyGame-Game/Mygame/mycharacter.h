@@ -93,6 +93,8 @@ public:
     void Oncollision(sf::Vector2f direction); //detect does hero in collision
     //colission with dynamic object
     void OnitemCollision(sf::Vector2f& direction);
+    //collision with enemies
+    void OnEnemiesCollision(sf::Vector2f& direction);
 };
 
 #endif // MYCHARACTER_H

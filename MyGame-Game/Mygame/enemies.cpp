@@ -154,15 +154,20 @@ Enemies::Enemies(std::string filename)
 //drawing everything
 void Enemies::drawing(sf::RenderTarget &target)
 {
+    if(sprites.empty()==false)
+    {
     for(size_t i=0;i<sprites.size();i++)
     {
         target.draw(*sprites[i]);
+    }
     }
 }
 
 //animation of walking
 void Enemies::walkingstep(const sf::Time &elapsed)
 {
+    if(sprites.empty()==false)
+    {
     this->CheckTurnface();
     for(size_t i=0;i<sprites.size();i++)
     {
@@ -194,12 +199,15 @@ void Enemies::walkingstep(const sf::Time &elapsed)
     }
     }
     }
+    }
 
 }
 
 //walking
 void Enemies::moving(const sf::Time &elapsed)
 {
+    if(sprites.empty()==false)
+    {
     for(size_t i=0;i<sprites.size();i++)
     {
         this->sprites[i]->move(this->veclocities[i]*elapsed.asSeconds(),0);
@@ -211,6 +219,7 @@ void Enemies::moving(const sf::Time &elapsed)
     {
         TurnAround();
         walktime-=walklimittime;
+    }
     }
 }
 //collision with items events
@@ -239,5 +248,10 @@ void Enemies::OnCollision(const sf::Vector2f &direction,const size_t& i)
 
     }
 */
+}
+//erase one enemies with it iterator
+void Enemies::Dead(const size_t& i)
+{
+    this->sprites.erase(sprites.begin()+i);
 }
 

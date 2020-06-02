@@ -168,6 +168,34 @@ void MyCharacter::OnitemCollision(sf::Vector2f &direction)
         vy=0.0f;
     }
 }
+//collision with enemies events
+void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
+{
+    if(direction.x <0.0f)
+    {
+        //Collision on the left
+        vx=0.0f;
+        life--;
+        this->setPosition(this->start_position);
+    }
+    else if(direction.x >0.0f)
+    {
+        //Collision on the rigth
+        vx=0.0f;
+        life--;
+        this->setPosition(this->start_position);
+    }
+    if(direction.y < 0.0f)
+    {
+        //Collision on the bottom
+        vy=0.0f;
+    }
+    else if(direction.y >0.0f)
+    {
+        //Collision on the top
+        vy=0.0f;
+    }
+}
 
 
 

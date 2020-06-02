@@ -67,6 +67,8 @@ public:
     void walkingstep(const sf::Time& elapsed);
     void moving(const sf::Time& elapsed);
     void OnCollision(const sf::Vector2f& direction,const size_t& i);
+    void Dead(const size_t& i);
+    //const std::vector<std::unique_ptr<sf::Sprite>>::iterator& it
 };
 
 #endif // ENEMIES_H
