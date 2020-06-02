@@ -42,6 +42,8 @@ public:
         stay_it=22;
         facerigth=true;
         //canjump =true;
+        life=3;
+        coins=0;
     }
     //~MyCharacter();
 
@@ -70,6 +72,10 @@ public:
     float time;
     //container of a animation frame a hero
     std::vector<sf::IntRect> vector_animationframe;
+
+    sf::Vector2f start_position; //start hero's position
+    int life; //number of hero's lifes
+    int coins; //number of hero's coins
 
 //functions public
 

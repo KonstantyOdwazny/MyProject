@@ -1,8 +1,60 @@
 #include "game.h"
 #include <cmath>
+//private functions
+void Game::InitTextures()
+{
+    tex_hud=std::make_unique<sf::Texture>();
+    tex_hud->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/spritesheet_hud.png");
+
+    sf::Vector2u v=this->tex_hud->getSize();
+    v.x/=8;
+    v.y/=8;
+    tex_hud->setRepeated(true);
+    for(int i=0;i<5;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            this->game_rect.emplace_back(sf::IntRect(i*v.x,j*v.y,v.y,v.x));
+        }
+    }
+    for(int i=0;i<4;i++)
+    {
+        auto sp=std::make_unique<sf::Sprite>();
+        if(i==3)
+        {
+            sp->setTexture(*this->tex_hud);
+            sp->setTextureRect(this->game_rect[4]);
+            sp->setScale(0.3f,0.3f);
+        }
+        else
+        {
+            sp->setTexture(*this->tex_hud);
+            sp->setTextureRect(this->game_rect[2]);
+            sp->setScale(0.3f,0.3f);
+        }
+        this->game_sprites.emplace_back(std::move(sp));
+    }
+}
+//change game textures position to textures always be in the top left corner
+void Game::Update_TexturesPosition()
+{
+    for(size_t i=0;i<this->game_sprites.size();i++)
+    {
+        if(i==0)
+        {
+            this->game_sprites[i]->setPosition(this->view.getCenter().x-400.0f,this->view.getCenter().y-290.0f);
+        }
+        else
+        {
+            this->game_sprites[i]->setPosition(game_sprites[i-1]->getGlobalBounds().left+game_sprites[i-1]->getGlobalBounds().width,this->view.getCenter().y-290.0f);
+        }
+    }
+}
 //constructor
 Game::Game()
 {
+    this->InitTextures();
+    licz_pom=0;
     //view.setViewport(sf::FloatRect(0.0f,0.0f,800.0f,600.0f));
     view.setSize(800.0f,600.0f);
     view.setCenter(0.0f,0.0f);
@@ -14,6 +66,8 @@ Game::Game()
     this->hero->animation_frame();
     this->hero->InitSprite(this->hero->vector_animationframe[0]);
     this->hero->setposition(300.0f,300.0f);
+    this->hero->start_position.x=300.0f;
+    this->hero->start_position.y=300.0f;
     //this->hero->setPosition(this->level->pom);
     //create items
     this->things=new Items("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/item.level");
@@ -472,6 +526,12 @@ void Game::update()
 void Game::render()
 {
     this->view.setCenter(this->hero->getPosition());
+    if(licz_pom==0)
+    {
+    this->level->backgrounds->setPosition(this->view.getCenter().x-600.0f,this->view.getCenter().y-800.0f);
+    }
+    licz_pom++;
+    this->Update_TexturesPosition();
     window->clear(sf::Color::Black);
     //view
     window->setView(this->view);
@@ -480,6 +540,10 @@ void Game::render()
     things->drawing(*window);
     enemies->drawing(*window);
     this->hero->render(*window);
+    for(size_t i=0;i<this->game_sprites.size();i++)
+    {
+        this->window->draw(*this->game_sprites[i]);
+    }
     this->window->display();
 }
 //bool functions return true if our windows is open

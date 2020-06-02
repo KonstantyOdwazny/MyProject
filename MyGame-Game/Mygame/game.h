@@ -16,6 +16,15 @@ private:
     sf::RenderWindow* window;
     //events
     sf::Event ev;
+
+    //private properties
+    std::unique_ptr<sf::Texture> tex_hud;
+    std::vector<std::unique_ptr<sf::Sprite>> game_sprites;
+    std::vector<sf::IntRect> game_rect;
+
+    //private functions
+    void InitTextures();
+    void Update_TexturesPosition();
 public:
     //constructor and destructor
     Game();
@@ -36,6 +45,7 @@ public:
     sf::Time elapsed;
     //view
     sf::View view;
+    int licz_pom;
 
     //public functions
 

@@ -114,7 +114,7 @@ void MapGame::createSprite()
     this->backgrounds->setTexture(*tex);
     //this->backgrounds->setTextureRect(sf::IntRect(0,0,1000,1000));
     this->backgrounds->setScale(3.0f,3.0f);
-    this->backgrounds->setPosition(0.0f,0.0f);
+    this->backgrounds->setPosition(-300.0f,-300.0f);
 }
 
 //draw all elements of the map
