@@ -20,7 +20,7 @@ void Enemies::InitSprite()
                 s->setPosition(j*tile_width*0.5f,i*tile_height*0.5f);
                 s->setOrigin(s->getGlobalBounds().width/2.0f,s->getGlobalBounds().height/2.0f);
                 sprites.emplace_back(std::move(s));
-               this->veclocities.emplace_back(200.0f);
+               this->veclocities.emplace_back(20.0f);
             }
         }
     }
@@ -82,15 +82,51 @@ void Enemies::InitTextures()
         }
     }
 }
-/*
+//init time enemies and view direction
+void Enemies::InitTime()
+{
+    for(size_t i=0;i<this->sprites.size();i++)
+    {
+        float t=0.0f;
+        bool f=true;
+        this->time.emplace_back(t);
+        this->faceright.emplace_back(f);
+    }
+}
+//turn around view enemies
 void Enemies::TurnAround()
 {
     for(size_t i=0;i<this->veclocities.size();i++)
     {
-        this->veclocities[i].x=-std::abs(this->veclocities[i].x);
+        this->veclocities[i]=-1*(this->veclocities[i]);
+        if(faceright[i]==true)
+        {
+            faceright[i]=false;
+        }
+        else
+        {
+            faceright[i]=true;
+        }
     }
+
 }
-*/
+
+void Enemies::CheckTurnface()
+{
+    for(size_t i=0;i<sprites.size();i++)
+    {
+        if(veclocities[i]<0.0f)
+        {
+            faceright[i]=false;
+        }
+        else
+        {
+            faceright[i]=true;
+        }
+    }
+
+}
+
 //constructors
 
 Enemies::Enemies()
@@ -104,10 +140,12 @@ Enemies::Enemies(std::string filename)
     animationframe();
     InitTextures();
     InitSprite();
-    //timelimit=0.2f;
+    InitTime();
+    this->it=36;
+    timelimit=0.1f;
     //time=0.0f;
-    //walktime=0.0f;
-    //walklimittime=1.8f;
+    walktime=0.0f;
+    walklimittime=16.8f;
     //faceright=true;
 }
 
@@ -121,21 +159,23 @@ void Enemies::drawing(sf::RenderTarget &target)
         target.draw(*sprites[i]);
     }
 }
-/*
-//animation of walking
-void Enemies::walkingstep(const sf::Time &elapsed,const size_t& i)
-{
 
-    sf::IntRect drect;
-    time+=elapsed.asSeconds();
-    if(time>=timelimit)
+//animation of walking
+void Enemies::walkingstep(const sf::Time &elapsed)
+{
+    this->CheckTurnface();
+    for(size_t i=0;i<sprites.size();i++)
     {
-        time-=timelimit;
-    if(it<27)
+    sf::IntRect drect;
+    time[i]+=elapsed.asSeconds();
+    if(time[i]>=timelimit)
+    {
+        time[i]-=timelimit;
+    if(it<43)
     {
         drect.top=this->vector_animationframe[it].top;
         drect.height=this->vector_animationframe[it].height;
-        if(this->faceright==true)
+        if(this->faceright[i]==true)
         {
             drect.width=std::abs(this->vector_animationframe[it].width);
             drect.left=this->vector_animationframe[it].left;
@@ -150,24 +190,54 @@ void Enemies::walkingstep(const sf::Time &elapsed,const size_t& i)
     }
     else
     {
-        it=24;
+        it=36;
+    }
     }
     }
 
 }
+
 //walking
 void Enemies::moving(const sf::Time &elapsed)
 {
     for(size_t i=0;i<sprites.size();i++)
     {
-        this->sprites[i]->move(this->veclocities[i].x*elapsed.asSeconds(),this->veclocities[i].y*elapsed.asSeconds());
-        walkingstep(elapsed,i);
+        this->sprites[i]->move(this->veclocities[i]*elapsed.asSeconds(),0);
+        //walkingstep(elapsed,i);
     }
+    walkingstep(elapsed);
     walktime+=elapsed.asSeconds();
     if(walktime>=walklimittime)
     {
         TurnAround();
-        walktime=0.0f;
+        walktime-=walklimittime;
     }
 }
+//collision with items events
+void Enemies::OnCollision(const sf::Vector2f &direction,const size_t& i)
+{
+    if(direction.x <0.0f)
+    {
+        //Collision on the left
+        this->veclocities[i]=-1*std::abs(this->veclocities[i]);
+
+    }
+    else if(direction.x >0.0f)
+    {
+        //Collision on the rigth
+       this->veclocities[i]=std::abs(this->veclocities[i]);
+    }
+/*
+    if(direction.y < 0.0f)
+    {
+        //Collision on the bottom
+
+    }
+    else if(direction.y >0.0f)
+    {
+        //Collision on the top
+
+    }
 */
+}
+

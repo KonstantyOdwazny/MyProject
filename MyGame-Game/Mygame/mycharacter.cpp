@@ -153,7 +153,7 @@ void MyCharacter::Oncollision(sf::Vector2f direction)
         vy=0.0f;
     }
 }
-
+//funkcja ktora wywoluje zdarzenia podczas kolizji z przedmiotem
 void MyCharacter::OnitemCollision(sf::Vector2f &direction)
 {
     if(direction.y < 0.0f)

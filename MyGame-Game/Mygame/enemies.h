@@ -6,6 +6,14 @@
 #include <iostream>
 //#include "items.h"
 
+/*
+ * Enemies clas
+ * Sprites,textures
+ * Moving and animation enemies
+ *
+ */
+
+
 //help structure to load from file
 struct Tile{
     //fieldtype type;
@@ -23,14 +31,16 @@ private:
     void animationframe();
     void loadfromfile(const std::string& filename);
     void InitTextures();
-   // void TurnAround();
+    void InitTime();
+    void TurnAround();
+    void CheckTurnface();
 
     //private properties
     std::vector<std::unique_ptr<sf::Texture>> textures;
     std::vector<sf::IntRect> vector_animationframe;
     float timelimit;
-    float time;
-    bool faceright;
+    std::vector<float> time;
+    std::vector<bool> faceright;
     size_t it;
     float walktime;
     float walklimittime;
@@ -54,8 +64,9 @@ public:
 
     //public functions
     void drawing(sf::RenderTarget& target);
-    void walkingstep(const sf::Time& elapsed,const size_t& i);
+    void walkingstep(const sf::Time& elapsed);
     void moving(const sf::Time& elapsed);
+    void OnCollision(const sf::Vector2f& direction,const size_t& i);
 };
 
 #endif // ENEMIES_H

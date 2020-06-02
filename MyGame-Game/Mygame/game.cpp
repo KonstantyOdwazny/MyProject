@@ -308,6 +308,92 @@ void Game::map_collision_items(sf::Vector2f &direction, float p)
     }
 
 }
+
+void Game::EnemiesWithItems_collision(sf::Vector2f &direction, float p)
+{
+    float deltax; //zmienna odleglosc miedzy pozycja x wroga i pozycja x innych obiektow
+    float deltay; //zmienna odleglosc miedzy pozycja y wroga i pozycja y innych obiektow
+    float intersectX; //przeciecie w osi X obiektu z wrogiem
+    float intersectY; //przeciecie w osi Y obiektu z wrogiem
+
+    for(size_t a=0;a<this->enemies->sprites.size();a++)
+    {
+        for(size_t i=0;i<this->things->items.size();i++)
+        {
+            for(size_t j=0;j<this->things->items[i].size();j++)
+            {
+                sf::Vector2f thisposition=this->things->items[i][j]->getPosition(); //pozycja przedmiotu
+                sf::Vector2f otherposition=this->enemies->sprites[a]->getPosition(); //pozycja aktualna wroga
+                sf::Vector2f thishalfsize(this->things->items[i][j]->getGlobalBounds().width/2.0f,this->things->items[i][j]->getGlobalBounds().height/2.0f);
+                sf::Vector2f otherhalfsize(this->enemies->sprites[a]->getGlobalBounds().width/2.0f,this->enemies->sprites[a]->getGlobalBounds().height/2.0f);
+                bool t;
+                deltax=otherposition.x-thisposition.x;
+                deltay=otherposition.y-thisposition.y;
+
+                intersectX=std::abs(deltax)-(otherhalfsize.x+thishalfsize.x);
+                intersectY=std::abs(deltay)-(otherhalfsize.y+thishalfsize.y);
+
+                if(this->things->typeofitem[i][j].dynamic==true){
+
+                if(intersectX<0.0f && intersectY<0.0f) //jesli obie osie przeciecia obiektu sa mniejsze od 0 to znaczy ze obiekty na siebie nachodza i nastepuje zderzenie
+                {
+                    p=std::min(std::max(p,0.0f),1.0f);
+
+                    if(intersectX > intersectY)
+                    {
+                        if(deltax > 0.0f)
+                        {
+                            this->things->items[i][j]->move(intersectX,0.0f); //odbicia podczas zderzen kazdy w innym kierunku
+                            enemies->sprites[a]->move(-0.0f,0.0f);
+
+                            direction.x=1.0f;
+                            direction.y=0.0f;
+                        }
+                        else
+                       {
+                        this->things->items[i][j]->move(-intersectX,0.0f);
+                        enemies->sprites[a]->move(0.0f,0.0f);
+
+                        direction.x=-1.0f;
+                        direction.y=0.0f;
+                       }
+                    }
+                    else
+                    {
+                        if(deltay > 0.0f)
+                        {
+                            this->things->items[i][j]->move(0.0f,intersectY*(1.0f-p));
+                            enemies->sprites[a]->move(0.0f,-intersectY*p);
+
+                            direction.x=0.0f;
+                            direction.y=1.0f;
+                        }
+                        else
+                       {
+                        this->things->items[i][j]->move(0.0f,-intersectY*(1.0f-p));
+                        enemies->sprites[a]->move(0.0f,intersectY*p);
+
+
+                        direction.x=0.0f;
+                        direction.y=-1.0f;
+                       }
+                    }
+                    t=true;
+
+                }
+                else{
+                    t=false;
+                }
+                if(t==true)
+                {
+                    this->enemies->OnCollision(direction,a);
+                }
+                }
+            }
+        }
+
+    }
+}
 //funkcja update gdzie zmieniamy pozycje obiektow i dodajemy zdarzenia przyciskow wejscia np klawiatury
 void Game::update()
 {
@@ -369,9 +455,11 @@ void Game::update()
     this->map_collision_items(direction,1.0f); //sprawdzamy kolizje przedmiotow z elementami mapy
     this->hero_and_itemsCollision(direction,1.0f); //sprawdzamy kolizje gracza z przedmiotami
     this->things->Collider_items();
+    this->EnemiesWithItems_collision(direction,0.0f);
 
     this->hero->moving(elapsed); //poruszanie naszym bohaterem
     this->things->moving(elapsed);
+    this->enemies->moving(elapsed);
 
      //animacja kiedy postac stoi
     if(this->hero->vx==0.0f&&this->hero->vy==0.0f){

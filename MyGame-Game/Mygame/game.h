@@ -45,6 +45,8 @@ public:
     void hero_and_itemsCollision(sf::Vector2f& direction, float p);
     //collision items with elements of map
     void map_collision_items(sf::Vector2f& direction, float p);
+    //collision enemies with items
+    void EnemiesWithItems_collision(sf::Vector2f& direction, float p);
 
 
 };
