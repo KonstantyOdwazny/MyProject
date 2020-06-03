@@ -48,7 +48,8 @@ void MyCharacter::setposition(float x_,float y_)
 //animation of running hero
 void MyCharacter::runstep(const sf::Time& elapsed)
 {
-
+    if(this->run==true && jump==false)
+    {
     sf::IntRect drect;
     time+=elapsed.asSeconds();
     if(time>=timelimit)
@@ -76,33 +77,65 @@ void MyCharacter::runstep(const sf::Time& elapsed)
         it=24;
     }
     }
+    }
 
 }
 //animmation of jumping hero
-void MyCharacter::jumpstep()
+void MyCharacter::jumpstep(const sf::Time& elapsed)
 {
     sf::IntRect drect;
     if(jump==true){
-        drect.top=this->vector_animationframe[1].top;
-        drect.height=this->vector_animationframe[1].height;
-        if(facerigth)
+        time+=elapsed.asSeconds();
+        if(time>=timelimit && time<=1.9f*timelimit)
         {
-            drect.width=std::abs(this->vector_animationframe[1].width);
-            drect.left=this->vector_animationframe[1].left;
-        }
-        else
+            jump_it=1;
+            drect.top=this->vector_animationframe[jump_it].top;
+            drect.height=this->vector_animationframe[jump_it].height;
+            if(facerigth)
+            {
+                drect.width=std::abs(this->vector_animationframe[jump_it].width);
+                drect.left=this->vector_animationframe[jump_it].left;
+            }
+            else
+            {
+                drect.width=-std::abs(this->vector_animationframe[jump_it].width);
+                drect.left=this->vector_animationframe[jump_it+1].left;
+            }
+            //jump_it++;
+            this->setTextureRect(drect);
+        }else if(time>=1.9f*timelimit && time<=2.5f*timelimit)
         {
-            drect.width=-std::abs(this->vector_animationframe[1].width);
-            drect.left=this->vector_animationframe[1+1].left;
+            jump_it=2;
+            drect.top=this->vector_animationframe[jump_it].top;
+            drect.height=this->vector_animationframe[jump_it].height;
+            if(facerigth)
+            {
+                drect.width=std::abs(this->vector_animationframe[jump_it].width);
+                drect.left=this->vector_animationframe[jump_it].left;
+            }
+            else
+            {
+                drect.width=-std::abs(this->vector_animationframe[jump_it].width);
+                drect.left=this->vector_animationframe[jump_it+1].left;
+            }
+            //jump_it++;
+            this->setTextureRect(drect);
+
         }
 
-        this->setTextureRect(drect);
-    }
+   }
+
 
 }
 //animation when hero stay
 void MyCharacter::stop(const sf::Time& elapsed)
 {
+    if(this->begin_stop==0)
+    {
+    this->setTextureRect(this->vector_animationframe[21]);
+        begin_stop++;
+    }
+
     time+=elapsed.asSeconds();
     if(time>=2.0f*timelimit)
     {
@@ -113,9 +146,10 @@ void MyCharacter::stop(const sf::Time& elapsed)
     }
     else
     {
-        stay_it=22;
+        stay_it=21;
     }
     }
+
 
 }
 //move
@@ -143,9 +177,7 @@ void MyCharacter::Deadstep()
             drect.width=-std::abs(this->vector_animationframe[4].width);
             drect.left=this->vector_animationframe[4+1].left;
         }
-        Sleep(1000);
-        this->setTextureRect(drect);
-
+            this->setTextureRect(drect);
 
 }
 
@@ -169,6 +201,7 @@ void MyCharacter::Oncollision(sf::Vector2f direction)
         //Collision on the bottom
         vy=0.0f;
         canjump=true;
+        jump=false;
     }
     else if(direction.y >0.0f)
     {
@@ -184,6 +217,7 @@ void MyCharacter::OnitemCollision(sf::Vector2f &direction)
         //Collision on the bottom
         vy=0.0f;
         canjump=true;
+        jump=false;
     }
     else if(direction.y >0.0f)
     {
@@ -200,6 +234,7 @@ void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
         vx=0.0f;
         life--;
         this->Deadstep();
+        Sleep(1000);
         this->setPosition(this->start_position);
     }
     else if(direction.x >0.0f)
@@ -208,6 +243,7 @@ void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
         vx=0.0f;
         life--;
         this->Deadstep();
+        Sleep(1000);
         this->setPosition(this->start_position);
     }
     if(direction.y < 0.0f)

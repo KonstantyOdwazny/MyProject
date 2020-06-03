@@ -576,7 +576,7 @@ void Game::update()
      *
      */
     this->hero->vx=0.0f;
-
+    this->hero->run=false;
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
@@ -584,8 +584,11 @@ void Game::update()
         this->hero->vx+=100.0f;
         }
         this->hero->run=true;
-        this->hero->runstep(this->elapsed);
+        //this->hero->runstep(this->elapsed);
         this->hero->facerigth=true;
+        this->hero->begin_stop=0;
+        //this->hero->jump_it=1;
+
 
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -594,8 +597,10 @@ void Game::update()
         this->hero->vx-=100.0f;
         }
         this->hero->run=true;
-        this->hero->runstep(this->elapsed);
+        //this->hero->runstep(this->elapsed);
        this->hero->facerigth=false;
+        this->hero->begin_stop=0;
+        //this->hero->jump_it=1;
 
     }
 
@@ -604,8 +609,11 @@ void Game::update()
         this->hero->canjump=false;
         //gravity
         this->hero->vy=-sqrtf(2.0f*981.0f*this->hero->jumpHeight); //float square root
-        this->hero->jumpstep(); //jump hero animation frame
+        this->hero->jump=true;
+        this->hero->begin_stop=0;
     }
+    this->hero->jumpstep(elapsed); //jump hero animation frame
+    this->hero->runstep(this->elapsed);
 
     for(size_t i=0;i<this->things->typeofitem.size();i++){
         for(size_t j=0;j<things->typeofitem[i].size();j++)
@@ -641,6 +649,7 @@ void Game::update()
     if(this->hero->vx==0.0f&&this->hero->vy==0.0f){
         this->hero->stop(elapsed);
         this->hero->jump=false;
+        this->hero->jump_it=1;
     }
 
 }

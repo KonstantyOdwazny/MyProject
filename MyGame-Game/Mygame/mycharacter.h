@@ -39,11 +39,12 @@ public:
         timelimit=0.2f;
         time=0.0f;
         jumpHeight=200.0f;
-        stay_it=22;
+        stay_it=21;
         facerigth=true;
         //canjump =true;
         life=3;
         coins=0;
+        begin_stop=0;
     }
     //~MyCharacter();
 
@@ -67,6 +68,7 @@ public:
     int it; //iterator vector animation  frame
     int jump_it; //iterator jump animation frame
     int stay_it;
+    int begin_stop;
 
     float timelimit;    //limit of animation time
     float time;
@@ -87,7 +89,7 @@ public:
     void setposition(float x_,float y_);    //set the position on the map
 
     void runstep(const sf::Time& elapsed);  //animation of running
-    void jumpstep();    //animation of jumping
+    void jumpstep(const sf::Time& elapsed);    //animation of jumping
     void stop(const sf::Time& elapsed);    //animation when hero stay
     void moving(const sf::Time& elapsed); //moving a hero with a time beetwen frame
     void Deadstep(); //animation when hero die
