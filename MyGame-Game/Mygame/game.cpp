@@ -230,7 +230,7 @@ void Game::hero_and_itemsCollision(sf::Vector2f &direction, float p)
              intersectX=std::abs(deltax)-(otherhalfsize.x+thishalfsize.x);
              intersectY=std::abs(deltay)-(otherhalfsize.y+thishalfsize.y);
 
-             if(this->things->typeofitem[i][j].dynamic==true){
+             if((this->things->typeofitem[i][j].dynamic==true)||(this->things->typeofitem[i][j].name=="woda")){
 
              if(intersectX<0.0f && intersectY<0.0f) //jesli obie osie przeciecia obiektu sa mniejsze od 0 to znaczy ze obiekty na siebie nachodza i nastepuje zderzenie
              {
@@ -283,7 +283,12 @@ void Game::hero_and_itemsCollision(sf::Vector2f &direction, float p)
              }
              if(t==true)
              {
+                 if(this->things->typeofitem[i][j].name!="woda"){
                  this->hero->OnitemCollision(direction);
+                 }else
+                 {
+                     this->hero->OndangerousItemsCollsion(direction);
+                 }
              }
            }
         }

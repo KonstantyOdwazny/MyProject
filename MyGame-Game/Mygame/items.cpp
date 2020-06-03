@@ -70,12 +70,23 @@ void Items::createSprite()
                     itemname.emplace_back(it);
                 }
                 else{
+                    if(poziom[i][j].type==15||poziom[i][j].type==17)
+                    {
+                        item_type it;
+                        it.name="woda";
+                        it.dynamic=false;
+                        it.velocity.x=0.0f;
+                        it.velocity.y=0.0f;
+                        itemname.emplace_back(it);
+                    }
+                    else{
                     item_type it;
                     it.name="nic";
                     it.dynamic=false;
                     it.velocity.x=0.0f;
                     it.velocity.y=0.0f;
                     itemname.emplace_back(it);
+                    }
                 }
 
              auto s=std::make_unique<sf::Sprite>();

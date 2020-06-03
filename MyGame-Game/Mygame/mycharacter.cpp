@@ -222,6 +222,23 @@ void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
     }
 }
 
+void MyCharacter::OndangerousItemsCollsion(sf::Vector2f &direction)
+{
+    if(direction.y < 0.0f)
+    {
+        //Collision on the bottom
+        vy=0.0f;
+        life--;
+        this->Deadstep();
+        this->setPosition(this->start_position);
+    }
+    else if(direction.y >0.0f)
+    {
+        //Collision on the top
+        vy=0.0f;
+    }
+}
+
 
 
 
