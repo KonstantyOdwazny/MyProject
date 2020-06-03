@@ -158,9 +158,9 @@ void MyCharacter::moving(const sf::Time& elapsed)
     //std::cout<<1/elapsed.asSeconds()<<std::endl;
     //if(this->run==true||this->jump==true){
     this->move(this->vx*elapsed.asSeconds()+ax*elapsed.asSeconds(),this->vy*elapsed.asSeconds()+ay*elapsed.asSeconds());
-    // }
+    //}
 }
-
+//dead animation frame
 void MyCharacter::Deadstep()
 {
     sf::IntRect drect;
@@ -257,7 +257,7 @@ void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
         vy=0.0f;
     }
 }
-
+//events when dangerous items like water is are in collision
 void MyCharacter::OndangerousItemsCollsion(sf::Vector2f &direction)
 {
     if(direction.y < 0.0f)
@@ -266,6 +266,7 @@ void MyCharacter::OndangerousItemsCollsion(sf::Vector2f &direction)
         vy=0.0f;
         life--;
         this->Deadstep();
+        Sleep(1000);
         this->setPosition(this->start_position);
     }
     else if(direction.y >0.0f)

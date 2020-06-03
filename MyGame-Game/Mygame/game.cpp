@@ -612,21 +612,22 @@ void Game::update()
         this->hero->jump=true;
         this->hero->begin_stop=0;
     }
+
     this->hero->jumpstep(elapsed); //jump hero animation frame
-    this->hero->runstep(this->elapsed);
+    this->hero->runstep(this->elapsed); //run hero animation
 
     for(size_t i=0;i<this->things->typeofitem.size();i++){
         for(size_t j=0;j<things->typeofitem[i].size();j++)
         {
             if(things->typeofitem[i][j].dynamic==true)
             {
-                things->typeofitem[i][j].velocity.y+=981.0f*elapsed.asSeconds();
+                things->typeofitem[i][j].velocity.y+=981.0f*elapsed.asSeconds(); //sila grawitacji dzialajaca na przedmioty
                 things->typeofitem[i][j].velocity.x=0.0f;
             }
         }
     }
 
-    this->hero->vy+=981.0f*elapsed.asSeconds();
+    this->hero->vy+=981.0f*elapsed.asSeconds(); //sila grawitacji dzialajaca na bohatera
 
     this->CheckCollision(direction,1.0f); //sprawdzamy kolizje przed poruszeniem sie postaci aby sprawdzic czy moze ona sie poruszac
     this->map_collision_items(direction,1.0f); //sprawdzamy kolizje przedmiotow z elementami mapy
@@ -639,10 +640,11 @@ void Game::update()
     }
 
     this->hero->moving(elapsed); //poruszanie naszym bohaterem
-    this->things->moving(elapsed);
+    this->things->moving(elapsed); //poruszanie sie przedmiotow dynamicznych
+
     if(enemies->sprites.empty()==false)
     {
-    this->enemies->moving(elapsed);
+    this->enemies->moving(elapsed); //poruszanie sie wrogow
     }
 
      //animacja kiedy postac stoi

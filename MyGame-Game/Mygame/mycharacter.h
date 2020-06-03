@@ -45,6 +45,8 @@ public:
         life=3;
         coins=0;
         begin_stop=0;
+        stop_time=0.0f;
+        jump_time=0.0f;
     }
     //~MyCharacter();
 
@@ -72,6 +74,8 @@ public:
 
     float timelimit;    //limit of animation time
     float time;
+    float stop_time;
+    float jump_time;
     //container of a animation frame a hero
     std::vector<sf::IntRect> vector_animationframe;
 
