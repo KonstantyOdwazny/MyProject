@@ -11,7 +11,7 @@
  * Sprites,textures
  * Moving and animation enemies
  *
- */
+*/
 
 
 //help structure to load from file
@@ -44,10 +44,12 @@ private:
     size_t it;
     float walktime;
     float walklimittime;
+    float stoptime;
 public:
     Enemies();
     Enemies(std::string filename);
     //public properties
+
     //size our textures
     const static int tile_height =128;
     const static int tile_width =96;
@@ -68,7 +70,6 @@ public:
     void moving(const sf::Time& elapsed);
     void OnCollision(const sf::Vector2f& direction,const size_t& i);
     void Dead(const size_t& i);
-    //const std::vector<std::unique_ptr<sf::Sprite>>::iterator& it
 };
 
 #endif // ENEMIES_H

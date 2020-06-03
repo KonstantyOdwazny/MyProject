@@ -85,10 +85,13 @@ public:
     //void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void render(sf::RenderTarget& window);  //draw a hero
     void setposition(float x_,float y_);    //set the position on the map
+
     void runstep(const sf::Time& elapsed);  //animation of running
     void jumpstep();    //animation of jumping
     void stop(const sf::Time& elapsed);    //animation when hero stay
     void moving(const sf::Time& elapsed); //moving a hero with a time beetwen frame
+    void Deadstep(); //animation when hero die
+
     //colission with static object
     void Oncollision(sf::Vector2f direction); //detect does hero in collision
     //colission with dynamic object

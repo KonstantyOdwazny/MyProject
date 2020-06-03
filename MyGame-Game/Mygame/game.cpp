@@ -55,7 +55,18 @@ void Game::Update_TexturesPosition()
         {
             this->game_sprites[i]->setPosition(game_sprites[i-1]->getGlobalBounds().left+game_sprites[i-1]->getGlobalBounds().width,this->view.getCenter().y-290.0f);
         }
-
+    }
+    if(this->hero->life==2)
+    {
+        this->game_sprites[0]->setTextureRect(this->game_rect[3]);
+    }
+    if(this->hero->life==1)
+    {
+        this->game_sprites[1]->setTextureRect(this->game_rect[3]);
+    }
+    if(this->hero->life==0)
+    {
+        this->game_sprites[2]->setTextureRect(this->game_rect[3]);
     }
 }
 //constructor

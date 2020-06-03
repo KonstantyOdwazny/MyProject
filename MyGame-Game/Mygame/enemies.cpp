@@ -3,6 +3,7 @@
 #include <fstream>
 
 
+
 //private functions
 //load from file positions our enemies
 void Enemies::InitSprite()
@@ -147,6 +148,7 @@ Enemies::Enemies(std::string filename)
     walktime=0.0f;
     walklimittime=16.8f;
     //faceright=true;
+    stoptime=0.0f;
 }
 
 //public functions
@@ -208,10 +210,10 @@ void Enemies::moving(const sf::Time &elapsed)
 {
     if(sprites.empty()==false)
     {
+
     for(size_t i=0;i<sprites.size();i++)
     {
         this->sprites[i]->move(this->veclocities[i]*elapsed.asSeconds(),0);
-        //walkingstep(elapsed,i);
     }
     walkingstep(elapsed);
     walktime+=elapsed.asSeconds();
@@ -221,6 +223,7 @@ void Enemies::moving(const sf::Time &elapsed)
         walktime-=walklimittime;
     }
     }
+
 }
 //collision with items events
 void Enemies::OnCollision(const sf::Vector2f &direction,const size_t& i)
@@ -252,6 +255,22 @@ void Enemies::OnCollision(const sf::Vector2f &direction,const size_t& i)
 //erase one enemies with it iterator
 void Enemies::Dead(const size_t& i)
 {
-    this->sprites.erase(sprites.begin()+i);
+     sf::IntRect drect;
+     drect.top=this->vector_animationframe[4].top;
+     drect.height=this->vector_animationframe[4].height;
+     if(this->faceright[i]==true)
+     {
+         drect.width=std::abs(this->vector_animationframe[4].width);
+         drect.left=this->vector_animationframe[4].left;
+     }
+     else
+     {
+         drect.width=-std::abs(this->vector_animationframe[4].width);
+         drect.left=this->vector_animationframe[4+1].left;
+     }
+     this->sprites[i]->setTextureRect(drect);
+
+     this->sprites.erase(sprites.begin()+i);
 }
+
 

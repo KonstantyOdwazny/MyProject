@@ -1,4 +1,5 @@
 #include "mycharacter.h"
+#include <windows.h>
 
 //private functions
 void MyCharacter::InitTexture(std::string filename)
@@ -123,7 +124,29 @@ void MyCharacter::moving(const sf::Time& elapsed)
     //std::cout<<1/elapsed.asSeconds()<<std::endl;
     //if(this->run==true||this->jump==true){
     this->move(this->vx*elapsed.asSeconds()+ax*elapsed.asSeconds(),this->vy*elapsed.asSeconds()+ay*elapsed.asSeconds());
-   // }
+    // }
+}
+
+void MyCharacter::Deadstep()
+{
+    sf::IntRect drect;
+
+        drect.top=this->vector_animationframe[4].top;
+        drect.height=this->vector_animationframe[4].height;
+        if(facerigth)
+        {
+            drect.width=std::abs(this->vector_animationframe[4].width);
+            drect.left=this->vector_animationframe[4].left;
+        }
+        else
+        {
+            drect.width=-std::abs(this->vector_animationframe[4].width);
+            drect.left=this->vector_animationframe[4+1].left;
+        }
+        Sleep(1000);
+        this->setTextureRect(drect);
+
+
 }
 
 
@@ -176,6 +199,7 @@ void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
         //Collision on the left
         vx=0.0f;
         life--;
+        this->Deadstep();
         this->setPosition(this->start_position);
     }
     else if(direction.x >0.0f)
@@ -183,6 +207,7 @@ void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
         //Collision on the rigth
         vx=0.0f;
         life--;
+        this->Deadstep();
         this->setPosition(this->start_position);
     }
     if(direction.y < 0.0f)

@@ -93,12 +93,6 @@ void MapGame::createSprite()
             //std::cout<<s->getGlobalBounds().width/2.0f<<"  "<<s->getGlobalBounds().height/2.0f<<std::endl;
 
             sp.emplace_back(std::move(s));
-            auto b=std::make_unique<bounds>();
-            b->top=i*tile_height*0.5f;
-            b->left=j*tile_width*0.5f;
-            b->width=128.0f*0.5f;
-            b->height=128.0f*0.5f;
-            this->bounds_vector.emplace_back(std::move(*b));
             }
         }
         this->sprites.emplace_back(std::move(sp));
@@ -131,11 +125,6 @@ void MapGame::drawing(sf::RenderTarget &target)
 
 }
 
-void MapGame::getposition(size_t it)
-{
-    std::cout<<bounds_vector[it].left<<" "<<bounds_vector[it].top<<std::endl;
-
-}
 
 
 
