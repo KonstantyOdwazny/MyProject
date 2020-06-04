@@ -98,13 +98,27 @@ Game::Game()
     this->things=new Items("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/item.level");
     //create enemies
     this->enemies=new Enemies("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/enemies.level");
-
+    kolor_licz=0;
     //pochodnie
     for(size_t i=0;i<this->things->pochodnie_pozycja.size();i++)
     {
-        sf::CircleShape circle(150.0f,30);
-        circle.setFillColor(sf::Color(255,255,255));
-        circle.setPosition(things->pochodnie_pozycja[i].x-50.0f,things->pochodnie_pozycja[i].y-50.0f);
+        sf::CircleShape circle(220.0f,30);
+        if(kolor_licz==0)
+        {
+            kolor_licz++;
+        circle.setFillColor(sf::Color(255,105,105));
+        }
+        else if(kolor_licz==1)
+        {
+            kolor_licz++;
+            circle.setFillColor(sf::Color(105,255,105));
+        }
+        else if(kolor_licz==2)
+        {
+            kolor_licz=0;
+            circle.setFillColor(sf::Color(105,105,255));
+        }
+        circle.setPosition(things->pochodnie_pozycja[i].x-100.0f,things->pochodnie_pozycja[i].y-50.0f);
         pochodnie.emplace_back(circle);
     }
 
@@ -676,12 +690,13 @@ void Game::render()
     //light
     this->view.setCenter(this->hero->getPosition());
     lightingTex.clear( sf::Color( 0, 0, 0, 0 ) );
-    lightingTex.draw( light, sf::BlendAdd ); // light - sprite, figura, cokolwiek sf::Drawable
+     lightingTex.draw( light, sf::BlendAdd ); // light - sprite, figura, cokolwiek sf::Drawable
     //pochodnie
     for(size_t i=0;i<this->pochodnie.size();i++)
     {
         lightingTex.draw(pochodnie[i], sf::BlendAdd);
     }
+
     lightingTex.display(); // wywołanie tekstury, zapieczętowanie
     lighting.setTexture( lightingTex.getTexture() );
     if(licz_pom==0)

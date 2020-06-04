@@ -53,6 +53,7 @@ public:
     sf::Sprite lighting;
     std::vector<sf::CircleShape> pochodnie;
     std::vector<sf::Sprite> sp_pochodnie;
+    int kolor_licz;
 
     //public functions
 
