@@ -80,6 +80,15 @@ void Items::createSprite()
                         itemname.emplace_back(it);
                     }
                     else{
+                        if(poziom[i][j].type==19)
+                        {
+                            item_type it;
+                            it.name="fire";
+                            it.dynamic=false;
+                            it.velocity.x=0.0f;
+                            it.velocity.y=0.0f;
+                            itemname.emplace_back(it);
+                        }
                     item_type it;
                     it.name="nic";
                     it.dynamic=false;
@@ -93,6 +102,11 @@ void Items::createSprite()
              s->setTexture(*textures[poziom[i][j].type]);
              s->setScale(0.5f,0.5f);
              s->setPosition(j*tile_width*0.5f,i*tile_height*0.5f);
+             if(poziom[i][j].type==19)
+             {
+                sf::Vector2f vec2f(j*tile_width*0.5f,i*tile_height*0.5f);
+                pochodnie_pozycja.emplace_back(vec2f);
+             }
              s->setOrigin(s->getGlobalBounds().width/2.0f,s->getGlobalBounds().height/2.0f);
 
              sp.emplace_back(std::move(s));

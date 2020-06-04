@@ -47,6 +47,13 @@ public:
     sf::View view;
     int licz_pom;
 
+    //light
+    sf::CircleShape light;
+    sf::RenderTexture lightingTex;
+    sf::Sprite lighting;
+    std::vector<sf::CircleShape> pochodnie;
+    std::vector<sf::Sprite> sp_pochodnie;
+
     //public functions
 
     //collision hero witch map

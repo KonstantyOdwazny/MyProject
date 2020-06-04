@@ -50,6 +50,9 @@ public:
     //container of sprite
     std::vector<std::vector<std::unique_ptr<sf::Sprite>>> items;
 
+    //kontener pozycji pochodni
+    std::vector<sf::Vector2f> pochodnie_pozycja;
+
     //public functions
     void drawing(sf::RenderTarget& target);
     void Collision_events(sf::Vector2f& direction,const size_t& i,const size_t& j);

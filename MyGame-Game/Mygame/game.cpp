@@ -72,6 +72,11 @@ void Game::Update_TexturesPosition()
 //constructor
 Game::Game()
 {
+    //light
+    this->lightingTex.create(2900,3000);
+    this->light.setRadius(200.0f);
+    this->light.setPointCount(30);
+    this->light.setFillColor(sf::Color(255,255,255));
 
     this->InitTextures();
     licz_pom=0;
@@ -93,6 +98,16 @@ Game::Game()
     this->things=new Items("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/item.level");
     //create enemies
     this->enemies=new Enemies("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/enemies.level");
+
+    //pochodnie
+    for(size_t i=0;i<this->things->pochodnie_pozycja.size();i++)
+    {
+        sf::CircleShape circle(150.0f,30);
+        circle.setFillColor(sf::Color(255,255,255));
+        circle.setPosition(things->pochodnie_pozycja[i].x-50.0f,things->pochodnie_pozycja[i].y-50.0f);
+        pochodnie.emplace_back(circle);
+    }
+
 }
 //destructor
 Game::~Game()
@@ -658,11 +673,23 @@ void Game::update()
 //function where we draw everything and set the view options
 void Game::render()
 {
+    //light
     this->view.setCenter(this->hero->getPosition());
+    lightingTex.clear( sf::Color( 0, 0, 0, 0 ) );
+    lightingTex.draw( light, sf::BlendAdd ); // light - sprite, figura, cokolwiek sf::Drawable
+    //pochodnie
+    for(size_t i=0;i<this->pochodnie.size();i++)
+    {
+        lightingTex.draw(pochodnie[i], sf::BlendAdd);
+    }
+    lightingTex.display(); // wywołanie tekstury, zapieczętowanie
+    lighting.setTexture( lightingTex.getTexture() );
     if(licz_pom==0)
     {
+    lighting.setPosition(this->view.getCenter().x-400.0f,this->view.getCenter().y-300.0f);
     this->level->backgrounds->setPosition(this->view.getCenter().x-600.0f,this->view.getCenter().y-800.0f);
     }
+    light.setPosition(this->hero->getPosition().x-50.0f,this->hero->getPosition().y-60.0f);
     licz_pom++;
     this->Update_TexturesPosition();
     window->clear(sf::Color::Black);
@@ -670,16 +697,19 @@ void Game::render()
     window->setView(this->view);
     //draw game object
     level->drawing(*window);
+
     things->drawing(*window);
     if(enemies->sprites.empty()==false)
     {
     enemies->drawing(*window);
     }
     this->hero->render(*window);
+    this->window->draw( lighting, sf::BlendMultiply );
     for(size_t i=0;i<this->game_sprites.size();i++)
     {
         this->window->draw(*this->game_sprites[i]);
     }
+
     this->window->display();
 }
 //bool functions return true if our windows is open

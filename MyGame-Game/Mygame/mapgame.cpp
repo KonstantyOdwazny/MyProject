@@ -114,7 +114,7 @@ void MapGame::createSprite()
 //draw all elements of the map
 void MapGame::drawing(sf::RenderTarget &target)
 {
-    target.draw(*this->backgrounds);
+    //target.draw(*this->backgrounds);
     for(size_t i=0;i<this->sprites.size();i++)
     {
         for(size_t j=0;j<this->sprites[i].size();j++)
