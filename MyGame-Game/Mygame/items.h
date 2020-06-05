@@ -39,6 +39,8 @@ public:
     const static int height =22;
     const static int width =47;
 
+    Tile poz_coin[height][width];
+
     Tile poziom[height][width];
 
     //vector textures
@@ -52,6 +54,10 @@ public:
 
     //kontener pozycji pochodni
     std::vector<sf::Vector2f> pochodnie_pozycja;
+
+    //container of coins
+    std::vector<std::unique_ptr<sf::Texture>> coins_tex;
+    std::vector<std::unique_ptr<sf::Sprite>> coinsy;
 
     //public functions
     void drawing(sf::RenderTarget& target);

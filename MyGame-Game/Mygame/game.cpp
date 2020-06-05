@@ -72,6 +72,15 @@ void Game::Update_TexturesPosition()
 //constructor
 Game::Game()
 {
+    //coinsy
+    coins_licz=0;
+    font.loadFromFile("C:/Users/konst/Documents/GitHub/blog-projects/Kurs_SFML/Lekcja 1/data/Mecha.ttf");
+    std::string ctext="0000";
+    this->coin_text.setString(ctext);
+    this->coin_text.setFont(font);
+    this->coin_text.setCharacterSize(30);
+    this->coin_text.setFillColor(sf::Color::Red);
+    this->coin_text.setStyle(sf::Text::Bold);
     //light
     this->lightingTex.create(2900,3000);
     this->light.setRadius(200.0f);
@@ -80,7 +89,7 @@ Game::Game()
 
     this->InitTextures();
     licz_pom=0;
-    //view.setViewport(sf::FloatRect(0.0f,0.0f,800.0f,600.0f));
+
     view.setSize(800.0f,600.0f);
     view.setCenter(0.0f,0.0f);
     this->window=new sf::RenderWindow(sf::VideoMode(800,600),"My Game");
@@ -99,6 +108,7 @@ Game::Game()
     //create enemies
     this->enemies=new Enemies("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/enemies.level");
     kolor_licz=0;
+
     //pochodnie
     for(size_t i=0;i<this->things->pochodnie_pozycja.size();i++)
     {
@@ -703,7 +713,9 @@ void Game::render()
     {
     lighting.setPosition(this->view.getCenter().x-400.0f,this->view.getCenter().y-300.0f);
     this->level->backgrounds->setPosition(this->view.getCenter().x-600.0f,this->view.getCenter().y-800.0f);
+    this->coin_text.setPosition(this->view.getCenter());
     }
+
     light.setPosition(this->hero->getPosition().x-50.0f,this->hero->getPosition().y-60.0f);
     licz_pom++;
     this->Update_TexturesPosition();
@@ -724,7 +736,7 @@ void Game::render()
     {
         this->window->draw(*this->game_sprites[i]);
     }
-
+    //this->window->draw(this->coin_text);
     this->window->display();
 }
 //bool functions return true if our windows is open

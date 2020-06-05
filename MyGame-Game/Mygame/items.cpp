@@ -16,7 +16,21 @@ void Items::loadfromfile(const std::string &filename)
             for(int j=0;j<width;j++)
             {
                 int pom;
-                file>>pom;
+                std::string txt;
+                //file>>pom;
+                file>>txt;
+                if(txt!="c")
+                {
+                   pom=std::atoi(txt.c_str());
+                   poz_coin[i][j].iswall=false;
+                }
+                else
+                {
+                    pom=0;
+                    poz_coin[i][j].iswall=true;
+                    poz_coin[i][j].type=23;
+                }
+
 
                 if(pom==0)
                 {
@@ -27,6 +41,7 @@ void Items::loadfromfile(const std::string &filename)
                     poziom[i][j].iswall=true;
                 }
                 poziom[i][j].type=pom-1;
+                txt.clear();
             }
         }
     }
@@ -50,6 +65,19 @@ void Items::createSprite()
         this->textures.emplace_back(std::move(t));
     }
     }
+
+    for(int j=0;j<6;j++)
+    {
+        for(int i=0;i<4;i++)
+        {
+            auto st=std::make_unique<sf::Texture>();
+            st->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/spritesheet_items.png",
+                             sf::IntRect(j*tile_width,i*tile_height,tile_width,tile_height));
+            st->setRepeated(true);
+            this->coins_tex.emplace_back(std::move(st));
+        }
+    }
+
      std::vector<std::unique_ptr<sf::Sprite>> sp;
      std::vector<item_type> itemname;
 
@@ -58,7 +86,7 @@ void Items::createSprite()
      {
          for(int j=0;j<width;j++)
          {
-             if(poziom[i][j].iswall==true){
+             if(poziom[i][j].iswall==true && poziom[i][j].type!=80){
 
 
                 if(poziom[i][j].type>=0 && poziom[i][j].type<=9){
@@ -111,10 +139,21 @@ void Items::createSprite()
 
              sp.emplace_back(std::move(s));
              }
+
+             if(this->poz_coin[i][j].iswall==true)
+             {
+                 auto sprit=std::make_unique<sf::Sprite>();
+                 sprit->setTexture(*coins_tex[poz_coin[i][j].type]);
+                 sprit->setScale(0.5f,0.5f);
+                 sprit->setPosition(j*tile_width*0.5f,i*tile_height*0.5f);
+                 sprit->setOrigin(sprit->getGlobalBounds().width/2.0f,sprit->getGlobalBounds().height/2.0f);
+                 this->coinsy.emplace_back(std::move(sprit));
+             }
+
+
          }
          this->items.emplace_back(std::move(sp));
          this->typeofitem.emplace_back(itemname);
-
 
          itemname.clear();
          sp.clear();
@@ -142,6 +181,12 @@ void Items::drawing(sf::RenderTarget &target)
             target.draw(*items[i][j]);
         }
     }
+
+    for(size_t a=0;a<this->coinsy.size();a++)
+    {
+        target.draw(*coinsy[a]);
+    }
+
 }
 //what hapen when items collider
 void Items::Collision_events(sf::Vector2f &direction,const size_t& i,const size_t& j)

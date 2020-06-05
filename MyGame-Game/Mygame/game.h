@@ -46,6 +46,10 @@ public:
     //view
     sf::View view;
     int licz_pom;
+    //coins
+    int coins_licz;
+    sf::Font font;
+    sf::Text coin_text;
 
     //light
     sf::CircleShape light;
@@ -67,6 +71,8 @@ public:
     void EnemiesWithItems_collision(sf::Vector2f& direction, float p);
     //hero and enemies collision
     void Hero_Enemies_Collision(sf::Vector2f& direction, float p);
+    //collect coins
+    void CollectCoins();
 
 
 };

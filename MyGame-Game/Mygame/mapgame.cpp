@@ -102,13 +102,13 @@ void MapGame::createSprite()
     //backgrounds
 
     tex=new sf::Texture;
-    tex->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/backgroundColorForest.png");
+    tex->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/bg_castle.png");
     tex->setRepeated(true);
     this->backgrounds=new sf::Sprite;
     this->backgrounds->setTexture(*tex);
     //this->backgrounds->setTextureRect(sf::IntRect(0,0,1000,1000));
     this->backgrounds->setScale(3.0f,3.0f);
-    this->backgrounds->setPosition(-300.0f,-300.0f);
+    this->backgrounds->setPosition(0.0f,0.0f);
 }
 
 //draw all elements of the map
