@@ -1,5 +1,6 @@
 #include "game.h"
 #include <cmath>
+#include <windows.h>
 //private functions
 void Game::InitTextures()
 {
@@ -18,7 +19,7 @@ void Game::InitTextures()
             this->game_rect.emplace_back(sf::IntRect(i*v.x,j*v.y,v.y,v.x));
         }
     }
-    for(int i=0;i<6;i++)
+    for(int i=0;i<4;i++)
     {
         auto sp=std::make_unique<sf::Sprite>();
         if(i==3)
@@ -33,12 +34,7 @@ void Game::InitTextures()
             sp->setTextureRect(this->game_rect[2]);
             sp->setScale(0.3f,0.3f);
         }
-        else if(i>3)
-        {
-            sp->setTexture(*this->tex_hud);
-            sp->setTextureRect(this->game_rect[14]);
-            sp->setScale(0.3f,0.3f);
-        }
+
         this->game_sprites.emplace_back(std::move(sp));
     }
 }
@@ -56,6 +52,7 @@ void Game::Update_TexturesPosition()
             this->game_sprites[i]->setPosition(game_sprites[i-1]->getGlobalBounds().left+game_sprites[i-1]->getGlobalBounds().width,this->view.getCenter().y-290.0f);
         }
     }
+    this->coin_text.setPosition(game_sprites[game_sprites.size()-1]->getGlobalBounds().left+game_sprites[game_sprites.size()-1]->getGlobalBounds().width,this->view.getCenter().y-290.0f);
     if(this->hero->life==2)
     {
         this->game_sprites[0]->setTextureRect(this->game_rect[3]);
@@ -68,19 +65,36 @@ void Game::Update_TexturesPosition()
     {
         this->game_sprites[2]->setTextureRect(this->game_rect[3]);
     }
+    this->coin_text.setString(std::to_string(this->coins_licz));
+
+    this->gameover.setPosition(this->view.getCenter().x-100.0f,this->view.getCenter().y);
+    this->again.setPosition(this->view.getCenter().x-100.0f,this->view.getCenter().y+100.0f);
 }
 //constructor
 Game::Game()
 {
+    this->startagain=false;
     //coinsy
     coins_licz=0;
     font.loadFromFile("C:/Users/konst/Documents/GitHub/blog-projects/Kurs_SFML/Lekcja 1/data/Mecha.ttf");
-    std::string ctext="0000";
+    std::string ctext="0";
     this->coin_text.setString(ctext);
     this->coin_text.setFont(font);
     this->coin_text.setCharacterSize(30);
-    this->coin_text.setFillColor(sf::Color::Red);
+    this->coin_text.setFillColor(sf::Color::White);
     this->coin_text.setStyle(sf::Text::Bold);
+
+    this->gameover.setString("GAME OVER");
+    this->gameover.setFont(font);
+    this->gameover.setCharacterSize(72);
+    this->gameover.setFillColor(sf::Color::Yellow);
+    this->gameover.setStyle(sf::Text::Bold);
+
+    this->again.setString("Click ENTER to start again");
+    this->again.setFont(font);
+    this->again.setCharacterSize(40);
+    this->again.setFillColor(sf::Color::Yellow);
+    this->again.setStyle(sf::Text::Bold);
     //light
     this->lightingTex.create(2900,3000);
     this->light.setRadius(200.0f);
@@ -156,6 +170,10 @@ void Game::pollevent()
         if(this->ev.key.code==sf::Keyboard::Space){
             this->hero->jump=true;
            // this->hero->jumpstep(); //jump hero animation frame
+        }
+        if(this->hero->life<=0 && this->ev.key.code==sf::Keyboard::Enter)
+        {
+            this->startagain=true;
         }
 
     }
@@ -269,7 +287,7 @@ void Game::hero_and_itemsCollision(sf::Vector2f &direction, float p)
              intersectX=std::abs(deltax)-(otherhalfsize.x+thishalfsize.x);
              intersectY=std::abs(deltay)-(otherhalfsize.y+thishalfsize.y);
 
-             if((this->things->typeofitem[i][j].dynamic==true)||(this->things->typeofitem[i][j].name=="woda")){
+             if(this->things->typeofitem[i][j].dynamic==true){
 
              if(intersectX<0.0f && intersectY<0.0f) //jesli obie osie przeciecia obiektu sa mniejsze od 0 to znaczy ze obiekty na siebie nachodza i nastepuje zderzenie
              {
@@ -322,14 +340,20 @@ void Game::hero_and_itemsCollision(sf::Vector2f &direction, float p)
              }
              if(t==true)
              {
-                 if(this->things->typeofitem[i][j].name!="woda"){
+
                  this->hero->OnitemCollision(direction);
-                 }else
-                 {
-                     this->hero->OndangerousItemsCollsion(direction);
-                 }
              }
            }
+           else
+            {
+                if((this->things->typeofitem[i][j].name=="woda")&&(this->hero->getGlobalBounds().intersects(this->things->items[i][j]->getGlobalBounds()))){
+                    hero->vy=0.0f;
+                    hero->life--;
+                    hero->Deadstep();
+                    Sleep(1000);
+                    hero->setPosition(hero->start_position);
+                 }
+            }
         }
     }
 }
@@ -602,21 +626,35 @@ void Game::Hero_Enemies_Collision(sf::Vector2f &direction, float p)
     }
 
 }
+//Collect Coins
+void Game::CollectCoins()
+{
+    for(size_t i=0;i<this->things->coinsy.size();i++)
+    {
+        if(this->hero->getGlobalBounds().intersects(this->things->coinsy[i]->getGlobalBounds()))
+        {
+            this->coins_licz++;
+            this->things->coinsy.erase(this->things->coinsy.begin()+i);
+            break;
+        }
+    }
+}
+
 //funkcja update gdzie zmieniamy pozycje obiektow i dodajemy zdarzenia przyciskow wejscia np klawiatury
 void Game::update()
 {
-    //level->getposition(10);
+    if(this->hero->life>0)
+    {
     //running
     this->window->setFramerateLimit(60); //limit fps-ow
     this->elapsed=this->clock.restart(); //restart a clock
+    this->hero->vx=0.0f;
+    this->hero->run=false;
     /*
      * Zdarzenia klawiatury
      *
      *
      */
-    this->hero->vx=0.0f;
-    this->hero->run=false;
-
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         if(this->hero->vx<600.0f){
@@ -652,9 +690,11 @@ void Game::update()
         this->hero->begin_stop=0;
     }
 
+    //animation update
     this->hero->jumpstep(elapsed); //jump hero animation frame
     this->hero->runstep(this->elapsed); //run hero animation
 
+    //grvity update
     for(size_t i=0;i<this->things->typeofitem.size();i++){
         for(size_t j=0;j<things->typeofitem[i].size();j++)
         {
@@ -668,6 +708,7 @@ void Game::update()
 
     this->hero->vy+=981.0f*elapsed.asSeconds(); //sila grawitacji dzialajaca na bohatera
 
+    //collision update
     this->CheckCollision(direction,1.0f); //sprawdzamy kolizje przed poruszeniem sie postaci aby sprawdzic czy moze ona sie poruszac
     this->map_collision_items(direction,1.0f); //sprawdzamy kolizje przedmiotow z elementami mapy
     this->hero_and_itemsCollision(direction,1.0f); //sprawdzamy kolizje gracza z przedmiotami
@@ -677,7 +718,7 @@ void Game::update()
     this->Hero_Enemies_Collision(direction,0.0f);
     this->EnemiesWithItems_collision(direction,0.0f);
     }
-
+    this->CollectCoins();
     this->hero->moving(elapsed); //poruszanie naszym bohaterem
     this->things->moving(elapsed); //poruszanie sie przedmiotow dynamicznych
 
@@ -691,6 +732,8 @@ void Game::update()
         this->hero->stop(elapsed);
         this->hero->jump=false;
         this->hero->jump_it=1;
+    }
+
     }
 
 }
@@ -713,7 +756,7 @@ void Game::render()
     {
     lighting.setPosition(this->view.getCenter().x-400.0f,this->view.getCenter().y-300.0f);
     this->level->backgrounds->setPosition(this->view.getCenter().x-600.0f,this->view.getCenter().y-800.0f);
-    this->coin_text.setPosition(this->view.getCenter());
+    //this->coin_text.setPosition(this->view.getCenter());
     }
 
     light.setPosition(this->hero->getPosition().x-50.0f,this->hero->getPosition().y-60.0f);
@@ -736,7 +779,13 @@ void Game::render()
     {
         this->window->draw(*this->game_sprites[i]);
     }
-    //this->window->draw(this->coin_text);
+    this->window->draw(this->coin_text);
+    if(this->hero->life<=0)
+    {
+        this->window->draw(gameover);
+        this->window->draw(again);
+    }
+
     this->window->display();
 }
 //bool functions return true if our windows is open

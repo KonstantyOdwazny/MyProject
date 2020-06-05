@@ -29,7 +29,7 @@ public:
     const static int tile_height =128;
     const static int tile_width =128;
 
-    const static int height =27;
+    const static int height =28;
     const static int width =47;
     //object our help struct Tile when we have a number which texture we have draw with our png
     Tile poziom[height][width];

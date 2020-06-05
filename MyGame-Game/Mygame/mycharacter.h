@@ -104,8 +104,6 @@ public:
     void OnitemCollision(sf::Vector2f& direction);
     //collision with enemies
     void OnEnemiesCollision(sf::Vector2f& direction);
-    //collision with dangerous items
-    void OndangerousItemsCollsion(sf::Vector2f& direction);
 };
 
 #endif // MYCHARACTER_H

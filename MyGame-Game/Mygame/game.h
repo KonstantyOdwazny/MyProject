@@ -50,6 +50,10 @@ public:
     int coins_licz;
     sf::Font font;
     sf::Text coin_text;
+    sf::Text gameover;
+    sf::Text again;
+    //start again
+    bool startagain;
 
     //light
     sf::CircleShape light;
@@ -73,6 +77,7 @@ public:
     void Hero_Enemies_Collision(sf::Vector2f& direction, float p);
     //collect coins
     void CollectCoins();
+
 
 
 };

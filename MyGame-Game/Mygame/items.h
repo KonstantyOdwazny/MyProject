@@ -36,7 +36,7 @@ public:
     const static int tile_height =128;
     const static int tile_width =128;
 
-    const static int height =22;
+    const static int height =27;
     const static int width =47;
 
     Tile poz_coin[height][width];

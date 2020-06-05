@@ -257,24 +257,6 @@ void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
         vy=0.0f;
     }
 }
-//events when dangerous items like water is are in collision
-void MyCharacter::OndangerousItemsCollsion(sf::Vector2f &direction)
-{
-    if(direction.y < 0.0f)
-    {
-        //Collision on the bottom
-        vy=0.0f;
-        life--;
-        this->Deadstep();
-        Sleep(1000);
-        this->setPosition(this->start_position);
-    }
-    else if(direction.y >0.0f)
-    {
-        //Collision on the top
-        vy=0.0f;
-    }
-}
 
 
 
