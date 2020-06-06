@@ -2,6 +2,7 @@
 #include <cmath>
 #include <windows.h>
 //private functions
+//Create game textures like hearts and coin
 void Game::InitTextures()
 {
     tex_hud=std::make_unique<sf::Texture>();
@@ -38,6 +39,85 @@ void Game::InitTextures()
         this->game_sprites.emplace_back(std::move(sp));
     }
 }
+//create game text like game over and number of coins
+void Game::InitText()
+{
+    //coinsy
+    coins_licz=0;
+    font.loadFromFile("C:/Users/konst/Documents/GitHub/blog-projects/Kurs_SFML/Lekcja 1/data/Mecha.ttf");
+    std::string ctext="0";
+    this->coin_text.setString(ctext);
+    this->coin_text.setFont(font);
+    this->coin_text.setCharacterSize(30);
+    this->coin_text.setFillColor(sf::Color::White);
+    this->coin_text.setStyle(sf::Text::Bold);
+
+    this->gameover.setString("GAME OVER");
+    this->gameover.setFont(font);
+    this->gameover.setCharacterSize(72);
+    this->gameover.setFillColor(sf::Color::Yellow);
+    this->gameover.setStyle(sf::Text::Bold);
+
+    this->again.setString("Click ENTER to start again");
+    this->again.setFont(font);
+    this->again.setCharacterSize(40);
+    this->again.setFillColor(sf::Color::Yellow);
+    this->again.setStyle(sf::Text::Bold);
+}
+//create main light hero
+void Game::InitLight()
+{
+    //light
+    this->lightingTex.create(2900,3000);
+    this->light.setRadius(200.0f);
+    this->light.setPointCount(30);
+    this->light.setFillColor(sf::Color(255,255,255));
+}
+//create lightings
+void Game::InitLightings()
+{
+    kolor_licz=0;
+    //pochodnie
+    for(size_t i=0;i<this->things->pochodnie_pozycja.size();i++)
+    {
+        sf::CircleShape circle(220.0f,30);
+        if(kolor_licz==0)
+        {
+            kolor_licz++;
+        circle.setFillColor(sf::Color(255,105,105));
+        }
+        else if(kolor_licz==1)
+        {
+            kolor_licz++;
+            circle.setFillColor(sf::Color(105,255,105));
+        }
+        else if(kolor_licz==2)
+        {
+            kolor_licz=0;
+            circle.setFillColor(sf::Color(105,105,255));
+        }
+        circle.setPosition(things->pochodnie_pozycja[i].x-100.0f,things->pochodnie_pozycja[i].y-50.0f);
+        pochodnie.emplace_back(circle);
+    }
+}
+//create constructor other classes
+void Game::CreateOtherClasses()
+{
+    this->level=new MapGame("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/map.level");
+    //create hero
+    hero=new MyCharacter;
+    this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_maleAdventurer_sheet.png");
+    this->hero->animation_frame();
+    this->hero->InitSprite(this->hero->vector_animationframe[0]);
+    this->hero->setposition(250.0f,280.0f);
+    this->hero->start_position.x=250.0f;
+    this->hero->start_position.y=280.0f;
+    //this->hero->setPosition(this->level->pom);
+    //create items
+    this->things=new Items("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/item.level");
+    //create enemies
+    this->enemies=new Enemies("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/enemies.level");
+}
 //change game textures position to textures always be in the top left corner
 void Game::Update_TexturesPosition()
 {
@@ -70,82 +150,73 @@ void Game::Update_TexturesPosition()
     this->gameover.setPosition(this->view.getCenter().x-100.0f,this->view.getCenter().y);
     this->again.setPosition(this->view.getCenter().x-100.0f,this->view.getCenter().y+100.0f);
 }
+//Update Keybord
+void Game::UpdateKeybordInput()
+{
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    {
+        if(this->hero->vx<600.0f){
+        this->hero->vx+=100.0f;
+        }
+        this->hero->run=true;
+        //this->hero->runstep(this->elapsed);
+        this->hero->facerigth=true;
+        this->hero->begin_stop=0;
+        //this->hero->jump_it=1;
+
+
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    {
+        if(this->hero->vx>-600.0f){
+        this->hero->vx-=100.0f;
+        }
+        this->hero->run=true;
+        //this->hero->runstep(this->elapsed);
+       this->hero->facerigth=false;
+        this->hero->begin_stop=0;
+        //this->hero->jump_it=1;
+
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->hero->canjump)
+    {
+        this->hero->canjump=false;
+        //gravity
+        this->hero->vy=-sqrtf(2.0f*981.0f*this->hero->jumpHeight); //float square root
+        this->hero->jump=true;
+        this->hero->begin_stop=0;
+    }
+}
+//Update Collision
+void Game::UpdateCollision()
+{
+    this->CheckCollision(direction,1.0f); //sprawdzamy kolizje przed poruszeniem sie postaci aby sprawdzic czy moze ona sie poruszac
+    this->map_collision_items(direction,1.0f); //sprawdzamy kolizje przedmiotow z elementami mapy
+    this->hero_and_itemsCollision(direction,1.0f); //sprawdzamy kolizje gracza z przedmiotami
+    this->things->Collider_items();
+    if(enemies->sprites.empty()==false)
+    {
+    this->Hero_Enemies_Collision(direction,0.0f);
+    this->EnemiesWithItems_collision(direction,0.0f);
+    }
+    this->CollectCoins();
+    this->hero->moving(elapsed); //poruszanie naszym bohaterem
+    this->things->moving(elapsed); //poruszanie sie przedmiotow dynamicznych
+}
 //constructor
 Game::Game()
 {
     this->startagain=false;
-    //coinsy
-    coins_licz=0;
-    font.loadFromFile("C:/Users/konst/Documents/GitHub/blog-projects/Kurs_SFML/Lekcja 1/data/Mecha.ttf");
-    std::string ctext="0";
-    this->coin_text.setString(ctext);
-    this->coin_text.setFont(font);
-    this->coin_text.setCharacterSize(30);
-    this->coin_text.setFillColor(sf::Color::White);
-    this->coin_text.setStyle(sf::Text::Bold);
-
-    this->gameover.setString("GAME OVER");
-    this->gameover.setFont(font);
-    this->gameover.setCharacterSize(72);
-    this->gameover.setFillColor(sf::Color::Yellow);
-    this->gameover.setStyle(sf::Text::Bold);
-
-    this->again.setString("Click ENTER to start again");
-    this->again.setFont(font);
-    this->again.setCharacterSize(40);
-    this->again.setFillColor(sf::Color::Yellow);
-    this->again.setStyle(sf::Text::Bold);
-    //light
-    this->lightingTex.create(2900,3000);
-    this->light.setRadius(200.0f);
-    this->light.setPointCount(30);
-    this->light.setFillColor(sf::Color(255,255,255));
-
+    this->InitText();
+    this->InitLight();
     this->InitTextures();
     licz_pom=0;
-
     view.setSize(800.0f,600.0f);
     view.setCenter(0.0f,0.0f);
     this->window=new sf::RenderWindow(sf::VideoMode(800,600),"My Game");
-    this->level=new MapGame("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/map.level");
-    //create hero
-    hero=new MyCharacter;
-    this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_maleAdventurer_sheet.png");
-    this->hero->animation_frame();
-    this->hero->InitSprite(this->hero->vector_animationframe[0]);
-    this->hero->setposition(300.0f,300.0f);
-    this->hero->start_position.x=300.0f;
-    this->hero->start_position.y=280.0f;
-    //this->hero->setPosition(this->level->pom);
-    //create items
-    this->things=new Items("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/item.level");
-    //create enemies
-    this->enemies=new Enemies("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/enemies.level");
-    kolor_licz=0;
-
-    //pochodnie
-    for(size_t i=0;i<this->things->pochodnie_pozycja.size();i++)
-    {
-        sf::CircleShape circle(220.0f,30);
-        if(kolor_licz==0)
-        {
-            kolor_licz++;
-        circle.setFillColor(sf::Color(255,105,105));
-        }
-        else if(kolor_licz==1)
-        {
-            kolor_licz++;
-            circle.setFillColor(sf::Color(105,255,105));
-        }
-        else if(kolor_licz==2)
-        {
-            kolor_licz=0;
-            circle.setFillColor(sf::Color(105,105,255));
-        }
-        circle.setPosition(things->pochodnie_pozycja[i].x-100.0f,things->pochodnie_pozycja[i].y-50.0f);
-        pochodnie.emplace_back(circle);
-    }
-
+    this->CreateOtherClasses();
+    this->InitLightings();
 }
 //destructor
 Game::~Game()
@@ -650,45 +721,7 @@ void Game::update()
     this->elapsed=this->clock.restart(); //restart a clock
     this->hero->vx=0.0f;
     this->hero->run=false;
-    /*
-     * Zdarzenia klawiatury
-     *
-     *
-     */
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-    {
-        if(this->hero->vx<600.0f){
-        this->hero->vx+=100.0f;
-        }
-        this->hero->run=true;
-        //this->hero->runstep(this->elapsed);
-        this->hero->facerigth=true;
-        this->hero->begin_stop=0;
-        //this->hero->jump_it=1;
-
-
-    }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-    {
-        if(this->hero->vx>-600.0f){
-        this->hero->vx-=100.0f;
-        }
-        this->hero->run=true;
-        //this->hero->runstep(this->elapsed);
-       this->hero->facerigth=false;
-        this->hero->begin_stop=0;
-        //this->hero->jump_it=1;
-
-    }
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->hero->canjump)
-    {
-        this->hero->canjump=false;
-        //gravity
-        this->hero->vy=-sqrtf(2.0f*981.0f*this->hero->jumpHeight); //float square root
-        this->hero->jump=true;
-        this->hero->begin_stop=0;
-    }
+    this->UpdateKeybordInput();
 
     //animation update
     this->hero->jumpstep(elapsed); //jump hero animation frame
@@ -708,19 +741,7 @@ void Game::update()
 
     this->hero->vy+=981.0f*elapsed.asSeconds(); //sila grawitacji dzialajaca na bohatera
 
-    //collision update
-    this->CheckCollision(direction,1.0f); //sprawdzamy kolizje przed poruszeniem sie postaci aby sprawdzic czy moze ona sie poruszac
-    this->map_collision_items(direction,1.0f); //sprawdzamy kolizje przedmiotow z elementami mapy
-    this->hero_and_itemsCollision(direction,1.0f); //sprawdzamy kolizje gracza z przedmiotami
-    this->things->Collider_items();
-    if(enemies->sprites.empty()==false)
-    {
-    this->Hero_Enemies_Collision(direction,0.0f);
-    this->EnemiesWithItems_collision(direction,0.0f);
-    }
-    this->CollectCoins();
-    this->hero->moving(elapsed); //poruszanie naszym bohaterem
-    this->things->moving(elapsed); //poruszanie sie przedmiotow dynamicznych
+    this->UpdateCollision();
 
     if(enemies->sprites.empty()==false)
     {
@@ -743,7 +764,7 @@ void Game::render()
     //light
     this->view.setCenter(this->hero->getPosition());
     lightingTex.clear( sf::Color( 0, 0, 0, 0 ) );
-     lightingTex.draw( light, sf::BlendAdd ); // light - sprite, figura, cokolwiek sf::Drawable
+    lightingTex.draw( light, sf::BlendAdd ); // light - sprite, figura, cokolwiek sf::Drawable
     //pochodnie
     for(size_t i=0;i<this->pochodnie.size();i++)
     {
@@ -756,9 +777,9 @@ void Game::render()
     {
     lighting.setPosition(this->view.getCenter().x-400.0f,this->view.getCenter().y-300.0f);
     this->level->backgrounds->setPosition(this->view.getCenter().x-600.0f,this->view.getCenter().y-800.0f);
+    this->hero->setPosition(250.0f,250.0f);
     //this->coin_text.setPosition(this->view.getCenter());
     }
-
     light.setPosition(this->hero->getPosition().x-50.0f,this->hero->getPosition().y-60.0f);
     licz_pom++;
     this->Update_TexturesPosition();

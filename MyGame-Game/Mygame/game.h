@@ -24,7 +24,13 @@ private:
 
     //private functions
     void InitTextures();
+    void InitText();
+    void InitLight();
+    void InitLightings();
+    void CreateOtherClasses();
     void Update_TexturesPosition();
+    void UpdateKeybordInput();
+    void UpdateCollision();
 public:
     //constructor and destructor
     Game();
