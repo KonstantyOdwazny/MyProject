@@ -14,8 +14,10 @@ class Game
 private:
     //window
     sf::RenderWindow* window;
+    sf::RenderWindow* equipment;
     //events
     sf::Event ev;
+    sf::Event event;
 
     //private properties
     std::unique_ptr<sf::Texture> tex_hud;

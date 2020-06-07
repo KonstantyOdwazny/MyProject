@@ -8,6 +8,7 @@ int main()
     int koniec=0;
     while(game.running())
     {
+
         //events
         game.pollevent();
         if(game.startagain==true)

@@ -34,6 +34,7 @@ private:
     void InitTime();
     void TurnAround();
     void CheckTurnface();
+    void InitLifes();
 
     //private properties
     std::vector<std::unique_ptr<sf::Texture>> textures;
@@ -63,6 +64,8 @@ public:
     std::vector<std::unique_ptr<sf::Sprite>> sprites;
     //vector velocity enemies
     std::vector<float> veclocities;
+    //vector of enemies's lifes
+    std::vector<int> lifes;
 
     //public functions
     void drawing(sf::RenderTarget& target);

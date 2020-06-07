@@ -1,5 +1,6 @@
 #include "mycharacter.h"
 #include <windows.h>
+#include <cmath>
 
 //private functions
 void MyCharacter::InitTexture(std::string filename)
@@ -249,7 +250,8 @@ void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
     if(direction.y < 0.0f)
     {
         //Collision on the bottom
-        vy=0.0f;
+        this->vy=-sqrtf(2.0f*981.0f*this->jumpHeight); //float square root
+        //vy=0.0f;
     }
     else if(direction.y >0.0f)
     {

@@ -127,6 +127,14 @@ void Enemies::CheckTurnface()
     }
 
 }
+//create enemies lifes
+void Enemies::InitLifes()
+{
+    for(size_t i=0;i<this->sprites.size();i++)
+    {
+        this->lifes.emplace_back(int(2));
+    }
+}
 
 //constructors
 
@@ -149,6 +157,7 @@ Enemies::Enemies(std::string filename)
     walklimittime=16.8f;
     //faceright=true;
     stoptime=0.0f;
+    InitLifes();
 }
 
 //public functions
