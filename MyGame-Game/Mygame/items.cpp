@@ -19,17 +19,34 @@ void Items::loadfromfile(const std::string &filename)
                 std::string txt;
                 //file>>pom;
                 file>>txt;
-                if(txt!="c")
+                if(txt!="c" && txt!="ck")
                 {
                    pom=std::atoi(txt.c_str());
                    poz_coin[i][j].iswall=false;
+                   poz_key[i][j].iswall=false;
+
                 }
-                else
+                else if(txt=="c")
                 {
                     pom=0;
                     poz_coin[i][j].iswall=true;
                     poz_coin[i][j].type=23;
+
+                    poz_key[i][j].iswall=false;
                 }
+                else if(txt=="ck")
+                {
+                    pom=0;
+                    poz_key[i][j].iswall=true;
+                    poz_key[i][j].type=15;
+                    poz_coin[i][j].iswall=false;
+                    //keycolors.emplace_back("red");
+                }
+                else
+                {
+                    pom=std::atoi(txt.c_str());
+                }
+
 
 
                 if(pom==0)
@@ -38,7 +55,17 @@ void Items::loadfromfile(const std::string &filename)
                 }
                 else
                 {
-                    poziom[i][j].iswall=true;
+
+                    if(pom>=42 && pom <= 45)
+                    {
+                        position_doors.emplace_back(pom-1);
+                        poziom[i][j].iswall=false;
+
+                    }
+                    else
+                    {
+                        poziom[i][j].iswall=true;
+                    }
                 }
                 poziom[i][j].type=pom-1;
                 txt.clear();
@@ -90,41 +117,47 @@ void Items::createSprite()
 
 
                 if(poziom[i][j].type>=0 && poziom[i][j].type<=9){
+
                     item_type it;
                     it.name="pudelko";
                     it.dynamic=true;
                     it.velocity.x=0.0f;
                     it.velocity.y=0.0f;
+                    it.dangerous=false;
                     itemname.emplace_back(it);
+
                 }
-                else{
-                    if(poziom[i][j].type==15||poziom[i][j].type==17)
+                else if(poziom[i][j].type==15||poziom[i][j].type==17)
                     {
                         item_type it;
                         it.name="woda";
                         it.dynamic=false;
                         it.velocity.x=0.0f;
                         it.velocity.y=0.0f;
+                        it.dangerous=true;
                         itemname.emplace_back(it);
                     }
-                    else{
-                        if(poziom[i][j].type==19)
+                    else if(poziom[i][j].type==19)
                         {
                             item_type it;
                             it.name="fire";
                             it.dynamic=false;
                             it.velocity.x=0.0f;
                             it.velocity.y=0.0f;
+                            it.dangerous=false;
                             itemname.emplace_back(it);
                         }
-                    item_type it;
-                    it.name="nic";
-                    it.dynamic=false;
-                    it.velocity.x=0.0f;
-                    it.velocity.y=0.0f;
-                    itemname.emplace_back(it);
+                    else{
+                        item_type it;
+                        it.name="nic";
+                        it.dynamic=false;
+                        it.velocity.x=0.0f;
+                        it.velocity.y=0.0f;
+                        it.dangerous=false;
+                        itemname.emplace_back(it);
                     }
-                }
+
+
 
              auto s=std::make_unique<sf::Sprite>();
              s->setTexture(*textures[poziom[i][j].type]);
@@ -139,6 +172,16 @@ void Items::createSprite()
 
              sp.emplace_back(std::move(s));
              }
+              if(poziom[i][j].type>=41 && poziom[i][j].type <=44)
+              {
+                  //doors.emplace_back(std::make_unique<sf::Sprite>(*textures[poziom[i][j].type]));
+                  auto d=std::make_unique<sf::Sprite>();
+                  d->setTexture(*textures[poziom[i][j].type]);
+                  d->setScale(0.5f,0.5f);
+                  d->setPosition(j*tile_width*0.5f,i*tile_height*0.5f);
+                  d->setOrigin(d->getGlobalBounds().width/2.0f,d->getGlobalBounds().height/2.0f);
+                  doors.emplace_back(std::move(d));
+              }
 
              if(this->poz_coin[i][j].iswall==true)
              {
@@ -148,6 +191,20 @@ void Items::createSprite()
                  sprit->setPosition(j*tile_width*0.5f,i*tile_height*0.5f);
                  sprit->setOrigin(sprit->getGlobalBounds().width/2.0f,sprit->getGlobalBounds().height/2.0f);
                  this->coinsy.emplace_back(std::move(sprit));
+             }
+
+             if(this->poz_key[i][j].iswall==true)
+             {
+                 auto spri=std::make_unique<sf::Sprite>();
+                 spri->setTexture(*coins_tex[poz_key[i][j].type]);
+                 spri->setScale(0.5f,0.5f);
+                 spri->setPosition(j*tile_width*0.5f,i*tile_height*0.5f);
+                 spri->setOrigin(spri->getGlobalBounds().width/2.0f,spri->getGlobalBounds().height/2.0f);
+                 this->keys.emplace_back(std::move(spri));
+                 std::pair<KeyColor,bool> p;
+                 p.first=KeyColor(poz_key[i][j].type);
+                 p.second=false;
+                 this->iskeycollect.emplace_back(p);
              }
 
 
@@ -185,6 +242,14 @@ void Items::drawing(sf::RenderTarget &target)
     for(size_t a=0;a<this->coinsy.size();a++)
     {
         target.draw(*coinsy[a]);
+    }
+    for(size_t i=0;i<this->keys.size();i++)
+    {
+        target.draw(*keys[i]);
+    }
+    for(size_t i=0;i<doors.size();i++)
+    {
+        target.draw(*doors[i]);
     }
 
 }
@@ -232,6 +297,13 @@ void Items::moving(sf::Time& elapsed)
         }
     }
 }
+//erase keys[i] and change this activity to true
+void Items::Collectkeys(const size_t &i)
+{
+    this->keys.erase(keys.begin()+i);
+    //this->iskeycollect[i]=true;
+}
+
 //collision items with another items
 void Items::Collider_items()
 {

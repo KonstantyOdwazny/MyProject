@@ -111,7 +111,7 @@ void Enemies::TurnAround()
     }
 
 }
-
+//Turn around enemies
 void Enemies::CheckTurnface()
 {
     for(size_t i=0;i<sprites.size();i++)
@@ -280,6 +280,8 @@ void Enemies::Dead(const size_t& i)
      this->sprites[i]->setTextureRect(drect);
 
      this->sprites.erase(sprites.begin()+i);
+
+
 }
 
 

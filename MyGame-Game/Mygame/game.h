@@ -14,10 +14,10 @@ class Game
 private:
     //window
     sf::RenderWindow* window;
-    sf::RenderWindow* equipment;
+    //sf::RenderWindow* equipment;
     //events
     sf::Event ev;
-    sf::Event event;
+    //sf::Event event;
 
     //private properties
     std::unique_ptr<sf::Texture> tex_hud;
@@ -71,7 +71,7 @@ public:
     std::vector<sf::Sprite> sp_pochodnie;
     int kolor_licz;
 
-    //public functions
+    //Collision functions
 
     //collision hero witch map
     void CheckCollision(sf::Vector2f& direction ,float p);
@@ -85,6 +85,8 @@ public:
     void Hero_Enemies_Collision(sf::Vector2f& direction, float p);
     //collect coins
     void CollectCoins();
+    //collect keys
+    void CollectKeys();
 
 
 

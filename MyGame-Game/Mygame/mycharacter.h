@@ -47,6 +47,7 @@ public:
         begin_stop=0;
         stop_time=0.0f;
         jump_time=0.0f;
+        hit_it=11;
     }
     //~MyCharacter();
 
@@ -71,6 +72,7 @@ public:
     int jump_it; //iterator jump animation frame
     int stay_it;
     int begin_stop;
+    int hit_it;
 
     float timelimit;    //limit of animation time
     float time;
@@ -97,11 +99,14 @@ public:
     void stop(const sf::Time& elapsed);    //animation when hero stay
     void moving(const sf::Time& elapsed); //moving a hero with a time beetwen frame
     void Deadstep(); //animation when hero die
+    void HitAnimation(const sf::Time& elapsed);
+    void KickAnimation();
 
     //colission with static object
     void Oncollision(sf::Vector2f direction); //detect does hero in collision
     //colission with dynamic object
     void OnitemCollision(sf::Vector2f& direction);
+    void OnSpecialBoxCollision(sf::Vector2f& direction);
     //collision with enemies
     void OnEnemiesCollision(sf::Vector2f& direction);
 };

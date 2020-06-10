@@ -153,7 +153,7 @@ void Game::Update_TexturesPosition()
 //Update Keybord
 void Game::UpdateKeybordInput()
 {
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         if(this->hero->vx<600.0f){
         this->hero->vx+=100.0f;
@@ -166,7 +166,7 @@ void Game::UpdateKeybordInput()
 
 
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
         if(this->hero->vx>-600.0f){
         this->hero->vx-=100.0f;
@@ -179,13 +179,23 @@ void Game::UpdateKeybordInput()
 
     }
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->hero->canjump)
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W) && this->hero->canjump)
     {
         this->hero->canjump=false;
         //gravity
         this->hero->vy=-sqrtf(2.0f*981.0f*this->hero->jumpHeight); //float square root
         this->hero->jump=true;
         this->hero->begin_stop=0;
+    }
+
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    {
+        this->hero->HitAnimation(elapsed);
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    {
+        this->hero->KickAnimation();
     }
 }
 //Update Collision
@@ -201,6 +211,7 @@ void Game::UpdateCollision()
     this->EnemiesWithItems_collision(direction,0.0f);
     }
     this->CollectCoins();
+    this->CollectKeys();
     this->hero->moving(elapsed); //poruszanie naszym bohaterem
     this->things->moving(elapsed); //poruszanie sie przedmiotow dynamicznych
 }
@@ -215,8 +226,8 @@ Game::Game()
     view.setSize(800.0f,600.0f);
     view.setCenter(0.0f,0.0f);
     this->window=new sf::RenderWindow(sf::VideoMode(800,600),"My Game");
-    this->equipment=new sf::RenderWindow(sf::VideoMode(800,600),"Equimpent");
-    this->equipment->setVisible(false);
+    //this->equipment=new sf::RenderWindow(sf::VideoMode(800,600),"Equimpent");
+    //this->equipment->setVisible(false);
     //this->equipment->setActive(false);
     this->CreateOtherClasses();
     this->InitLightings();
@@ -240,16 +251,13 @@ void Game::pollevent()
         if(this->ev.type==sf::Event::Closed || this->ev.key.code==sf::Keyboard::Escape)
         {
             this->window->close();
-            this->equipment->close();
-        }
-        if(this->ev.key.code==sf::Keyboard::Space){
-            this->hero->jump=true;
-           // this->hero->jumpstep(); //jump hero animation frame
+            //this->equipment->close();
         }
         if(this->hero->life<=0 && this->ev.key.code==sf::Keyboard::Enter)
         {
             this->startagain=true;
         }
+        /*
         if(this->ev.key.code==sf::Keyboard::I)
         {
             this->window->setVisible(false);
@@ -257,8 +265,9 @@ void Game::pollevent()
             this->equipment->setActive(true);
             this->equipment->setVisible(true);
         }
-
+        */
     }
+    /*
     while(this->equipment->pollEvent(this->event))
     {
         if(this->event.type==sf::Event::Closed)
@@ -269,6 +278,7 @@ void Game::pollevent()
             this->window->setActive(true);
         }
     }
+    */
 }
 //funckja do sprawdzania kolizji gracza z otoczeniem
 void Game::CheckCollision(sf::Vector2f &direction, float p)
@@ -432,13 +442,12 @@ void Game::hero_and_itemsCollision(sf::Vector2f &direction, float p)
              }
              if(t==true)
              {
-
                  this->hero->OnitemCollision(direction);
              }
            }
            else
             {
-                if((this->things->typeofitem[i][j].name=="woda")&&(this->hero->getGlobalBounds().intersects(this->things->items[i][j]->getGlobalBounds()))){
+                if((this->things->typeofitem[i][j].dangerous==true)&&(this->hero->getGlobalBounds().intersects(this->things->items[i][j]->getGlobalBounds()))){
                     hero->vy=0.0f;
                     hero->life--;
                     hero->Deadstep();
@@ -731,6 +740,17 @@ void Game::CollectCoins()
         }
     }
 }
+//functions where we check is key collect
+void Game::CollectKeys()
+{
+    for(size_t i=0;i<this->things->keys.size();i++)
+    {
+    if(this->hero->getGlobalBounds().intersects(this->things->keys[i]->getGlobalBounds()))
+    {
+        this->things->Collectkeys(i);
+    }
+    }
+}
 
 //funkcja update gdzie zmieniamy pozycje obiektow i dodajemy zdarzenia przyciskow wejscia np klawiatury
 void Game::update()
@@ -805,7 +825,7 @@ void Game::render()
     licz_pom++;
     this->Update_TexturesPosition();
     window->clear(sf::Color::Black);
-    equipment->clear(sf::Color::Red);
+    //equipment->clear(sf::Color::Red);
     //view
     window->setView(this->view);
     //draw game object
@@ -830,7 +850,7 @@ void Game::render()
     }
 
     this->window->display();
-    this->equipment->display();
+    //this->equipment->display();
 }
 //bool functions return true if our windows is open
 bool Game::running()

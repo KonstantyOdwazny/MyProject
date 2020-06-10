@@ -181,6 +181,57 @@ void MyCharacter::Deadstep()
             this->setTextureRect(drect);
 
 }
+//animation when hero hit something/somebody
+void MyCharacter::HitAnimation(const sf::Time& elapsed)
+{
+    sf::IntRect drect;
+    time+=elapsed.asSeconds();
+    if(time>=timelimit)
+    {
+        time-=timelimit;
+    if(this->hit_it<14)
+    {
+    drect.top=this->vector_animationframe[hit_it].top;
+    drect.height=this->vector_animationframe[hit_it].height;
+    if(facerigth)
+    {
+        drect.width=std::abs(this->vector_animationframe[hit_it].width);
+        drect.left=this->vector_animationframe[hit_it].left;
+    }
+    else
+    {
+        drect.width=-std::abs(this->vector_animationframe[hit_it].width);
+        drect.left=this->vector_animationframe[hit_it+1].left;
+    }
+    this->setTextureRect(drect);
+    hit_it++;
+    }
+    else
+    {
+    hit_it=11;
+    }
+    }
+
+}
+
+void MyCharacter::KickAnimation()
+{
+    sf::IntRect drect;
+
+    drect.top=this->vector_animationframe[14].top;
+    drect.height=this->vector_animationframe[14].height;
+    if(facerigth)
+    {
+        drect.width=std::abs(this->vector_animationframe[14].width);
+        drect.left=this->vector_animationframe[14].left;
+    }
+    else
+    {
+        drect.width=-std::abs(this->vector_animationframe[14].width);
+        drect.left=this->vector_animationframe[14+1].left;
+    }
+    this->setTextureRect(drect);
+}
 
 
 //funkcja do sprawdzania z ktorej strony obiektu nastepuje kolizja gracza z obiektem
@@ -226,6 +277,20 @@ void MyCharacter::OnitemCollision(sf::Vector2f &direction)
         vy=0.0f;
     }
 }
+//special box collision
+void MyCharacter::OnSpecialBoxCollision(sf::Vector2f &direction)
+{
+    if(direction.y < 0.0f)
+    {
+        //Collision on the bottom
+        this->vy=-sqrtf(2.0f*981.0f*this->jumpHeight); //float square root
+    }
+    else if(direction.y >0.0f)
+    {
+        //Collision on the top
+        vy=0.0f;
+    }
+}
 //collision with enemies events
 void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
 {
@@ -250,8 +315,8 @@ void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
     if(direction.y < 0.0f)
     {
         //Collision on the bottom
-        this->vy=-sqrtf(2.0f*981.0f*this->jumpHeight); //float square root
-        //vy=0.0f;
+        //this->vy=-sqrtf(2.0f*981.0f*this->jumpHeight); //float square root
+        vy=0.0f;
     }
     else if(direction.y >0.0f)
     {

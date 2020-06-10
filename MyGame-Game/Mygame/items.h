@@ -12,13 +12,18 @@
  *
  */
 
-//help struct to selecting items on different type
+enum KeyColor{
+    yellow=14,red=15,green=16,blue=17
+};
 
+//help struct to selecting items on different type
+class Weapons;
 struct item_type
 {
     std::string name;
     bool dynamic;
     sf::Vector2f velocity;
+    bool dangerous;
 };
 
 class Items
@@ -43,11 +48,16 @@ public:
 
     Tile poziom[height][width];
 
+    Tile poz_key[height][width];
+
     //vector textures
     std::vector<std::unique_ptr<sf::Texture>> textures;
 
     //help vector type of items
     std::vector<std::vector<item_type>> typeofitem;
+
+    //weapons container
+    std::vector<Weapons> weapons;
 
     //container of sprite
     std::vector<std::vector<std::unique_ptr<sf::Sprite>>> items;
@@ -58,13 +68,33 @@ public:
     //container of coins
     std::vector<std::unique_ptr<sf::Texture>> coins_tex;
     std::vector<std::unique_ptr<sf::Sprite>> coinsy;
+    //container of keys
+    std::vector<std::unique_ptr<sf::Sprite>> keys;
+    std::vector<std::pair<KeyColor,bool>> iskeycollect;
+
+    //container of doors
+    std::vector<std::unique_ptr<sf::Sprite>> doors;
+    std::vector<int> position_doors;
 
     //public functions
     void drawing(sf::RenderTarget& target);
     void Collision_events(sf::Vector2f& direction,const size_t& i,const size_t& j);
     void moving(sf::Time& elapsed);
+    void Collectkeys(const size_t& i);
     //items with items collision
     void Collider_items();
+};
+
+class Weapons
+{
+private:
+
+public:
+    Weapons();
+    std::string type;
+    int damage;
+    std::unique_ptr<sf::Texture> texture;
+    std::unique_ptr<sf::Sprite> sprite;
 };
 
 #endif // ITEMS_H
