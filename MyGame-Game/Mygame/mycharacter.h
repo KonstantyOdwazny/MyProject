@@ -50,7 +50,7 @@ public:
         jump_time=0.0f;
         hit_it=11;
         this->weapon=new Weapons;
-        this->weapon->setPosition(250.0f,280.0f);
+        this->weapon->setPosition(250.0f,260.0f);
     }
     //~MyCharacter();
 

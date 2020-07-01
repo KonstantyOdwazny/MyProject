@@ -160,7 +160,8 @@ void MyCharacter::moving(const sf::Time& elapsed)
     //std::cout<<1/elapsed.asSeconds()<<std::endl;
     //if(this->run==true||this->jump==true){
     this->move(this->vx*elapsed.asSeconds()+ax*elapsed.asSeconds(),this->vy*elapsed.asSeconds()+ay*elapsed.asSeconds());
-    //this->weapon->setPosition(this->getPosition());
+
+    this->weapon->setPosition(this->getPosition());
     //}
 }
 //dead animation frame
@@ -214,7 +215,7 @@ void MyCharacter::HitAnimation(const sf::Time& elapsed)
     this->setTextureRect(drect);
 
     hit_it++;
-   this->weapon->moving();
+   //this->weapon->moving();
     }
     else
     {

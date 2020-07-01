@@ -159,6 +159,7 @@ void Game::UpdateKeybordInput()
     {
         if(this->hero->vx<600.0f){
         this->hero->vx+=100.0f;
+
         }
         this->hero->run=true;
         //this->hero->runstep(this->elapsed);
@@ -172,6 +173,7 @@ void Game::UpdateKeybordInput()
     {
         if(this->hero->vx>-600.0f){
         this->hero->vx-=100.0f;
+
         }
         this->hero->run=true;
         //this->hero->runstep(this->elapsed);
@@ -188,6 +190,7 @@ void Game::UpdateKeybordInput()
         this->hero->vy=-sqrtf(2.0f*981.0f*this->hero->jumpHeight); //float square root
         this->hero->jump=true;
         this->hero->begin_stop=0;
+
     }
 
     if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
