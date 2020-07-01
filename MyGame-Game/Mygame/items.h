@@ -17,7 +17,6 @@ enum KeyColor{
 };
 
 //help struct to selecting items on different type
-class Weapons;
 struct item_type
 {
     std::string name;
@@ -56,9 +55,6 @@ public:
     //help vector type of items
     std::vector<std::vector<item_type>> typeofitem;
 
-    //weapons container
-    std::vector<Weapons> weapons;
-
     //container of sprite
     std::vector<std::vector<std::unique_ptr<sf::Sprite>>> items;
 
@@ -74,6 +70,7 @@ public:
 
     //container of doors
     std::vector<std::unique_ptr<sf::Sprite>> doors;
+    std::vector<KeyColor> door_colors;
     std::vector<int> position_doors;
 
     //public functions
@@ -83,18 +80,6 @@ public:
     void Collectkeys(const size_t& i);
     //items with items collision
     void Collider_items();
-};
-
-class Weapons
-{
-private:
-
-public:
-    Weapons();
-    std::string type;
-    int damage;
-    std::unique_ptr<sf::Texture> texture;
-    std::unique_ptr<sf::Sprite> sprite;
 };
 
 #endif // ITEMS_H

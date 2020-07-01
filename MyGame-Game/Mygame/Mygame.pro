@@ -4,12 +4,14 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        collision.cpp \
         enemies.cpp \
         game.cpp \
         items.cpp \
         main.cpp \
         mapgame.cpp \
-        mycharacter.cpp
+        mycharacter.cpp \
+        weapons.cpp
 INCLUDEPATH += "C:/SFML-2.5.1/include"
 LIBS += -L"C:/SFML-2.5.1/lib"
 CONFIG(debug, debug|release){
@@ -19,8 +21,10 @@ CONFIG(debug, debug|release){
 }
 
 HEADERS += \
+    collision.h \
     enemies.h \
     game.h \
     items.h \
     mapgame.h \
-    mycharacter.h
+    mycharacter.h \
+    weapons.h

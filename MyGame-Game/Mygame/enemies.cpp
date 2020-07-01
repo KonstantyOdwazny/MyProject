@@ -235,8 +235,17 @@ void Enemies::moving(const sf::Time &elapsed)
 
 }
 //collision with items events
-void Enemies::OnCollision(const sf::Vector2f &direction,const size_t& i)
+void Enemies::OnCollision(const size_t& i)
 {
+    if(this->veclocities[i] >=0 )
+    {
+        this->veclocities[i]=-1*std::abs(this->veclocities[i]);
+    }
+    else
+    {
+        this->veclocities[i]=std::abs(this->veclocities[i]);
+    }
+    /*
     if(direction.x <0.0f)
     {
         //Collision on the left
@@ -248,6 +257,7 @@ void Enemies::OnCollision(const sf::Vector2f &direction,const size_t& i)
         //Collision on the rigth
        this->veclocities[i]=std::abs(this->veclocities[i]);
     }
+    */
 /*
     if(direction.y < 0.0f)
     {

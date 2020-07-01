@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include "weapons.h"
 //#include "enemies.h"
 
 /*
@@ -48,6 +49,8 @@ public:
         stop_time=0.0f;
         jump_time=0.0f;
         hit_it=11;
+        this->weapon=new Weapons;
+        this->weapon->setPosition(250.0f,280.0f);
     }
     //~MyCharacter();
 
@@ -80,6 +83,7 @@ public:
     float jump_time;
     //container of a animation frame a hero
     std::vector<sf::IntRect> vector_animationframe;
+    Weapons* weapon;
 
     sf::Vector2f start_position; //start hero's position
     int life; //number of hero's lifes

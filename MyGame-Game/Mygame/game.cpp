@@ -112,6 +112,8 @@ void Game::CreateOtherClasses()
     this->hero->setposition(250.0f,280.0f);
     this->hero->start_position.x=250.0f;
     this->hero->start_position.y=280.0f;
+    //this->weapon=new Weapons;
+    //this->weapon->setPosition(250.0f,280.0f);
     //this->hero->setPosition(this->level->pom);
     //create items
     this->things=new Items("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/item.level");
@@ -191,27 +193,34 @@ void Game::UpdateKeybordInput()
     if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
         this->hero->HitAnimation(elapsed);
+        //this->weapon->setPosition(this->hero->getGlobalBounds().left+this->hero->getGlobalBounds().width,this->hero->getPosition().y);
     }
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
     {
         this->hero->KickAnimation();
     }
+
 }
 //Update Collision
 void Game::UpdateCollision()
 {
-    this->CheckCollision(direction,1.0f); //sprawdzamy kolizje przed poruszeniem sie postaci aby sprawdzic czy moze ona sie poruszac
-    this->map_collision_items(direction,1.0f); //sprawdzamy kolizje przedmiotow z elementami mapy
-    this->hero_and_itemsCollision(direction,1.0f); //sprawdzamy kolizje gracza z przedmiotami
+    //this->CheckCollision(direction,1.0f); //sprawdzamy kolizje przed poruszeniem sie postaci aby sprawdzic czy moze ona sie poruszac
+    this->CheckCollisions(this->level->sprites,*this->hero,direction,1.0f);
+    //this->map_collision_items(direction,1.0f); //sprawdzamy kolizje przedmiotow z elementami mapy
+    this->CheckCollisions(this->level->sprites,*this->things,direction,1.0f);
+    //this->hero_and_itemsCollision(direction,1.0f); //sprawdzamy kolizje gracza z przedmiotami
+    this->CheckCollisions(*this->things,*this->hero,direction,1.0f);
     this->things->Collider_items();
     if(enemies->sprites.empty()==false)
     {
-    this->Hero_Enemies_Collision(direction,0.0f);
-    this->EnemiesWithItems_collision(direction,0.0f);
+    //this->Hero_Enemies_Collision(direction,0.0f);
+    this->CheckCollisions(this->enemies->sprites,*this->hero,direction,0.0f);
+    this->EnemiesWithItems_collision();
     }
     this->CollectCoins();
     this->CollectKeys();
+    this->OpenDoors();
     this->hero->moving(elapsed); //poruszanie naszym bohaterem
     this->things->moving(elapsed); //poruszanie sie przedmiotow dynamicznych
 }
@@ -240,6 +249,7 @@ Game::~Game()
     delete this->hero;
     delete this->things;
     delete  this->enemies;
+    //delete weapon;
 }
 //functions
 
@@ -552,92 +562,26 @@ void Game::map_collision_items(sf::Vector2f &direction, float p)
 
 }
 
-void Game::EnemiesWithItems_collision(sf::Vector2f &direction, float p)
+void Game::EnemiesWithItems_collision()
 {
     if(enemies->sprites.empty()==false)
     {
-    float deltax; //zmienna odleglosc miedzy pozycja x wroga i pozycja x innych obiektow
-    float deltay; //zmienna odleglosc miedzy pozycja y wroga i pozycja y innych obiektow
-    float intersectX; //przeciecie w osi X obiektu z wrogiem
-    float intersectY; //przeciecie w osi Y obiektu z wrogiem
-
-    for(size_t a=0;a<this->enemies->sprites.size();a++)
-    {
-        for(size_t i=0;i<this->things->items.size();i++)
+        for(size_t a=0;a<this->enemies->sprites.size();a++)
         {
-            for(size_t j=0;j<this->things->items[i].size();j++)
+            for(size_t i=0;i<this->things->items.size();i++)
             {
-                sf::Vector2f thisposition=this->things->items[i][j]->getPosition(); //pozycja przedmiotu
-                sf::Vector2f otherposition=this->enemies->sprites[a]->getPosition(); //pozycja aktualna wroga
-                sf::Vector2f thishalfsize(this->things->items[i][j]->getGlobalBounds().width/2.0f,this->things->items[i][j]->getGlobalBounds().height/2.0f);
-                sf::Vector2f otherhalfsize(this->enemies->sprites[a]->getGlobalBounds().width/2.0f,this->enemies->sprites[a]->getGlobalBounds().height/2.0f);
-                bool t;
-                deltax=otherposition.x-thisposition.x;
-                deltay=otherposition.y-thisposition.y;
-
-                intersectX=std::abs(deltax)-(otherhalfsize.x+thishalfsize.x);
-                intersectY=std::abs(deltay)-(otherhalfsize.y+thishalfsize.y);
-
-                if(this->things->typeofitem[i][j].dynamic==true){
-
-                if(intersectX<0.0f && intersectY<0.0f) //jesli obie osie przeciecia obiektu sa mniejsze od 0 to znaczy ze obiekty na siebie nachodza i nastepuje zderzenie
+                for(size_t j=0;j<this->things->items[i].size();j++)
                 {
-                    p=std::min(std::max(p,0.0f),1.0f);
-
-                    if(intersectX > intersectY)
+                    if(things->typeofitem[i][j].dynamic==true)
                     {
-                        if(deltax > 0.0f)
-                        {
-                            this->things->items[i][j]->move(intersectX,0.0f); //odbicia podczas zderzen kazdy w innym kierunku
-                            enemies->sprites[a]->move(-0.0f,0.0f);
-
-                            direction.x=1.0f;
-                            direction.y=0.0f;
-                        }
-                        else
-                       {
-                        this->things->items[i][j]->move(-intersectX,0.0f);
-                        enemies->sprites[a]->move(0.0f,0.0f);
-
-                        direction.x=-1.0f;
-                        direction.y=0.0f;
-                       }
-                    }
-                    else
+                    if(enemies->sprites[a]->getGlobalBounds().intersects(things->items[i][j]->getGlobalBounds()))
                     {
-                        if(deltay > 0.0f)
-                        {
-                            this->things->items[i][j]->move(0.0f,intersectY*(1.0f-p));
-                            enemies->sprites[a]->move(0.0f,-intersectY*p);
-
-                            direction.x=0.0f;
-                            direction.y=1.0f;
-                        }
-                        else
-                       {
-                        this->things->items[i][j]->move(0.0f,-intersectY*(1.0f-p));
-                        enemies->sprites[a]->move(0.0f,intersectY*p);
-
-
-                        direction.x=0.0f;
-                        direction.y=-1.0f;
-                       }
+                        this->enemies->OnCollision(a);
                     }
-                    t=true;
-
-                }
-                else{
-                    t=false;
-                }
-                if(t==true)
-                {
-                    this->enemies->OnCollision(direction,a);
-                }
+                    }
                 }
             }
         }
-
-    }
     }
 }
 
@@ -751,6 +695,88 @@ void Game::CollectKeys()
     }
     }
 }
+//function when check collision with doors and check can we open it
+void Game::OpenDoors()
+{
+    float deltax; //zmienna odleglosc miedzy pozycja x bohatera i pozycja x innych obiektow
+    float deltay; //zmienna odleglosc miedzy pozycja y bohatera i pozycja y innych obiektow
+    float intersectX; //przeciecie w osi X obiektu z bohaterem
+    float intersectY; //przeciecie w osi Y obiektu z bohaterem
+    for(size_t i=0;i<things->doors.size();i++)
+    {
+        sf::Vector2f thisposition=this->things->doors[i]->getPosition(); //pozycja przedmiotu
+        sf::Vector2f otherposition=this->hero->getPosition(); //pozycja aktualna bohatera
+        sf::Vector2f thishalfsize(this->things->doors[i]->getGlobalBounds().width/2.0f,this->things->doors[i]->getGlobalBounds().height/2.0f);
+        sf::Vector2f otherhalfsize(this->hero->getGlobalBounds().width/2.0f,this->hero->getGlobalBounds().height/2.0f);
+        bool t;
+
+         deltax=otherposition.x-thisposition.x;
+         deltay=otherposition.y-thisposition.y;
+
+         intersectX=std::abs(deltax)-(otherhalfsize.x+thishalfsize.x);
+         intersectY=std::abs(deltay)-(otherhalfsize.y+thishalfsize.y);
+         if(intersectX<0.0f && intersectY<0.0f) //jesli obie osie przeciecia obiektu sa mniejsze od 0 to znaczy ze obiekty na siebie nachodza i nastepuje zderzenie
+         {
+             if(intersectX > intersectY)
+             {
+                 if(deltax > 0.0f)
+                 {
+                     this->things->doors[i]->move(0.0f,0.0f); //odbicia podczas zderzen kazdy w innym kierunku
+                     hero->move(-intersectX,0.0f);
+
+                     direction.x=1.0f;
+                     direction.y=0.0f;
+                     this->hero->vx=0.0f;
+                 }
+                 else
+                {
+                 this->things->doors[i]->move(0.0f,0.0f);
+                 hero->move(intersectX,0.0f);
+
+                 direction.x=-1.0f;
+                 direction.y=0.0f;
+                 this->hero->vx=0.0f;
+                }
+             }
+             else
+             {
+                 if(deltay > 0.0f)
+                 {
+                     this->things->doors[i]->move(0.0f,0.0f);
+                     hero->move(0.0f,-intersectY);
+
+                     direction.x=0.0f;
+                     direction.y=1.0f;
+                 }
+                 else
+                {
+                 this->things->doors[i]->move(0.0f,0.0f);
+                 hero->move(0.0f,intersectY);
+
+
+                 direction.x=0.0f;
+                 direction.y=-1.0f;
+                }
+             }
+             t=true;
+
+         }
+         else{
+             t=false;
+         }
+         if(t==true)
+         {
+             this->hero->OnitemCollision(direction);
+             if(this->things->iskeycollect[i].first==this->things->door_colors[i])
+             {
+                 if(this->things->iskeycollect[i].second==true)
+                 {
+                     this->things->doors.erase(this->things->doors.begin()+i);
+                 }
+             }
+         }
+    }
+}
 
 //funkcja update gdzie zmieniamy pozycje obiektow i dodajemy zdarzenia przyciskow wejscia np klawiatury
 void Game::update()
@@ -798,6 +824,7 @@ void Game::update()
 
     }
 
+    //this->weapon->setPosition(this->hero->getPosition().x+20.0f,this->hero->getPosition().y);
 }
 //function where we draw everything and set the view options
 void Game::render()
@@ -836,6 +863,7 @@ void Game::render()
     {
     enemies->drawing(*window);
     }
+    //this->window->draw(*weapon);
     this->hero->render(*window);
     this->window->draw( lighting, sf::BlendMultiply );
     for(size_t i=0;i<this->game_sprites.size();i++)

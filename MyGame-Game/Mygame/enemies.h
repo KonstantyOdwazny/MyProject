@@ -71,7 +71,7 @@ public:
     void drawing(sf::RenderTarget& target);
     void walkingstep(const sf::Time& elapsed);
     void moving(const sf::Time& elapsed);
-    void OnCollision(const sf::Vector2f& direction,const size_t& i);
+    void OnCollision(const size_t& i);
     void Dead(const size_t& i);
 };
 

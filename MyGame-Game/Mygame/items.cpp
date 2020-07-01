@@ -181,7 +181,9 @@ void Items::createSprite()
                   d->setPosition(j*tile_width*0.5f,i*tile_height*0.5f);
                   d->setOrigin(d->getGlobalBounds().width/2.0f,d->getGlobalBounds().height/2.0f);
                   doors.emplace_back(std::move(d));
+                  door_colors.emplace_back(KeyColor(poziom[i][j].type-27));
               }
+              //create coins
 
              if(this->poz_coin[i][j].iswall==true)
              {
@@ -192,6 +194,7 @@ void Items::createSprite()
                  sprit->setOrigin(sprit->getGlobalBounds().width/2.0f,sprit->getGlobalBounds().height/2.0f);
                  this->coinsy.emplace_back(std::move(sprit));
              }
+             //create keys
 
              if(this->poz_key[i][j].iswall==true)
              {
@@ -301,6 +304,7 @@ void Items::moving(sf::Time& elapsed)
 void Items::Collectkeys(const size_t &i)
 {
     this->keys.erase(keys.begin()+i);
+    this->iskeycollect[i].second=true;
     //this->iskeycollect[i]=true;
 }
 

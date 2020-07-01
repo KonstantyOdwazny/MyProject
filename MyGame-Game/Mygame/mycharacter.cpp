@@ -37,6 +37,7 @@ void MyCharacter::InitSprite(sf::IntRect r)
 //draw hero
 void MyCharacter::render(sf::RenderTarget &window)
 {
+    window.draw(*this->weapon);
     window.draw(*this);
 }
 //set the hero position
@@ -159,6 +160,7 @@ void MyCharacter::moving(const sf::Time& elapsed)
     //std::cout<<1/elapsed.asSeconds()<<std::endl;
     //if(this->run==true||this->jump==true){
     this->move(this->vx*elapsed.asSeconds()+ax*elapsed.asSeconds(),this->vy*elapsed.asSeconds()+ay*elapsed.asSeconds());
+    //this->weapon->setPosition(this->getPosition());
     //}
 }
 //dead animation frame
@@ -185,14 +187,19 @@ void MyCharacter::Deadstep()
 void MyCharacter::HitAnimation(const sf::Time& elapsed)
 {
     sf::IntRect drect;
+    sf::IntRect we_rect;
     time+=elapsed.asSeconds();
+
     if(time>=timelimit)
     {
         time-=timelimit;
+
     if(this->hit_it<14)
     {
     drect.top=this->vector_animationframe[hit_it].top;
     drect.height=this->vector_animationframe[hit_it].height;
+    we_rect.top=this->weapon->rect[6].top;
+    we_rect.height=this->weapon->rect[6].height;
     if(facerigth)
     {
         drect.width=std::abs(this->vector_animationframe[hit_it].width);
@@ -202,15 +209,21 @@ void MyCharacter::HitAnimation(const sf::Time& elapsed)
     {
         drect.width=-std::abs(this->vector_animationframe[hit_it].width);
         drect.left=this->vector_animationframe[hit_it+1].left;
+
     }
     this->setTextureRect(drect);
+
     hit_it++;
+   this->weapon->moving();
     }
     else
     {
     hit_it=11;
+
     }
     }
+
+
 
 }
 

@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include "mapgame.h"
-#include "mycharacter.h"
+#include "collision.h"
 //#include "enemies.h"
 //#include "items.h"
 
@@ -9,7 +9,7 @@
  Main game class
  create game loop and renderwindow
 */
-class Game
+class Game :public Collision
 {
 private:
     //window
@@ -47,6 +47,7 @@ public:
     Items* things;
     MapGame* level;
     MyCharacter* hero;
+    //Weapons* weapon;
     sf::Vector2f direction;
     //time
     sf::Clock clock;
@@ -80,13 +81,15 @@ public:
     //collision items with elements of map
     void map_collision_items(sf::Vector2f& direction, float p);
     //collision enemies with items
-    void EnemiesWithItems_collision(sf::Vector2f& direction, float p);
+    void EnemiesWithItems_collision();
     //hero and enemies collision
     void Hero_Enemies_Collision(sf::Vector2f& direction, float p);
     //collect coins
     void CollectCoins();
     //collect keys
     void CollectKeys();
+    //open the doors
+    void OpenDoors();
 
 
 
