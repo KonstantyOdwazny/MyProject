@@ -25,33 +25,7 @@ private:
     sf::Texture texture;
 public:
     //Constructor and destructor
-    MyCharacter() : sf::Sprite(){
-        vx=0;
-        vy=0;
-        ax=0;
-        ay=0;
-        x=0;
-        y=0;
-        run=false;
-        it=24;
-        jump_it=1;
-        jump=false;
-        is_colission=true;
-        timelimit=0.2f;
-        time=0.0f;
-        jumpHeight=200.0f;
-        stay_it=21;
-        facerigth=true;
-        //canjump =true;
-        life=3;
-        coins=0;
-        begin_stop=0;
-        stop_time=0.0f;
-        jump_time=0.0f;
-        hit_it=11;
-        this->weapon=new Weapons;
-        this->weapon->setPosition(250.0f,260.0f);
-    }
+    MyCharacter();
     //~MyCharacter();
 
 //public properties
@@ -113,6 +87,9 @@ public:
     void OnSpecialBoxCollision(sf::Vector2f& direction);
     //collision with enemies
     void OnEnemiesCollision(sf::Vector2f& direction);
+
+    //create new weapon
+    Weapons* CreateWeapons(float damage_,std::string name_,size_t it_);
 };
 
 #endif // MYCHARACTER_H

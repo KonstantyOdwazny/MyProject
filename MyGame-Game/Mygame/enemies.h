@@ -21,6 +21,12 @@ struct Tile{
     bool iswall;
 };
 
+struct Statistic{
+    float lives;
+    std::string name;
+    int type_atack;
+};
+
 
 
 class Enemies
@@ -66,6 +72,8 @@ public:
     std::vector<float> veclocities;
     //vector of enemies's lifes
     std::vector<int> lifes;
+    //vector enemies statistic
+    std::vector<Statistic> enemies_statistic;
 
     //public functions
     void drawing(sf::RenderTarget& target);
@@ -73,6 +81,7 @@ public:
     void moving(const sf::Time& elapsed);
     void OnCollision(const size_t& i);
     void Dead(const size_t& i);
+    void SpecialAtack(sf::Vector2f& hero_position);
 };
 
 #endif // ENEMIES_H

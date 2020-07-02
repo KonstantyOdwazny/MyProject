@@ -22,6 +22,14 @@ void Enemies::InitSprite()
                 s->setOrigin(s->getGlobalBounds().width/2.0f,s->getGlobalBounds().height/2.0f);
                 sprites.emplace_back(std::move(s));
                this->veclocities.emplace_back(20.0f);
+                if(poziom[i][j].type==1)
+                {
+                    enemies_statistic.emplace_back(Statistic{60,"robot",1});
+                }
+                else
+                {
+                    enemies_statistic.emplace_back(Statistic{40,"zoombie",2});
+                }
             }
         }
     }
@@ -132,6 +140,7 @@ void Enemies::InitLifes()
 {
     for(size_t i=0;i<this->sprites.size();i++)
     {
+
         this->lifes.emplace_back(int(2));
     }
 }
@@ -291,6 +300,11 @@ void Enemies::Dead(const size_t& i)
 
      this->sprites.erase(sprites.begin()+i);
 
+
+}
+//enemies special skills
+void Enemies::SpecialAtack(sf::Vector2f &hero_position)
+{
 
 }
 

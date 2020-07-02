@@ -58,7 +58,7 @@ void Collision::CheckCollisions(std::vector<std::unique_ptr<sf::Sprite> > &sprit
                  {
                      if(deltay > 0.0f)
                      {
-                         sprites[i]->move(0.0f,intersectY*(1.0f-p));
+                         sprites[i]->move(0.0f,0.0f);
                          hero.move(0.0f,-intersectY*p);
 
                          direction.x=0.0f;
@@ -66,7 +66,7 @@ void Collision::CheckCollisions(std::vector<std::unique_ptr<sf::Sprite> > &sprit
                      }
                      else
                     {
-                     sprites[i]->move(0.0f,-intersectY*(1.0f-p));
+                     sprites[i]->move(0.0f,0.0f);
                      hero.move(0.0f,intersectY*p);
 
                      //this->enemies->Dead(i);
@@ -87,7 +87,7 @@ void Collision::CheckCollisions(std::vector<std::unique_ptr<sf::Sprite> > &sprit
 
         }
 }
-
+//hero with map collision
 void Collision::CheckCollisions(std::vector<std::vector<std::unique_ptr<sf::Sprite> > > &v, MyCharacter &s, sf::Vector2f& direction, float p)
 {
     float deltax; //zmienna odleglosc miedzy pozycja x bohatera i pozycja x innych obiektow
@@ -172,7 +172,7 @@ void Collision::CheckCollisions(std::vector<std::vector<std::unique_ptr<sf::Spri
 
     }
 }
-
+//hero with items collisions
 void Collision::CheckCollisions(Items &things, MyCharacter &hero, sf::Vector2f &direction, float p)
 {
     float deltax; //zmienna odleglosc miedzy pozycja x bohatera i pozycja x innych obiektow
@@ -265,7 +265,7 @@ void Collision::CheckCollisions(Items &things, MyCharacter &hero, sf::Vector2f &
         }
     }
 }
-
+//enemies with items collision
 void Collision::CheckCollisions(std::vector<std::vector<std::unique_ptr<sf::Sprite> > > &sprites, Items &things, sf::Vector2f &direction, float p)
 {
     for(size_t i=0;i<sprites.size();i++)
@@ -352,6 +352,22 @@ void Collision::CheckCollisions(std::vector<std::vector<std::unique_ptr<sf::Spri
                     }
                 }
             }
+        }
+    }
+}
+//collison weapons with enemies
+void Collision::WeaponHit(Weapons &weapon, Enemies &enemy)
+{
+    for(size_t i=0;i<enemy.sprites.size();i++)
+    {
+        if(enemy.sprites[i]->getGlobalBounds().intersects(weapon.getGlobalBounds()))
+        {
+            enemy.enemies_statistic[i].lives-=weapon.damage;
+            if(enemy.enemies_statistic[i].lives<=0.0f)
+            {
+                enemy.Dead(i);
+            }
+            break;
         }
     }
 }

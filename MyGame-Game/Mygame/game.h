@@ -74,24 +74,14 @@ public:
 
     //Collision functions
 
-    //collision hero witch map
-    void CheckCollision(sf::Vector2f& direction ,float p);
-    //collision hero and items
-    void hero_and_itemsCollision(sf::Vector2f& direction, float p);
-    //collision items with elements of map
-    void map_collision_items(sf::Vector2f& direction, float p);
     //collision enemies with items
     void EnemiesWithItems_collision();
-    //hero and enemies collision
-    void Hero_Enemies_Collision(sf::Vector2f& direction, float p);
     //collect coins
     void CollectCoins();
     //collect keys
     void CollectKeys();
     //open the doors
     void OpenDoors();
-
-
 
 };
 

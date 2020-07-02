@@ -10,6 +10,35 @@ void MyCharacter::InitTexture(std::string filename)
     }
     this->texture.setRepeated(true);
 }
+//constructor
+MyCharacter::MyCharacter() : sf::Sprite(){
+    vx=0;
+    vy=0;
+    ax=0;
+    ay=0;
+    x=0;
+    y=0;
+    run=false;
+    it=24;
+    jump_it=1;
+    jump=false;
+    is_colission=true;
+    timelimit=0.2f;
+    time=0.0f;
+    jumpHeight=200.0f;
+    stay_it=21;
+    facerigth=true;
+    //canjump =true;
+    life=3;
+    coins=0;
+    begin_stop=0;
+    stop_time=0.0f;
+    jump_time=0.0f;
+    hit_it=11;
+    //this->weapon=new Weapons(10.0f,"kilof",44);
+    this->weapon=CreateWeapons(10,"kilof",6);
+    this->weapon->setPosition(250.0f,260.0f);
+}
 //create a vector of animation frame
 void MyCharacter::animation_frame()
 {
@@ -161,7 +190,7 @@ void MyCharacter::moving(const sf::Time& elapsed)
     //if(this->run==true||this->jump==true){
     this->move(this->vx*elapsed.asSeconds()+ax*elapsed.asSeconds(),this->vy*elapsed.asSeconds()+ay*elapsed.asSeconds());
 
-    this->weapon->setPosition(this->getPosition());
+    //this->weapon->setPosition(this->getPosition());
     //}
 }
 //dead animation frame
@@ -188,7 +217,6 @@ void MyCharacter::Deadstep()
 void MyCharacter::HitAnimation(const sf::Time& elapsed)
 {
     sf::IntRect drect;
-    sf::IntRect we_rect;
     time+=elapsed.asSeconds();
 
     if(time>=timelimit)
@@ -199,23 +227,47 @@ void MyCharacter::HitAnimation(const sf::Time& elapsed)
     {
     drect.top=this->vector_animationframe[hit_it].top;
     drect.height=this->vector_animationframe[hit_it].height;
-    we_rect.top=this->weapon->rect[6].top;
-    we_rect.height=this->weapon->rect[6].height;
     if(facerigth)
     {
         drect.width=std::abs(this->vector_animationframe[hit_it].width);
         drect.left=this->vector_animationframe[hit_it].left;
+        this->weapon->setScale(0.3f,0.3f);
+        if(hit_it==11)
+        {
+            this->weapon->setPosition(this->getPosition().x+28.0f,this->getPosition().y-20.0f);
+        }
+        else if(hit_it==12)
+        {
+            this->weapon->setPosition(this->getPosition().x+28.0f,this->getPosition().y);
+        }
+        else if(hit_it==13)
+        {
+            this->weapon->setPosition(this->getPosition().x+28.0f,this->getPosition().y+20.0f);
+        }
+
     }
     else
     {
         drect.width=-std::abs(this->vector_animationframe[hit_it].width);
         drect.left=this->vector_animationframe[hit_it+1].left;
+       this->weapon->setScale(-0.3f,0.3f);
+        if(hit_it==11)
+        {
+            this->weapon->setPosition(this->getPosition().x-5.0f,this->getPosition().y-20.0f);
+        }
+        else if(hit_it==12)
+        {
+            this->weapon->setPosition(this->getPosition().x-5.0f,this->getPosition().y);
+        }
+        else if(hit_it==13)
+        {
+            this->weapon->setPosition(this->getPosition().x-5.0f,this->getPosition().y+20.0f);
+        }
 
     }
     this->setTextureRect(drect);
 
     hit_it++;
-   //this->weapon->moving();
     }
     else
     {
@@ -223,9 +275,6 @@ void MyCharacter::HitAnimation(const sf::Time& elapsed)
 
     }
     }
-
-
-
 }
 
 void MyCharacter::KickAnimation()
@@ -331,12 +380,25 @@ void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
         //Collision on the bottom
         //this->vy=-sqrtf(2.0f*981.0f*this->jumpHeight); //float square root
         vy=0.0f;
+        life--;
+        this->Deadstep();
+        Sleep(1000);
+        this->setPosition(this->start_position);
     }
     else if(direction.y >0.0f)
     {
         //Collision on the top
         vy=0.0f;
+        life--;
+        this->Deadstep();
+        Sleep(1000);
+        this->setPosition(this->start_position);
     }
+}
+//function when we create and equip new weapons
+Weapons *MyCharacter::CreateWeapons(float damage_, std::string name_, size_t it_)
+{
+    return new Weapons(damage_,name_,it_);
 }
 
 
