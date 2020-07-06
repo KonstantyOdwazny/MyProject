@@ -21,6 +21,7 @@ public:
      float damage;
      size_t it;
      std::string name;
+     bool canhit;
 };
 
 #endif // WEAPONS_H

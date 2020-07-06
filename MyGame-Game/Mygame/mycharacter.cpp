@@ -243,6 +243,7 @@ void MyCharacter::HitAnimation(const sf::Time& elapsed)
         else if(hit_it==13)
         {
             this->weapon->setPosition(this->getPosition().x+28.0f,this->getPosition().y+20.0f);
+            this->weapon->canhit=true;
         }
 
     }
@@ -262,6 +263,7 @@ void MyCharacter::HitAnimation(const sf::Time& elapsed)
         else if(hit_it==13)
         {
             this->weapon->setPosition(this->getPosition().x-5.0f,this->getPosition().y+20.0f);
+            this->weapon->canhit=true;
         }
 
     }

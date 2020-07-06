@@ -157,8 +157,8 @@ void Game::UpdateKeybordInput()
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
-        if(this->hero->vx<600.0f){
-        this->hero->vx+=100.0f;
+        if(this->hero->vx<900.0f){
+        this->hero->vx+=200.0f;
 
         }
         this->hero->run=true;
@@ -171,8 +171,8 @@ void Game::UpdateKeybordInput()
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
-        if(this->hero->vx>-600.0f){
-        this->hero->vx-=100.0f;
+        if(this->hero->vx>-900.0f){
+        this->hero->vx-=200.0f;
 
         }
         this->hero->run=true;
@@ -200,16 +200,30 @@ void Game::UpdateKeybordInput()
     }
     */
     //hero hit and use weapon animation
-    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->hero->run==false && this->hero->jump==false)
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->hero->run==false && this->hero->jump==false && this->hero->weapon->canhit==true)
     {
+        //this->hero->weapon->canhit=false;
         this->hero->HitAnimation(elapsed);
         this->WeaponHit(*this->hero->weapon,*this->enemies);
+        licznikuderzen++;
     }
     else
     {
         this->hero->weapon->setScale(0.3f,0.3f);
         this->hero->weapon->setPosition(this->hero->getPosition());
     }
+    if(licznikuderzen==50)
+    {
+        this->hero->weapon->canhit=false;
+        czasdouderzenia+=elapsed.asSeconds();
+        if(czasdouderzenia>=1.5f)
+        {
+            czasdouderzenia-=1.5f;
+            licznikuderzen=0;
+            this->hero->weapon->canhit=true;
+        }
+    }
+
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
     {
@@ -252,6 +266,8 @@ Game::Game()
     //this->equipment->setActive(false);
     this->CreateOtherClasses();
     this->InitLightings();
+    licznikuderzen=0;
+    czasdouderzenia=0.0f;
 }
 //destructor
 Game::~Game()

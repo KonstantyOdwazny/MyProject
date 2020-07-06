@@ -22,7 +22,7 @@ void Weapons::InitTextures()
     }
 }
 //constructor
-Weapons::Weapons(float damage_, std::string name_, size_t it_):sf::Sprite(),damage(damage_),it(it_),name(name_){
+Weapons::Weapons(float damage_, std::string name_, size_t it_):sf::Sprite(),damage(damage_),it(it_), name(name_),canhit(true){
     this->InitTextures();
    this->setTexture(texture);
   this->setTextureRect(rect[it]);

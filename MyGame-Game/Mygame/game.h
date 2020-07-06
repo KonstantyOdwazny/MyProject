@@ -18,6 +18,8 @@ private:
     //events
     sf::Event ev;
     //sf::Event event;
+    int licznikuderzen;
+    float czasdouderzenia;
 
     //private properties
     std::unique_ptr<sf::Texture> tex_hud;
