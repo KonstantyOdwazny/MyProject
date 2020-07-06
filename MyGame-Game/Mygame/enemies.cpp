@@ -299,6 +299,8 @@ void Enemies::Dead(const size_t& i)
      this->sprites[i]->setTextureRect(drect);
 
      this->sprites.erase(sprites.begin()+i);
+     this->veclocities.erase(veclocities.begin()+i);
+     this->enemies_statistic.erase(this->enemies_statistic.begin()+i);
 
 
 }

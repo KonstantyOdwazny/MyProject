@@ -363,6 +363,14 @@ void Collision::WeaponHit(Weapons &weapon, Enemies &enemy)
         if(enemy.sprites[i]->getGlobalBounds().intersects(weapon.getGlobalBounds()))
         {
             enemy.enemies_statistic[i].lives-=weapon.damage;
+            if(weapon.getScale().x<=0.0f)
+            {
+                enemy.sprites[i]->move(-20.0f,0.0f);
+            }
+            else
+            {
+                enemy.sprites[i]->move(20.0f,0.0f);
+            }
             if(enemy.enemies_statistic[i].lives<=0.0f)
             {
                 enemy.Dead(i);
