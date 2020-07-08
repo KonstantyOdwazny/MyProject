@@ -23,6 +23,7 @@ private:
 
     //private properties
     sf::Texture texture;
+
 public:
     //Constructor and destructor
     MyCharacter();
@@ -76,7 +77,7 @@ public:
     void jumpstep(const sf::Time& elapsed);    //animation of jumping
     void stop(const sf::Time& elapsed);    //animation when hero stay
     void moving(const sf::Time& elapsed); //moving a hero with a time beetwen frame
-    void Deadstep(); //animation when hero die
+    void Deadstep(sf::Time& elapsed); //animation when hero die
     void HitAnimation(const sf::Time& elapsed);
     void KickAnimation();
 
@@ -86,7 +87,7 @@ public:
     void OnitemCollision(sf::Vector2f& direction);
     void OnSpecialBoxCollision(sf::Vector2f& direction);
     //collision with enemies
-    void OnEnemiesCollision(sf::Vector2f& direction);
+    void OnEnemiesCollision(sf::Vector2f& direction,sf::Time& elapsed);
 
     //create new weapon
     Weapons* CreateWeapons(float damage_,std::string name_,size_t it_);

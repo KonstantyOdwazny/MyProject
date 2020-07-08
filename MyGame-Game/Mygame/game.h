@@ -20,6 +20,14 @@ private:
     //sf::Event event;
     int licznikuderzen;
     float czasdouderzenia;
+    //music
+    sf::SoundBuffer collect_buffer;
+    sf::Sound collect_music;
+    float time_to_foot_step_sound;
+    sf::SoundBuffer foot_buffer;
+    sf::Sound foot_step_sound;
+    sf::SoundBuffer hit_buffer;
+    sf::Sound hit_sound;
 
     //private properties
     std::unique_ptr<sf::Texture> tex_hud;

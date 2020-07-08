@@ -2,6 +2,7 @@
 #define MAPGAME_H
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
+#include "SFML/Audio.hpp"
 #include <vector>
 #include <memory>
 //#include "collision.h"

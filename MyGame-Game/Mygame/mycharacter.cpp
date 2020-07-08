@@ -194,7 +194,7 @@ void MyCharacter::moving(const sf::Time& elapsed)
     //}
 }
 //dead animation frame
-void MyCharacter::Deadstep()
+void MyCharacter::Deadstep(sf::Time& elapsed)
 {
     sf::IntRect drect;
 
@@ -210,7 +210,14 @@ void MyCharacter::Deadstep()
             drect.width=-std::abs(this->vector_animationframe[4].width);
             drect.left=this->vector_animationframe[4+1].left;
         }
-            this->setTextureRect(drect);
+        this->setTextureRect(drect);
+       this->setPosition(start_position);
+        time+=elapsed.asSeconds();
+        if(time>=0.8f)
+        {
+            time-=0.8f;
+            //this->setPosition(start_position);
+        }
 
 }
 //animation when hero hit something/somebody
@@ -357,25 +364,29 @@ void MyCharacter::OnSpecialBoxCollision(sf::Vector2f &direction)
     }
 }
 //collision with enemies events
-void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
+void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction,sf::Time& elapsed)
 {
     if(direction.x <0.0f)
     {
         //Collision on the left
         vx=0.0f;
         life--;
-        this->Deadstep();
+        this->Deadstep(elapsed);
+        /*
         Sleep(1000);
         this->setPosition(this->start_position);
+        */
     }
     else if(direction.x >0.0f)
     {
         //Collision on the rigth
         vx=0.0f;
         life--;
-        this->Deadstep();
+        this->Deadstep(elapsed);
+        /*
         Sleep(1000);
         this->setPosition(this->start_position);
+        */
     }
     if(direction.y < 0.0f)
     {
@@ -383,18 +394,22 @@ void MyCharacter::OnEnemiesCollision(sf::Vector2f &direction)
         //this->vy=-sqrtf(2.0f*981.0f*this->jumpHeight); //float square root
         vy=0.0f;
         life--;
-        this->Deadstep();
+        this->Deadstep(elapsed);
+        /*
         Sleep(1000);
         this->setPosition(this->start_position);
+        */
     }
     else if(direction.y >0.0f)
     {
         //Collision on the top
         vy=0.0f;
         life--;
-        this->Deadstep();
+        this->Deadstep(elapsed);
+        /*
         Sleep(1000);
         this->setPosition(this->start_position);
+        */
     }
 }
 //function when we create and equip new weapons

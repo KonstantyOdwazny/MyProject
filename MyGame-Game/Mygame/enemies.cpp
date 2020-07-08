@@ -24,11 +24,12 @@ void Enemies::InitSprite()
                this->veclocities.emplace_back(20.0f);
                 if(poziom[i][j].type==1)
                 {
-                    enemies_statistic.emplace_back(Statistic{60,"robot",1});
+
+                    enemies_statistic.emplace_back(Statistic{40,"zoombie",2});
                 }
                 else
                 {
-                    enemies_statistic.emplace_back(Statistic{40,"zoombie",2});
+                    enemies_statistic.emplace_back(Statistic{60,"robot",1});
                 }
             }
         }
@@ -144,6 +145,12 @@ void Enemies::InitLifes()
         this->lifes.emplace_back(int(2));
     }
 }
+//create new bulet
+RobotsBullet *Enemies::createbullet(bool faceright_,sf::Vector2f v)
+{
+    return new RobotsBullet(faceright_,v);
+}
+
 
 //constructors
 
@@ -167,7 +174,16 @@ Enemies::Enemies(std::string filename)
     //faceright=true;
     stoptime=0.0f;
     InitLifes();
+    timetoshoot=0.0f;
+
+
 }
+//destructor
+Enemies::~Enemies()
+{
+    bullets.clear();
+}
+
 
 //public functions
 
@@ -180,6 +196,14 @@ void Enemies::drawing(sf::RenderTarget &target)
     {
         target.draw(*sprites[i]);
     }
+    if(bullets.empty()==false)
+    {
+    for(size_t i=0;i<bullets.size();i++)
+    {
+        target.draw(*bullets[i]);
+    }
+    }
+
     }
 }
 
@@ -305,8 +329,30 @@ void Enemies::Dead(const size_t& i)
 
 }
 //enemies special skills
-void Enemies::SpecialAtack(sf::Vector2f &hero_position)
+
+void Enemies::SpecialAtack(sf::Time& elapsed)
 {
+    timetoshoot+=elapsed.asSeconds();
+
+    if(timetoshoot>=1.9f)
+    {
+        timetoshoot-=1.9f;
+        for(size_t i=0;i<enemies_statistic.size();i++)
+        {
+            if(enemies_statistic[i].type_atack==1)
+            {
+                bullets.emplace_back(createbullet(faceright[i],this->sprites[i]->getPosition()));
+            }
+        }
+    }
+    if(bullets.empty()==false)
+    {
+    for(size_t i=0;i<bullets.size();i++)
+    {
+        bullets[i]->Shoot(elapsed);
+    }
+
+    }
 
 }
 

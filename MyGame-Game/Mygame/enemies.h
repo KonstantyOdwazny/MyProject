@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 #include <iostream>
-//#include "items.h"
+#include "robotsbullet.h"
 
 /*
  * Enemies clas
@@ -41,6 +41,7 @@ private:
     void TurnAround();
     void CheckTurnface();
     void InitLifes();
+    RobotsBullet* createbullet(bool faceright_,sf::Vector2f v);
 
     //private properties
     std::vector<std::unique_ptr<sf::Texture>> textures;
@@ -52,9 +53,12 @@ private:
     float walktime;
     float walklimittime;
     float stoptime;
+    float timetoshoot;
+
 public:
     Enemies();
     Enemies(std::string filename);
+    ~Enemies();
     //public properties
 
     //size our textures
@@ -75,13 +79,17 @@ public:
     //vector enemies statistic
     std::vector<Statistic> enemies_statistic;
 
+    std::vector<RobotsBullet*> bullets;
+    bool heroisnear;
+
     //public functions
     void drawing(sf::RenderTarget& target);
     void walkingstep(const sf::Time& elapsed);
     void moving(const sf::Time& elapsed);
     void OnCollision(const size_t& i);
     void Dead(const size_t& i);
-    void SpecialAtack(sf::Vector2f& hero_position);
+    void SpecialAtack(sf::Time& elapsed);
+
 };
 
 #endif // ENEMIES_H

@@ -6,8 +6,15 @@ int main()
 {
     Game game;
     int koniec=0;
+    sf::SoundBuffer begin_buffer;
+    sf::Sound begin_music;
+    begin_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/bensound-epic.ogg");
+    begin_music.setBuffer(begin_buffer);
+    begin_music.setLoop(true);
+    begin_music.play();
     while(game.running())
     {
+
 
         //events
         game.pollevent();

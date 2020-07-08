@@ -11,6 +11,7 @@ SOURCES += \
         main.cpp \
         mapgame.cpp \
         mycharacter.cpp \
+        robotsbullet.cpp \
         weapons.cpp
 INCLUDEPATH += "C:/SFML-2.5.1/include"
 LIBS += -L"C:/SFML-2.5.1/lib"
@@ -27,4 +28,5 @@ HEADERS += \
     items.h \
     mapgame.h \
     mycharacter.h \
+    robotsbullet.h \
     weapons.h

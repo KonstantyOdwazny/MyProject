@@ -5,7 +5,7 @@ Collision::Collision()
 
 }
 
-void Collision::CheckCollisions(std::vector<std::unique_ptr<sf::Sprite> > &sprites, MyCharacter &hero, sf::Vector2f direction, float p)
+void Collision::CheckCollisions(std::vector<std::unique_ptr<sf::Sprite> > &sprites, MyCharacter &hero, sf::Vector2f direction, float p,sf::Time& elapsed)
 {
     float deltax; //zmienna odleglosc miedzy pozycja x bohatera i pozycja x wroga
     float deltay; //zmienna odleglosc miedzy pozycja y bohatera i pozycja y wroga
@@ -28,8 +28,6 @@ void Collision::CheckCollisions(std::vector<std::unique_ptr<sf::Sprite> > &sprit
 
              intersectX=std::abs(deltax)-(otherhalfsize.x+thishalfsize.x);
              intersectY=std::abs(deltay)-(otherhalfsize.y+thishalfsize.y);
-
-
 
              if(intersectX<0.0f && intersectY<0.0f) //jesli obie osie przeciecia obiektu sa mniejsze od 0 to znaczy ze obiekty na siebie nachodza i nastepuje zderzenie
              {
@@ -82,7 +80,7 @@ void Collision::CheckCollisions(std::vector<std::unique_ptr<sf::Sprite> > &sprit
              }
              if(t==true)
              {
-                 hero.OnEnemiesCollision(direction);
+                 hero.OnEnemiesCollision(direction,elapsed);
              }
 
         }
@@ -173,7 +171,7 @@ void Collision::CheckCollisions(std::vector<std::vector<std::unique_ptr<sf::Spri
     }
 }
 //hero with items collisions
-void Collision::CheckCollisions(Items &things, MyCharacter &hero, sf::Vector2f &direction, float p)
+void Collision::CheckCollisions(Items &things, MyCharacter &hero, sf::Vector2f &direction, float p,sf::Time& elapsed)
 {
     float deltax; //zmienna odleglosc miedzy pozycja x bohatera i pozycja x innych obiektow
     float deltay; //zmienna odleglosc miedzy pozycja y bohatera i pozycja y innych obiektow
@@ -257,7 +255,7 @@ void Collision::CheckCollisions(Items &things, MyCharacter &hero, sf::Vector2f &
                 if((things.typeofitem[i][j].dangerous==true)&&(hero.getGlobalBounds().intersects(things.items[i][j]->getGlobalBounds()))){
                     hero.vy=0.0f;
                     hero.life--;
-                    hero.Deadstep();
+                    hero.Deadstep(elapsed);
                     Sleep(1000);
                     hero.setPosition(hero.start_position);
                  }

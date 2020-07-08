@@ -157,6 +157,12 @@ void Game::UpdateKeybordInput()
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
+        time_to_foot_step_sound+=elapsed.asSeconds();
+        if(time_to_foot_step_sound>=0.3f)
+        {
+            time_to_foot_step_sound-=0.3f;
+        foot_step_sound.play();
+        }
         if(this->hero->vx<900.0f){
         this->hero->vx+=200.0f;
 
@@ -171,6 +177,13 @@ void Game::UpdateKeybordInput()
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
+        //foot_step_sound.play();
+        time_to_foot_step_sound+=elapsed.asSeconds();
+        if(time_to_foot_step_sound>=0.3f)
+        {
+            time_to_foot_step_sound-=0.3f;
+        foot_step_sound.play();
+        }
         if(this->hero->vx>-900.0f){
         this->hero->vx-=200.0f;
 
@@ -206,11 +219,20 @@ void Game::UpdateKeybordInput()
         this->hero->HitAnimation(elapsed);
         this->WeaponHit(*this->hero->weapon,*this->enemies);
         licznikuderzen++;
+        time_to_foot_step_sound+=elapsed.asSeconds();
+        if(time_to_foot_step_sound>=0.3f)
+        {
+            time_to_foot_step_sound-=0.3f;
+            hit_sound.play();
+        }
+
+
     }
     else
     {
         this->hero->weapon->setScale(0.3f,0.3f);
         this->hero->weapon->setPosition(this->hero->getPosition());
+
     }
     if(licznikuderzen==50)
     {
@@ -237,11 +259,11 @@ void Game::UpdateCollision()
 {
     this->CheckCollisions(this->level->sprites,*this->hero,direction,1.0f);
     this->CheckCollisions(this->level->sprites,*this->things,direction,1.0f);
-    this->CheckCollisions(*this->things,*this->hero,direction,1.0f);
+    this->CheckCollisions(*this->things,*this->hero,direction,1.0f,elapsed);
     this->things->Collider_items();
     if(enemies->sprites.empty()==false)
     {
-    this->CheckCollisions(this->enemies->sprites,*this->hero,direction,0.0f);
+    this->CheckCollisions(this->enemies->sprites,*this->hero,direction,0.0f,elapsed);
     this->EnemiesWithItems_collision();
     }
     this->CollectCoins();
@@ -268,6 +290,14 @@ Game::Game()
     this->InitLightings();
     licznikuderzen=0;
     czasdouderzenia=0.0f;
+    collect_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/handleCoins.ogg");
+    collect_music.setBuffer(collect_buffer);
+    foot_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/footstep00.ogg");
+    foot_step_sound.setBuffer(foot_buffer);
+    time_to_foot_step_sound=0.0f;
+    hit_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/knifeSlice.ogg");
+    hit_sound.setBuffer(hit_buffer);
+
 }
 //destructor
 Game::~Game()
@@ -284,6 +314,7 @@ Game::~Game()
 //functions of event in game
 void Game::pollevent()
 {
+
     while(this->window->pollEvent(this->ev))
     {
         if(this->ev.type==sf::Event::Closed || this->ev.key.code==sf::Keyboard::Escape)
@@ -318,9 +349,6 @@ void Game::pollevent()
     }
     */
 }
-
-
-
 void Game::EnemiesWithItems_collision()
 {
     if(enemies->sprites.empty()==false)
@@ -352,6 +380,8 @@ void Game::CollectCoins()
     {
         if(this->hero->getGlobalBounds().intersects(this->things->coinsy[i]->getGlobalBounds()))
         {
+
+            collect_music.play();
             this->coins_licz++;
             this->things->coinsy.erase(this->things->coinsy.begin()+i);
             break;
@@ -365,6 +395,7 @@ void Game::CollectKeys()
     {
     if(this->hero->getGlobalBounds().intersects(this->things->keys[i]->getGlobalBounds()))
     {
+        collect_music.play();
         this->things->Collectkeys(i);
     }
     }
@@ -455,8 +486,10 @@ void Game::OpenDoors()
 //funkcja update gdzie zmieniamy pozycje obiektow i dodajemy zdarzenia przyciskow wejscia np klawiatury
 void Game::update()
 {
+
     if(this->hero->life>0)
     {
+
     //running
     this->window->setFramerateLimit(60); //limit fps-ow
     this->elapsed=this->clock.restart(); //restart a clock
@@ -488,6 +521,7 @@ void Game::update()
     {
     this->enemies->moving(elapsed); //poruszanie sie wrogow
     }
+    this->enemies->SpecialAtack(elapsed);
 
      //animacja kiedy postac stoi
     if(this->hero->vx==0.0f&&this->hero->vy==0.0f){
