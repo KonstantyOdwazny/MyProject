@@ -64,7 +64,7 @@ public:
     sf::Time elapsed;
     //view
     sf::View view;
-    int licz_pom;
+    int set_lighthings_position;
     //coins
     int coins_licz;
     sf::Font font;

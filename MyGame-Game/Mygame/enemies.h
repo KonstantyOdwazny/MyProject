@@ -86,7 +86,7 @@ public:
     void drawing(sf::RenderTarget& target);
     void walkingstep(const sf::Time& elapsed);
     void moving(const sf::Time& elapsed);
-    void OnCollision(const size_t& i);
+    void OnCollision(const size_t& i,const sf::Vector2f& direction);
     void Dead(const size_t& i);
     void SpecialAtack(sf::Time& elapsed);
 

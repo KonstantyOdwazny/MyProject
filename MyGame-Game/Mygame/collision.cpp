@@ -353,6 +353,93 @@ void Collision::CheckCollisions(std::vector<std::vector<std::unique_ptr<sf::Spri
         }
     }
 }
+//enemy with items collision
+void Collision::CheckCollisions(Enemies &enemies, Items &things, sf::Vector2f &direction)
+{
+    float deltax; //zmienna odleglosc miedzy pozycja x bohatera i pozycja x innych obiektow
+    float deltay; //zmienna odleglosc miedzy pozycja y bohatera i pozycja y innych obiektow
+    float intersectX; //przeciecie w osi X obiektu z bohaterem
+    float intersectY; //przeciecie w osi Y obiektu z bohaterem
+
+    for(size_t i=0;i<things.items.size();i++)
+    {
+        for(size_t j=0;j<things.items[i].size();j++)
+        {
+            for(size_t a=0;a<enemies.sprites.size();a++)
+            {
+            sf::Vector2f thisposition=things.items[i][j]->getPosition(); //pozycja przedmiotu
+            sf::Vector2f otherposition=enemies.sprites[a]->getPosition(); //pozycja aktualna bohatera
+            sf::Vector2f thishalfsize(things.items[i][j]->getGlobalBounds().width/2.0f,things.items[i][j]->getGlobalBounds().height/2.0f);
+            sf::Vector2f otherhalfsize(enemies.sprites[a]->getGlobalBounds().width/2.0f,enemies.sprites[a]->getGlobalBounds().height/2.0f);
+            bool t;
+
+             deltax=otherposition.x-thisposition.x;
+             deltay=otherposition.y-thisposition.y;
+
+             intersectX=std::abs(deltax)-(otherhalfsize.x+thishalfsize.x);
+             intersectY=std::abs(deltay)-(otherhalfsize.y+thishalfsize.y);
+
+             if(things.typeofitem[i][j].dynamic==true){
+
+                 if(intersectX<0.0f && intersectY<0.0f) //jesli obie osie przeciecia obiektu sa mniejsze od 0 to znaczy ze obiekty na siebie nachodza i nastepuje zderzenie
+                 {
+                     //p=std::min(std::max(p,0.0f),1.0f);
+
+                     if(intersectX > intersectY)
+                     {
+                         if(deltax > 0.0f)
+                         {
+                             things.items[i][j]->move(0.0f,0.0f); //odbicia podczas zderzen kazdy w innym kierunku
+                             enemies.sprites[a]->move(-intersectX,0.0f);
+
+                             direction.x=1.0f;
+                             direction.y=0.0f;
+                         }
+                         else
+                        {
+                         things.items[i][j]->move(0.0f,0.0f);
+                         enemies.sprites[a]->move(intersectX,0.0f);
+
+                         direction.x=-1.0f;
+                         direction.y=0.0f;
+                        }
+                     }
+                     else
+                     {
+                         if(deltay > 0.0f)
+                         {
+                             things.items[i][j]->move(0.0f,0.0f);
+                             enemies.sprites[a]->move(0.0f,0.0f);
+
+                             direction.x=0.0f;
+                             direction.y=1.0f;
+                         }
+                         else
+                        {
+                         things.items[i][j]->move(0.0f,0.0f);
+                         enemies.sprites[a]->move(0.0f,0.0f);
+
+
+                         direction.x=0.0f;
+                         direction.y=-1.0f;
+                        }
+                     }
+                     t=true;
+
+                 }
+                 else{
+                     t=false;
+                 }
+                 if(t==true)
+                 {
+                     enemies.OnCollision(a,direction);
+                 }
+
+             }
+            }
+        }
+    }
+}
 //collison weapons with enemies
 void Collision::WeaponHit(Weapons &weapon, Enemies &enemy)
 {
@@ -376,4 +463,67 @@ void Collision::WeaponHit(Weapons &weapon, Enemies &enemy)
             break;
         }
     }
+}
+//bullets collision events and destroy
+void Collision::BulletsCollision(std::vector<RobotsBullet*>& bullets, Items &things, MyCharacter &hero,std::vector<std::vector<std::unique_ptr<sf::Sprite>>>& map,sf::Time& elapsed)
+{
+    if(bullets.empty()==false)
+    {
+    for(size_t a=0;a<bullets.size();a++)
+    {
+        for(size_t i=0;i<things.items.size();i++)
+        {
+            for(size_t j=0;j<things.items[i].size();j++)
+            {
+                if(things.typeofitem[i][j].dynamic==true)
+                {
+                    if(bullets.empty()==false)
+                    {
+                    if(bullets[a]->getGlobalBounds().intersects(things.items[i][j]->getGlobalBounds()))
+                    {
+                        //bullets.clear();
+                        bullets.erase(bullets.begin()+a);
+                        break;
+                    }
+                    }
+                }
+
+            }
+            if(bullets.empty())
+            {
+                break;
+            }
+
+        }
+
+    if(hero.getGlobalBounds().intersects(bullets[a]->getGlobalBounds()))
+    {
+        //bullets.clear();
+        bullets.erase(bullets.begin()+a);
+        hero.vy=0.0f;
+        hero.life--;
+        hero.Deadstep(elapsed);
+        break;
+    }
+
+    for(size_t i=0;i<map.size();i++)
+    {
+        for(size_t j=0;j<map[i].size();j++)
+        {
+            if(bullets[a]->getGlobalBounds().intersects(map[i][j]->getGlobalBounds()))
+            {
+                //bullets.clear();
+                bullets.erase(bullets.begin()+a);
+            }
+        }
+    }
+    if(bullets.empty())
+    {
+        break;
+    }
+    }
+    }
+
+
+
 }

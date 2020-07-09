@@ -268,8 +268,9 @@ void Enemies::moving(const sf::Time &elapsed)
 
 }
 //collision with items events
-void Enemies::OnCollision(const size_t& i)
+void Enemies::OnCollision(const size_t& i,const sf::Vector2f& direction)
 {
+    /*
     if(this->veclocities[i] >=0 )
     {
         this->veclocities[i]=-1*std::abs(this->veclocities[i]);
@@ -278,7 +279,8 @@ void Enemies::OnCollision(const size_t& i)
     {
         this->veclocities[i]=std::abs(this->veclocities[i]);
     }
-    /*
+    */
+
     if(direction.x <0.0f)
     {
         //Collision on the left
@@ -290,19 +292,19 @@ void Enemies::OnCollision(const size_t& i)
         //Collision on the rigth
        this->veclocities[i]=std::abs(this->veclocities[i]);
     }
-    */
-/*
+
+
     if(direction.y < 0.0f)
     {
         //Collision on the bottom
-
+        this->Dead(i);
     }
     else if(direction.y >0.0f)
     {
         //Collision on the top
-
+        this->Dead(i);
     }
-*/
+
 }
 //erase one enemies with it iterator
 void Enemies::Dead(const size_t& i)

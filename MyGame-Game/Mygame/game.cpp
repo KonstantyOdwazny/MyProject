@@ -264,11 +264,13 @@ void Game::UpdateCollision()
     if(enemies->sprites.empty()==false)
     {
     this->CheckCollisions(this->enemies->sprites,*this->hero,direction,0.0f,elapsed);
-    this->EnemiesWithItems_collision();
+    //this->EnemiesWithItems_collision();
+    this->CheckCollisions(*enemies,*things,direction);
     }
     this->CollectCoins();
     this->CollectKeys();
     this->OpenDoors();
+    this->BulletsCollision(enemies->bullets,*things,*hero,this->level->sprites,elapsed);
     this->hero->moving(elapsed); //poruszanie naszym bohaterem
     this->things->moving(elapsed); //poruszanie sie przedmiotow dynamicznych
 }
@@ -279,7 +281,7 @@ Game::Game()
     this->InitText();
     this->InitLight();
     this->InitTextures();
-    licz_pom=0;
+    set_lighthings_position=0;
     view.setSize(800.0f,600.0f);
     view.setCenter(0.0f,0.0f);
     this->window=new sf::RenderWindow(sf::VideoMode(800,600),"My Game");
@@ -349,30 +351,6 @@ void Game::pollevent()
     }
     */
 }
-void Game::EnemiesWithItems_collision()
-{
-    if(enemies->sprites.empty()==false)
-    {
-        for(size_t a=0;a<this->enemies->sprites.size();a++)
-        {
-            for(size_t i=0;i<this->things->items.size();i++)
-            {
-                for(size_t j=0;j<this->things->items[i].size();j++)
-                {
-                    if(things->typeofitem[i][j].dynamic==true)
-                    {
-                    if(enemies->sprites[a]->getGlobalBounds().intersects(things->items[i][j]->getGlobalBounds()))
-                    {
-                        this->enemies->OnCollision(a);
-                    }
-                    }
-                }
-            }
-        }
-    }
-}
-
-
 //Collect Coins
 void Game::CollectCoins()
 {
@@ -549,15 +527,16 @@ void Game::render()
 
     lightingTex.display(); // wywołanie tekstury, zapieczętowanie
     lighting.setTexture( lightingTex.getTexture() );
-    if(licz_pom==0)
+    if(set_lighthings_position==0)
     {
     lighting.setPosition(this->view.getCenter().x-400.0f,this->view.getCenter().y-300.0f);
     this->level->backgrounds->setPosition(this->view.getCenter().x-600.0f,this->view.getCenter().y-800.0f);
     this->hero->setPosition(250.0f,250.0f);
     //this->coin_text.setPosition(this->view.getCenter());
+     set_lighthings_position=1;
     }
     light.setPosition(this->hero->getPosition().x-50.0f,this->hero->getPosition().y-60.0f);
-    licz_pom++;
+
     this->Update_TexturesPosition();
     window->clear(sf::Color::Black);
     //equipment->clear(sf::Color::Red);
