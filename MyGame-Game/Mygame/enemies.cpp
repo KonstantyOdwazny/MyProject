@@ -297,7 +297,7 @@ void Enemies::OnCollision(const size_t& i,const sf::Vector2f& direction)
     if(direction.y < 0.0f)
     {
         //Collision on the bottom
-        this->Dead(i);
+        //this->Dead(i);
     }
     else if(direction.y >0.0f)
     {

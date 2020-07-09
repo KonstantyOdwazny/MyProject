@@ -1,6 +1,7 @@
 #include "game.h"
 #include <cmath>
 #include <windows.h>
+#include <iostream>
 //private functions
 //Create game textures like hearts and coin
 void Game::InitTextures()
@@ -44,7 +45,7 @@ void Game::InitText()
 {
     //coinsy
     coins_licz=0;
-    font.loadFromFile("C:/Users/konst/Documents/GitHub/blog-projects/Kurs_SFML/Lekcja 1/data/Mecha.ttf");
+    font.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Mecha.ttf");
     std::string ctext="0";
     this->coin_text.setString(ctext);
     this->coin_text.setFont(font);
@@ -309,6 +310,7 @@ Game::~Game()
     delete this->hero;
     delete this->things;
     delete  this->enemies;
+    //delete menu;
     //delete weapon;
 }
 //functions
@@ -316,6 +318,7 @@ Game::~Game()
 //functions of event in game
 void Game::pollevent()
 {
+
 
     while(this->window->pollEvent(this->ev))
     {
@@ -328,28 +331,9 @@ void Game::pollevent()
         {
             this->startagain=true;
         }
-        /*
-        if(this->ev.key.code==sf::Keyboard::I)
-        {
-            this->window->setVisible(false);
-            this->window->setActive(false);
-            this->equipment->setActive(true);
-            this->equipment->setVisible(true);
-        }
-        */
+
     }
-    /*
-    while(this->equipment->pollEvent(this->event))
-    {
-        if(this->event.type==sf::Event::Closed)
-        {
-            this->equipment->setVisible(false);
-            this->equipment->setActive(false);
-            this->window->setVisible(true);
-            this->window->setActive(true);
-        }
-    }
-    */
+
 }
 //Collect Coins
 void Game::CollectCoins()
@@ -450,11 +434,24 @@ void Game::OpenDoors()
          if(t==true)
          {
              this->hero->OnitemCollision(direction);
+             /*
              if(this->things->iskeycollect[i].first==this->things->door_colors[i])
              {
                  if(this->things->iskeycollect[i].second==true)
                  {
                      this->things->doors.erase(this->things->doors.begin()+i);
+                 }
+             }
+             */
+             for(size_t j=0;j<things->iskeycollect.size();j++)
+             {
+                 if(this->things->iskeycollect[j].first==this->things->door_colors[i])
+                 {
+                     if(this->things->iskeycollect[j].second==true)
+                     {
+                        this->things->doors.erase(this->things->doors.begin()+i);
+                        this->things->door_colors.erase(this->things->door_colors.begin()+i);
+                     }
                  }
              }
          }
@@ -465,9 +462,9 @@ void Game::OpenDoors()
 void Game::update()
 {
 
-    if(this->hero->life>0)
-    {
 
+    if(this->hero->life>0 )
+    {
     //running
     this->window->setFramerateLimit(60); //limit fps-ow
     this->elapsed=this->clock.restart(); //restart a clock
@@ -515,14 +512,17 @@ void Game::update()
 //function where we draw everything and set the view options
 void Game::render()
 {
+
+
+    window->clear(sf::Color::Black);
     //light
     this->view.setCenter(this->hero->getPosition());
     lightingTex.clear( sf::Color( 0, 0, 0, 0 ) );
-    lightingTex.draw( light, sf::BlendAdd ); // light - sprite, figura, cokolwiek sf::Drawable
+    lightingTex.draw( light, sf::BlendAdd ); //tworzenie swiatla na czarnej teksturze
     //pochodnie
     for(size_t i=0;i<this->pochodnie.size();i++)
     {
-        lightingTex.draw(pochodnie[i], sf::BlendAdd);
+        lightingTex.draw(pochodnie[i], sf::BlendAdd); //tworzenie swiatel pochodni
     }
 
     lightingTex.display(); // wywołanie tekstury, zapieczętowanie
@@ -566,6 +566,8 @@ void Game::render()
 
     this->window->display();
     //this->equipment->display();
+
+
 }
 //bool functions return true if our windows is open
 bool Game::running()

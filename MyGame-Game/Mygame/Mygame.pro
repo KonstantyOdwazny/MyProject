@@ -10,6 +10,7 @@ SOURCES += \
         items.cpp \
         main.cpp \
         mapgame.cpp \
+        menu.cpp \
         mycharacter.cpp \
         robotsbullet.cpp \
         weapons.cpp
@@ -27,6 +28,7 @@ HEADERS += \
     game.h \
     items.h \
     mapgame.h \
+    menu.h \
     mycharacter.h \
     robotsbullet.h \
     weapons.h

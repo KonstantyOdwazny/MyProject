@@ -4,6 +4,14 @@ using namespace std;
 
 int main()
 {
+
+    MainMenu menu;
+    while(menu.Running() && menu.active==true)
+    {
+        menu.UpdateEvents();
+
+        menu.Drawing();
+    }
     Game game;
     int koniec=0;
     sf::SoundBuffer begin_buffer;
@@ -30,6 +38,7 @@ int main()
     }
     if(koniec==1)
     {
+        begin_music.stop();
         return main();
     }
     else

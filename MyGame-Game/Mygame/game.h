@@ -2,6 +2,7 @@
 #define GAME_H
 #include "mapgame.h"
 #include "collision.h"
+#include "menu.h"
 //#include "enemies.h"
 //#include "items.h"
 
@@ -57,6 +58,7 @@ public:
     Items* things;
     MapGame* level;
     MyCharacter* hero;
+
     //Weapons* weapon;
     sf::Vector2f direction;
     //time
@@ -73,6 +75,7 @@ public:
     sf::Text again;
     //start again
     bool startagain;
+    bool active_window;
 
     //light
     sf::CircleShape light;

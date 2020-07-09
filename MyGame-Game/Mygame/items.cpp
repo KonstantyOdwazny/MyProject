@@ -19,7 +19,7 @@ void Items::loadfromfile(const std::string &filename)
                 std::string txt;
                 //file>>pom;
                 file>>txt;
-                if(txt!="c" && txt!="ck")
+                if(txt!="c" && txt!="ck" && txt!="yk" && txt!="bk" && txt!="gk")
                 {
                    pom=std::atoi(txt.c_str());
                    poz_coin[i][j].iswall=false;
@@ -41,6 +41,27 @@ void Items::loadfromfile(const std::string &filename)
                     poz_key[i][j].type=15;
                     poz_coin[i][j].iswall=false;
                     //keycolors.emplace_back("red");
+                }
+                else if(txt=="yk")
+                {
+                    pom=0;
+                    poz_key[i][j].iswall=true;
+                    poz_key[i][j].type=14;
+                    poz_coin[i][j].iswall=false;
+                }
+                else if(txt=="gk")
+                {
+                    pom=0;
+                    poz_key[i][j].iswall=true;
+                    poz_key[i][j].type=16;
+                    poz_coin[i][j].iswall=false;
+                }
+                else if(txt=="bk")
+                {
+                    pom=0;
+                    poz_key[i][j].iswall=true;
+                    poz_key[i][j].type=17;
+                    poz_coin[i][j].iswall=false;
                 }
                 else
                 {
@@ -146,6 +167,8 @@ void Items::createSprite()
                             it.velocity.y=0.0f;
                             it.dangerous=false;
                             itemname.emplace_back(it);
+                            sf::Vector2f vec2f(j*tile_width*0.5f,i*tile_height*0.5f);
+                            pochodnie_pozycja.emplace_back(vec2f);
                         }
                     else{
                         item_type it;
@@ -163,11 +186,13 @@ void Items::createSprite()
              s->setTexture(*textures[poziom[i][j].type]);
              s->setScale(0.5f,0.5f);
              s->setPosition(j*tile_width*0.5f,i*tile_height*0.5f);
+             /*
              if(poziom[i][j].type==19)
              {
                 sf::Vector2f vec2f(j*tile_width*0.5f,i*tile_height*0.5f);
                 pochodnie_pozycja.emplace_back(vec2f);
              }
+             */
              s->setOrigin(s->getGlobalBounds().width/2.0f,s->getGlobalBounds().height/2.0f);
 
              sp.emplace_back(std::move(s));
@@ -248,7 +273,10 @@ void Items::drawing(sf::RenderTarget &target)
     }
     for(size_t i=0;i<this->keys.size();i++)
     {
+        if(iskeycollect[i].second==false)
+        {
         target.draw(*keys[i]);
+        }
     }
     for(size_t i=0;i<doors.size();i++)
     {
@@ -303,7 +331,7 @@ void Items::moving(sf::Time& elapsed)
 //erase keys[i] and change this activity to true
 void Items::Collectkeys(const size_t &i)
 {
-    this->keys.erase(keys.begin()+i);
+    //this->keys.erase(keys.begin()+i);
     this->iskeycollect[i].second=true;
     //this->iskeycollect[i]=true;
 }
