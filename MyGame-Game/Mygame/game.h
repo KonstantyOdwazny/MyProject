@@ -3,6 +3,8 @@
 #include "mapgame.h"
 #include "collision.h"
 #include "menu.h"
+#include "optionswindow.h"
+#include "sterowaniewindow.h"
 //#include "enemies.h"
 //#include "items.h"
 
@@ -40,13 +42,13 @@ private:
     void InitText();
     void InitLight();
     void InitLightings();
-    void CreateOtherClasses();
+    void CreateOtherClasses(HeroClass& heroclass);
     void Update_TexturesPosition();
     void UpdateKeybordInput();
     void UpdateCollision();
 public:
     //constructor and destructor
-    Game();
+    Game(HeroClass& heroclass);
     virtual ~Game();
     //public functions
     void update();

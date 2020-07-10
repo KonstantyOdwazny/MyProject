@@ -6,13 +6,50 @@ int main()
 {
 
     MainMenu menu;
+    menu.PlayMusic();
     while(menu.Running() && menu.active==true)
     {
-        menu.UpdateEvents();
+        menu.PollEvents();
+
+        menu.Update();
 
         menu.Drawing();
     }
-    Game game;
+    if(menu.action==Activity::Exit)
+    {
+        return 0;
+    }
+    else
+    {
+        if(menu.action==Activity::Sterowanie)
+        {
+            SterowanieWindow sterowanie;
+            sterowanie.PlayMusic();
+            while(sterowanie.Running())
+            {
+                sterowanie.PollEvents();
+                //sterowanie.Update();
+                sterowanie.Drawing();
+            }
+            return main();
+        }
+    OptionsWindow select;
+    select.PlayMusic();
+    while(select.Running())
+    {
+        select.PollEvents();
+
+        select.Update();
+
+        select.Drawing();
+    }
+    if(select.exitorplay==false)
+    {
+        return 0;
+    }
+    else
+    {
+    Game game(select.heroclass);
     int koniec=0;
     sf::SoundBuffer begin_buffer;
     sf::Sound begin_music;
@@ -44,5 +81,7 @@ int main()
     else
     {
         return 0;
+    }
+    }
     }
 }

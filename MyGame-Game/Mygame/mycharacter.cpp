@@ -69,13 +69,6 @@ void MyCharacter::render(sf::RenderTarget &window)
     window.draw(*this->weapon);
     window.draw(*this);
 }
-//set the hero position
-void MyCharacter::setposition(float x_,float y_)
-{
-    this->setPosition(x_,y_);
-    this->x=x_;
-    this->y=y_;
-}
 //animation of running hero
 void MyCharacter::runstep(const sf::Time& elapsed)
 {

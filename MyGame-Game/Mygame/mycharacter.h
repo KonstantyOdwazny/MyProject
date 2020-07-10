@@ -71,7 +71,6 @@ public:
     void InitTexture(std::string filename);     //download texture from file
     //void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void render(sf::RenderTarget& window);  //draw a hero
-    void setposition(float x_,float y_);    //set the position on the map
 
     void runstep(const sf::Time& elapsed);  //animation of running
     void jumpstep(const sf::Time& elapsed);    //animation of jumping

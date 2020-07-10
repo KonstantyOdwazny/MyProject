@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        abstractwindow.cpp \
         collision.cpp \
         enemies.cpp \
         game.cpp \
@@ -12,7 +13,9 @@ SOURCES += \
         mapgame.cpp \
         menu.cpp \
         mycharacter.cpp \
+        optionswindow.cpp \
         robotsbullet.cpp \
+        sterowaniewindow.cpp \
         weapons.cpp
 INCLUDEPATH += "C:/SFML-2.5.1/include"
 LIBS += -L"C:/SFML-2.5.1/lib"
@@ -23,6 +26,7 @@ CONFIG(debug, debug|release){
 }
 
 HEADERS += \
+    abstractwindow.h \
     collision.h \
     enemies.h \
     game.h \
@@ -30,5 +34,7 @@ HEADERS += \
     mapgame.h \
     menu.h \
     mycharacter.h \
+    optionswindow.h \
     robotsbullet.h \
+    sterowaniewindow.h \
     weapons.h

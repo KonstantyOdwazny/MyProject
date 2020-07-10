@@ -69,7 +69,7 @@ void Game::InitText()
 void Game::InitLight()
 {
     //light
-    this->lightingTex.create(2900,3000);
+    this->lightingTex.create(3500,3000);
     this->light.setRadius(200.0f);
     this->light.setPointCount(30);
     this->light.setFillColor(sf::Color(255,255,255));
@@ -102,15 +102,33 @@ void Game::InitLightings()
     }
 }
 //create constructor other classes
-void Game::CreateOtherClasses()
+void Game::CreateOtherClasses(HeroClass& heroclass)
 {
+
     this->level=new MapGame("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/map.level");
+
+
     //create hero
     hero=new MyCharacter;
+    if(heroclass==HeroClass::MaleAdventure)
+    {
     this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_maleAdventurer_sheet.png");
+    }
+    else if(heroclass==HeroClass::FemaleAdventure)
+    {
+     this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_femaleAdventurer_sheet.png");
+    }
+    else if(heroclass==HeroClass::BlackMale)
+    {
+      this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_malePerson_sheet.png");
+    }
+    else if(heroclass==HeroClass::BlackFemale)
+    {
+      this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_femalePerson_sheet.png");
+    }
     this->hero->animation_frame();
     this->hero->InitSprite(this->hero->vector_animationframe[0]);
-    this->hero->setposition(250.0f,280.0f);
+    this->hero->setPosition(250.0f,280.0f);
     this->hero->start_position.x=250.0f;
     this->hero->start_position.y=280.0f;
     //this->weapon=new Weapons;
@@ -276,7 +294,7 @@ void Game::UpdateCollision()
     this->things->moving(elapsed); //poruszanie sie przedmiotow dynamicznych
 }
 //constructor
-Game::Game()
+Game::Game(HeroClass& heroclass)
 {
     this->startagain=false;
     this->InitText();
@@ -289,7 +307,7 @@ Game::Game()
     //this->equipment=new sf::RenderWindow(sf::VideoMode(800,600),"Equimpent");
     //this->equipment->setVisible(false);
     //this->equipment->setActive(false);
-    this->CreateOtherClasses();
+    this->CreateOtherClasses(heroclass);
     this->InitLightings();
     licznikuderzen=0;
     czasdouderzenia=0.0f;

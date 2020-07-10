@@ -4,6 +4,7 @@
 #include "SFML/Window.hpp"
 #include "SFML/Audio.hpp"
 #include "vector"
+#include "abstractwindow.h"
 
 /*
  *Class game menu
@@ -11,29 +12,16 @@
  */
 
 enum Activity{
-    StartGame,SelectHero,Exit
+    StartGame,Sterowanie,Exit
 };
 
-class MainMenu
+class MainMenu:public AbstractWindow
 {
 private:
-    //txt
-
-    sf::Font font;
-    //audio
-    sf::SoundBuffer click_buffer;
-    sf::Sound click_sound;
-    sf::SoundBuffer menu_buffer;
-    sf::Sound menu_music;
-    //graphic
-    sf::Texture bacground_tex;
-    sf::Sprite bacground;
-    //events
-    sf::Event event;
-    //window
-    sf::RenderWindow* window;
     //functions
-    void InitTextPosition();
+    void InitText() override;
+    void InitMusic() override;
+    void InitTexture() override;
 public:
     MainMenu();
     ~MainMenu();
@@ -43,9 +31,11 @@ public:
     std::vector<sf::Text> napisy;
     bool active;
     //functions
-    void UpdateEvents();
-    void Drawing();
-    bool Running();
+    void PollEvents() override;
+    void Drawing() override;
+    bool Running() override;
+    void PlayMusic() override;
+    void Update() override;
 };
 
 #endif // MENU_H
