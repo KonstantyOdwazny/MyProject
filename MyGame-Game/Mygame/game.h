@@ -5,6 +5,7 @@
 #include "menu.h"
 #include "optionswindow.h"
 #include "sterowaniewindow.h"
+#include "winwindow.h"
 //#include "enemies.h"
 //#include "items.h"
 
@@ -60,6 +61,7 @@ public:
     Items* things;
     MapGame* level;
     MyCharacter* hero;
+    bool victory;
 
     //Weapons* weapon;
     sf::Vector2f direction;

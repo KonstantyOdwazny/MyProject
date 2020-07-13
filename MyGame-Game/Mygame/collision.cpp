@@ -80,6 +80,7 @@ void Collision::CheckCollisions(std::vector<std::unique_ptr<sf::Sprite> > &sprit
              }
              if(t==true)
              {
+                 hero.dead_sound.play();
                  hero.OnEnemiesCollision(direction,elapsed);
              }
 
@@ -255,6 +256,7 @@ void Collision::CheckCollisions(Items &things, MyCharacter &hero, sf::Vector2f &
                 if((things.typeofitem[i][j].dangerous==true)&&(hero.getGlobalBounds().intersects(things.items[i][j]->getGlobalBounds()))){
                     hero.vy=0.0f;
                     hero.life--;
+                    hero.dead_sound.play();
                     hero.Deadstep(elapsed);
                     Sleep(1000);
                     hero.setPosition(hero.start_position);
@@ -440,6 +442,8 @@ void Collision::CheckCollisions(Enemies &enemies, Items &things, sf::Vector2f &d
         }
     }
 }
+
+
 //collison weapons with enemies
 void Collision::WeaponHit(Weapons &weapon, Enemies &enemy)
 {
@@ -461,6 +465,23 @@ void Collision::WeaponHit(Weapons &weapon, Enemies &enemy)
                 enemy.Dead(i);
             }
             break;
+        }
+    }
+}
+
+void Collision::WinCollision(MyCharacter &hero, Items &things)
+{
+    for(size_t i=0;i<things.items.size();i++)
+    {
+        for(size_t j=0;j<things.items[i].size();j++)
+        {
+            if(things.typeofitem[i][j].name=="win")
+            {
+            if(things.items[i][j]->getGlobalBounds().intersects(hero.getGlobalBounds()))
+            {
+                hero.win=true;
+            }
+            }
         }
     }
 }
@@ -502,6 +523,7 @@ void Collision::BulletsCollision(std::vector<RobotsBullet*>& bullets, Items &thi
         bullets.erase(bullets.begin()+a);
         hero.vy=0.0f;
         hero.life--;
+        hero.dead_sound.play();
         hero.Deadstep(elapsed);
         break;
     }

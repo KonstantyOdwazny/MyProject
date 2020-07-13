@@ -3,7 +3,7 @@
 
 void MainMenu::InitText()
 {
-    font.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Mecha.ttf");
+    font.loadFromFile("Mecha.ttf");
     napisy.emplace_back(sf::Text("New game",font,70));
     napisy.emplace_back(sf::Text("Sterowanie",font,70));
     napisy.emplace_back(sf::Text("Exit game",font,70));
@@ -17,12 +17,12 @@ void MainMenu::InitText()
 
 void MainMenu::InitMusic()
 {
-    click_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/metalClick.ogg");
+    click_buffer.loadFromFile("metalClick.ogg");
     click_sound.setBuffer(click_buffer);
-    main_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/MagoryNET-Dreams-In-A-Stasis-Chamber.ogg");
+    main_buffer.loadFromFile("MagoryNET-Dreams-In-A-Stasis-Chamber.ogg");
     main_music.setBuffer(main_buffer);
     main_music.setLoop(true);
-    contains_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/handleSmallLeather.ogg");
+    contains_buffer.loadFromFile("handleSmallLeather.ogg");
     contains_music.setBuffer(contains_buffer);
 }
 
@@ -30,7 +30,7 @@ void MainMenu::InitTexture()
 {
 
     this->texture=new sf::Texture();
-    if(!this->texture->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Menu_tlo.png"))
+    if(!this->texture->loadFromFile("Menu_tlo.png"))
     {
         std::cout<<"Nie otwarl sie!"<<std::endl;
     }

@@ -1,6 +1,7 @@
 #ifndef ENEMIES_H
 #define ENEMIES_H
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 #include <vector>
 #include <memory>
 #include <iostream>
@@ -40,7 +41,6 @@ private:
     void InitTime();
     void TurnAround();
     void CheckTurnface();
-    void InitLifes();
     RobotsBullet* createbullet(bool faceright_,sf::Vector2f v);
 
     //private properties
@@ -48,12 +48,14 @@ private:
     std::vector<sf::IntRect> vector_animationframe;
     float timelimit;
     std::vector<float> time;
-    std::vector<bool> faceright;
+
     size_t it;
     float walktime;
     float walklimittime;
     float stoptime;
     float timetoshoot;
+    sf::SoundBuffer laser_buffer;
+    sf::Sound laser_sound;
 
 public:
     Enemies();
@@ -65,7 +67,7 @@ public:
     const static int tile_height =128;
     const static int tile_width =96;
     //size a map
-    const static int height =22;
+    const static int height =28;
     const static int width =47;
     //object our help struct Tile when we have a number which texture we have draw with our png
     Tile poziom[height][width];
@@ -78,6 +80,7 @@ public:
     std::vector<int> lifes;
     //vector enemies statistic
     std::vector<Statistic> enemies_statistic;
+     std::vector<bool> faceright;
 
     std::vector<RobotsBullet*> bullets;
     bool heroisnear;

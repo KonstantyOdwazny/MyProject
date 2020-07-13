@@ -119,7 +119,7 @@ void Items::createSprite()
         for(int i=0;i<4;i++)
         {
             auto st=std::make_unique<sf::Texture>();
-            st->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/spritesheet_items.png",
+            st->loadFromFile("Spritesheets/spritesheet_items.png",
                              sf::IntRect(j*tile_width,i*tile_height,tile_width,tile_height));
             st->setRepeated(true);
             this->coins_tex.emplace_back(std::move(st));
@@ -171,6 +171,18 @@ void Items::createSprite()
                             pochodnie_pozycja.emplace_back(vec2f);
                         }
                     else{
+                    if(poziom[i][j].type==36)
+                    {
+                        item_type it;
+                        it.name="win";
+                        it.dynamic=false;
+                        it.velocity.x=0.0f;
+                        it.velocity.y=0.0f;
+                        it.dangerous=false;
+                        itemname.emplace_back(it);
+                    }
+                    else
+                    {
                         item_type it;
                         it.name="nic";
                         it.dynamic=false;
@@ -178,6 +190,7 @@ void Items::createSprite()
                         it.velocity.y=0.0f;
                         it.dangerous=false;
                         itemname.emplace_back(it);
+                    }
                     }
 
 

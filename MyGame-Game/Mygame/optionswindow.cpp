@@ -3,7 +3,7 @@
 void OptionsWindow::InitTexture()
 {
     this->texture=new sf::Texture();
-    this->texture->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Select.png");
+    this->texture->loadFromFile("Select.png");
     this->texture->setRepeated(true);
     this->sprite=new sf::Sprite();
     this->sprite->setTexture(*this->texture);
@@ -11,18 +11,18 @@ void OptionsWindow::InitTexture()
 
 void OptionsWindow::InitMusic()
 {
-    click_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/metalClick.ogg");
+    click_buffer.loadFromFile("metalClick.ogg");
     click_sound.setBuffer(click_buffer);
-    main_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/MagoryNET-Dreams-In-A-Stasis-Chamber.ogg");
+    main_buffer.loadFromFile("MagoryNET-Dreams-In-A-Stasis-Chamber.ogg");
     main_music.setBuffer(main_buffer);
     main_music.setLoop(true);
-    contains_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/handleSmallLeather.ogg");
+    contains_buffer.loadFromFile("handleSmallLeather.ogg");
     contains_music.setBuffer(contains_buffer);
 }
 
 void OptionsWindow::InitText()
 {
-    font.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Mecha.ttf");
+    font.loadFromFile("Mecha.ttf");
     txt.emplace_back(sf::Text("Jack",font,40));
     txt.emplace_back(sf::Text("Lara",font,40));
     txt.emplace_back(sf::Text("John",font,40));

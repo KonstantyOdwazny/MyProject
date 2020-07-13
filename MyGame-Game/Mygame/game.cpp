@@ -7,7 +7,7 @@
 void Game::InitTextures()
 {
     tex_hud=std::make_unique<sf::Texture>();
-    tex_hud->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/spritesheet_hud.png");
+    tex_hud->loadFromFile("Spritesheets/spritesheet_hud.png");
 
     sf::Vector2u v=this->tex_hud->getSize();
     v.x/=8;
@@ -45,7 +45,7 @@ void Game::InitText()
 {
     //coinsy
     coins_licz=0;
-    font.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Mecha.ttf");
+    font.loadFromFile("Mecha.ttf");
     std::string ctext="0";
     this->coin_text.setString(ctext);
     this->coin_text.setFont(font);
@@ -59,7 +59,7 @@ void Game::InitText()
     this->gameover.setFillColor(sf::Color::Yellow);
     this->gameover.setStyle(sf::Text::Bold);
 
-    this->again.setString("Click ENTER to start again");
+    this->again.setString("ENTER-return Main Menu");
     this->again.setFont(font);
     this->again.setCharacterSize(40);
     this->again.setFillColor(sf::Color::Yellow);
@@ -104,27 +104,26 @@ void Game::InitLightings()
 //create constructor other classes
 void Game::CreateOtherClasses(HeroClass& heroclass)
 {
-
-    this->level=new MapGame("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/map.level");
-
-
+//"C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/
+    this->level=new MapGame("map.level");
     //create hero
     hero=new MyCharacter;
     if(heroclass==HeroClass::MaleAdventure)
     {
-    this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_maleAdventurer_sheet.png");
+        //"C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/
+    this->hero->InitTexture("Spritesheets/character_maleAdventurer_sheet.png");
     }
     else if(heroclass==HeroClass::FemaleAdventure)
     {
-     this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_femaleAdventurer_sheet.png");
+     this->hero->InitTexture("Spritesheets/character_femaleAdventurer_sheet.png");
     }
     else if(heroclass==HeroClass::BlackMale)
     {
-      this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_malePerson_sheet.png");
+      this->hero->InitTexture("Spritesheets/character_malePerson_sheet.png");
     }
     else if(heroclass==HeroClass::BlackFemale)
     {
-      this->hero->InitTexture("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_femalePerson_sheet.png");
+      this->hero->InitTexture("Spritesheets/character_femalePerson_sheet.png");
     }
     this->hero->animation_frame();
     this->hero->InitSprite(this->hero->vector_animationframe[0]);
@@ -135,9 +134,9 @@ void Game::CreateOtherClasses(HeroClass& heroclass)
     //this->weapon->setPosition(250.0f,280.0f);
     //this->hero->setPosition(this->level->pom);
     //create items
-    this->things=new Items("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/item.level");
+    this->things=new Items("item.level");
     //create enemies
-    this->enemies=new Enemies("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/enemies.level");
+    this->enemies=new Enemies("enemies.level");
 }
 //change game textures position to textures always be in the top left corner
 void Game::Update_TexturesPosition()
@@ -222,15 +221,9 @@ void Game::UpdateKeybordInput()
         this->hero->vy=-sqrtf(2.0f*981.0f*this->hero->jumpHeight); //float square root
         this->hero->jump=true;
         this->hero->begin_stop=0;
-
+        this->hero->jump_sound.play();
     }
 
-    /*
-    for(size_t i=0;i<enemies->enemies_statistic.size();i++)
-    {
-        std::cout<<"Enemy "<<i+1<<" lives: "<<enemies->enemies_statistic[i].lives<<std::endl;
-    }
-    */
     //hero hit and use weapon animation
     if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->hero->run==false && this->hero->jump==false && this->hero->weapon->canhit==true)
     {
@@ -284,8 +277,10 @@ void Game::UpdateCollision()
     {
     this->CheckCollisions(this->enemies->sprites,*this->hero,direction,0.0f,elapsed);
     //this->EnemiesWithItems_collision();
+    //this->CheckCollisions(this->level->sprites,*enemies,direction,1.0f);
     this->CheckCollisions(*enemies,*things,direction);
     }
+    this->WinCollision(*hero,*things);
     this->CollectCoins();
     this->CollectKeys();
     this->OpenDoors();
@@ -311,13 +306,14 @@ Game::Game(HeroClass& heroclass)
     this->InitLightings();
     licznikuderzen=0;
     czasdouderzenia=0.0f;
-    collect_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/handleCoins.ogg");
+    collect_buffer.loadFromFile("handleCoins.ogg");
     collect_music.setBuffer(collect_buffer);
-    foot_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/footstep00.ogg");
+    foot_buffer.loadFromFile("footstep00.ogg");
     foot_step_sound.setBuffer(foot_buffer);
     time_to_foot_step_sound=0.0f;
-    hit_buffer.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/knifeSlice.ogg");
+    hit_buffer.loadFromFile("knifeSlice.ogg");
     hit_sound.setBuffer(hit_buffer);
+    victory=false;
 
 }
 //destructor
@@ -507,7 +503,6 @@ void Game::update()
     }
 
     this->hero->vy+=981.0f*elapsed.asSeconds(); //sila grawitacji dzialajaca na bohatera
-
     this->UpdateCollision();
 
     if(enemies->sprites.empty()==false)
@@ -521,6 +516,11 @@ void Game::update()
         this->hero->stop(elapsed);
         this->hero->jump=false;
         this->hero->jump_it=1;
+    }
+    if(hero->win==true)
+    {
+        victory=true;
+        this->window->close();
     }
 
     }
@@ -583,9 +583,6 @@ void Game::render()
     }
 
     this->window->display();
-    //this->equipment->display();
-
-
 }
 //bool functions return true if our windows is open
 bool Game::running()

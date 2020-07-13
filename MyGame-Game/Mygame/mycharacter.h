@@ -2,6 +2,7 @@
 #define MYCHARACTER_H
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
+#include "SFML/Audio.hpp"
 #include <vector>
 #include <memory>
 #include <iostream>
@@ -20,6 +21,7 @@ class MyCharacter :public sf::Sprite
 private:
     //private functions
     //void InitTexture(std::string filename);
+    void InitMusic();
 
     //private properties
     sf::Texture texture;
@@ -59,6 +61,12 @@ public:
     //container of a animation frame a hero
     std::vector<sf::IntRect> vector_animationframe;
     Weapons* weapon;
+    //music
+    sf::SoundBuffer jump_buffer;
+    sf::Sound jump_sound;
+    sf::SoundBuffer dead_buffer;
+    sf::Sound dead_sound;
+    bool win;
 
     sf::Vector2f start_position; //start hero's position
     int life; //number of hero's lifes

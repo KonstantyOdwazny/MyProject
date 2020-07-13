@@ -102,7 +102,7 @@ void MapGame::createSprite()
     //backgrounds
 
     tex=new sf::Texture;
-    tex->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/bg_castle.png");
+    tex->loadFromFile("Spritesheets/bg_castle.png");
     tex->setRepeated(true);
     this->backgrounds=new sf::Sprite;
     this->backgrounds->setTexture(*tex);

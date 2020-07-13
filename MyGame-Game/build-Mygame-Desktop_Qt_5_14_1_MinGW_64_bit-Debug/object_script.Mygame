@@ -1,0 +1,14 @@
+abstractwindow.o
+collision.o
+enemies.o
+game.o
+items.o
+main.o
+mapgame.o
+menu.o
+mycharacter.o
+optionswindow.o
+robotsbullet.o
+sterowaniewindow.o
+weapons.o
+winwindow.o

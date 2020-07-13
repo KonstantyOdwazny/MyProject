@@ -11,6 +11,14 @@ void MyCharacter::InitTexture(std::string filename)
     this->texture.setRepeated(true);
 }
 //constructor
+void MyCharacter::InitMusic()
+{
+    this->jump_buffer.loadFromFile("Jump.ogg");
+    this->jump_sound.setBuffer(jump_buffer);
+    this->dead_buffer.loadFromFile("Dead.ogg");
+    this->dead_sound.setBuffer(dead_buffer);
+}
+
 MyCharacter::MyCharacter() : sf::Sprite(){
     vx=0;
     vy=0;
@@ -38,6 +46,8 @@ MyCharacter::MyCharacter() : sf::Sprite(){
     //this->weapon=new Weapons(10.0f,"kilof",44);
     this->weapon=CreateWeapons(10,"kilof",6);
     this->weapon->setPosition(250.0f,260.0f);
+    this->InitMusic();
+    win=false;
 }
 //create a vector of animation frame
 void MyCharacter::animation_frame()

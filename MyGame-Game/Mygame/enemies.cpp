@@ -22,6 +22,7 @@ void Enemies::InitSprite()
                 s->setOrigin(s->getGlobalBounds().width/2.0f,s->getGlobalBounds().height/2.0f);
                 sprites.emplace_back(std::move(s));
                this->veclocities.emplace_back(20.0f);
+
                 if(poziom[i][j].type==1)
                 {
 
@@ -81,13 +82,13 @@ void Enemies::InitTextures()
         if(i==0)
         {
             auto t=std::make_unique<sf::Texture>();
-            t->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_robot_sheet.png");
+            t->loadFromFile("Spritesheets/character_robot_sheet.png");
             textures.emplace_back(std::move(t));
         }
         else
         {
             auto te=std::make_unique<sf::Texture>();
-            te->loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Spritesheets/character_zombie_sheet.png");
+            te->loadFromFile("Spritesheets/character_zombie_sheet.png");
             textures.emplace_back(std::move(te));
         }
     }
@@ -136,15 +137,7 @@ void Enemies::CheckTurnface()
     }
 
 }
-//create enemies lifes
-void Enemies::InitLifes()
-{
-    for(size_t i=0;i<this->sprites.size();i++)
-    {
 
-        this->lifes.emplace_back(int(2));
-    }
-}
 //create new bulet
 RobotsBullet *Enemies::createbullet(bool faceright_,sf::Vector2f v)
 {
@@ -173,8 +166,9 @@ Enemies::Enemies(std::string filename)
     walklimittime=16.8f;
     //faceright=true;
     stoptime=0.0f;
-    InitLifes();
     timetoshoot=0.0f;
+    laser_buffer.loadFromFile("Laser.ogg");
+    laser_sound.setBuffer(laser_buffer);
 
 
 }
@@ -270,16 +264,6 @@ void Enemies::moving(const sf::Time &elapsed)
 //collision with items events
 void Enemies::OnCollision(const size_t& i,const sf::Vector2f& direction)
 {
-    /*
-    if(this->veclocities[i] >=0 )
-    {
-        this->veclocities[i]=-1*std::abs(this->veclocities[i]);
-    }
-    else
-    {
-        this->veclocities[i]=std::abs(this->veclocities[i]);
-    }
-    */
 
     if(direction.x <0.0f)
     {
@@ -291,18 +275,6 @@ void Enemies::OnCollision(const size_t& i,const sf::Vector2f& direction)
     {
         //Collision on the rigth
        this->veclocities[i]=std::abs(this->veclocities[i]);
-    }
-
-
-    if(direction.y < 0.0f)
-    {
-        //Collision on the bottom
-        //this->Dead(i);
-    }
-    else if(direction.y >0.0f)
-    {
-        //Collision on the top
-        this->Dead(i);
     }
 
 }
@@ -328,7 +300,6 @@ void Enemies::Dead(const size_t& i)
      this->veclocities.erase(veclocities.begin()+i);
      this->enemies_statistic.erase(this->enemies_statistic.begin()+i);
 
-
 }
 //enemies special skills
 
@@ -338,6 +309,7 @@ void Enemies::SpecialAtack(sf::Time& elapsed)
 
     if(timetoshoot>=1.9f)
     {
+        laser_sound.play();
         timetoshoot-=1.9f;
         for(size_t i=0;i<enemies_statistic.size();i++)
         {
@@ -352,6 +324,7 @@ void Enemies::SpecialAtack(sf::Time& elapsed)
     for(size_t i=0;i<bullets.size();i++)
     {
         bullets[i]->Shoot(elapsed);
+
     }
 
     }

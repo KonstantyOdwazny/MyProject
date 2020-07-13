@@ -80,6 +80,19 @@ int main()
     }
     else
     {
+        if(game.victory==true)
+        {
+            begin_music.stop();
+            WinWindow win;
+            while(win.Running())
+            {
+                win.PollEvents();
+
+                win.Update();
+
+                win.Drawing();
+            }
+        }
         return 0;
     }
     }

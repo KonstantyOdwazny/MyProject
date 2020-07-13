@@ -25,6 +25,7 @@ public:
     void CheckCollisions(std::vector<std::vector<std::unique_ptr<sf::Sprite>>>& sprites,Items& things,sf::Vector2f& direction,float p);
     void CheckCollisions(Enemies& enemies,Items& things,sf::Vector2f& direction);
     void WeaponHit(Weapons& weapon,Enemies& enemy);
+    void WinCollision(MyCharacter& hero,Items& things);
     void BulletsCollision(std::vector<RobotsBullet*>& bullets,Items& things,MyCharacter& hero,std::vector<std::vector<std::unique_ptr<sf::Sprite>>>& map,sf::Time& elapsed);
 };
 

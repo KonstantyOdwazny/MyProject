@@ -16,7 +16,8 @@ SOURCES += \
         optionswindow.cpp \
         robotsbullet.cpp \
         sterowaniewindow.cpp \
-        weapons.cpp
+        weapons.cpp \
+        winwindow.cpp
 INCLUDEPATH += "C:/SFML-2.5.1/include"
 LIBS += -L"C:/SFML-2.5.1/lib"
 CONFIG(debug, debug|release){
@@ -37,4 +38,5 @@ HEADERS += \
     optionswindow.h \
     robotsbullet.h \
     sterowaniewindow.h \
-    weapons.h
+    weapons.h \
+    winwindow.h

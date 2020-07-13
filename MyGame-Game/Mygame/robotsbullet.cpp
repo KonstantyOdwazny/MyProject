@@ -3,7 +3,7 @@
 
 void RobotsBullet::InitTextures()
 {
-    texture.loadFromFile("C:/Users/konst/Desktop/MyGame-Game/MyProject/MyGame-Game/build-Mygame-Desktop_Qt_5_14_1_MinGW_64_bit-Debug/Bullet.png");
+    texture.loadFromFile("Bullet.png");
     texture.setRepeated(true);
     this->setTexture(texture);
     this->setScale(0.5f,0.5f);
